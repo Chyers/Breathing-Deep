@@ -1,10 +1,10 @@
 [gd_scene load_steps=16 format=4 uid="uid://r8n41rp1ivon"]
 
-[ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://scenes/template/Dungeon tileset.png" id="1_du4l7"]
+[ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/Dungeon tileset.png" id="1_ulwwn"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sft0b"]
 resource_name = "Top_Wall"
-texture = ExtResource("1_du4l7")
+texture = ExtResource("1_ulwwn")
 1:3/0 = 0
 1:4/0 = 0
 0:4/0 = 0
@@ -33,7 +33,7 @@ texture = ExtResource("1_du4l7")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_du4l7"]
 resource_name = "Misc_Wall"
-texture = ExtResource("1_du4l7")
+texture = ExtResource("1_ulwwn")
 4:2/0 = 0
 2:1/0 = 0
 2:0/0 = 0
@@ -43,7 +43,7 @@ texture = ExtResource("1_du4l7")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_osgoi"]
 resource_name = "Bottom_Wall"
-texture = ExtResource("1_du4l7")
+texture = ExtResource("1_ulwwn")
 6:1/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_osgoi"]
@@ -52,7 +52,7 @@ sources/1 = SubResource("TileSetAtlasSource_du4l7")
 sources/4 = SubResource("TileSetAtlasSource_osgoi")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_exa7g"]
-texture = ExtResource("1_du4l7")
+texture = ExtResource("1_ulwwn")
 0:9/size_in_atlas = Vector2i(3, 3)
 0:9/0 = 0
 4:9/0 = 0
@@ -130,7 +130,7 @@ terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_exa7g")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_wse7y"]
-texture = ExtResource("1_du4l7")
+texture = ExtResource("1_ulwwn")
 0:5/size_in_atlas = Vector2i(3, 2)
 0:5/0 = 0
 0:7/size_in_atlas = Vector2i(3, 2)
@@ -144,7 +144,7 @@ texture = ExtResource("1_du4l7")
 sources/0 = SubResource("TileSetAtlasSource_wse7y")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_yd2l5"]
-texture = ExtResource("1_du4l7")
+texture = ExtResource("1_ulwwn")
 11:0/size_in_atlas = Vector2i(1, 2)
 11:0/0 = 0
 12:0/size_in_atlas = Vector2i(1, 2)
@@ -154,7 +154,7 @@ texture = ExtResource("1_du4l7")
 sources/0 = SubResource("TileSetAtlasSource_yd2l5")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_acbhu"]
-texture = ExtResource("1_du4l7")
+texture = ExtResource("1_ulwwn")
 7:5/size_in_atlas = Vector2i(1, 2)
 7:5/0 = 0
 8:5/size_in_atlas = Vector2i(1, 2)
@@ -173,7 +173,7 @@ texture = ExtResource("1_du4l7")
 sources/0 = SubResource("TileSetAtlasSource_acbhu")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_e2lbl"]
-texture = ExtResource("1_du4l7")
+texture = ExtResource("1_ulwwn")
 0:0/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_wse7y"]

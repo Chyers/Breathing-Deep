@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfxmbor5lyo8l"
-path="res://.godot/imported/Dungeon tileset.png-eb5469f0e5cbc751e7d4b38e33280289.ctex"
+uid="uid://btwl3qe44nmub"
+path="res://.godot/imported/torch_02.jpg-36400eba002781df10126765a3221d7d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/template/Dungeon tileset.png"
-dest_files=["res://.godot/imported/Dungeon tileset.png-eb5469f0e5cbc751e7d4b38e33280289.ctex"]
+source_file="res://assets/torch_02.jpg"
+dest_files=["res://.godot/imported/torch_02.jpg-36400eba002781df10126765a3221d7d.ctex"]
 
 [params]
 
