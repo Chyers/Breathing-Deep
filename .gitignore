@@ -18,6 +18,7 @@ mono_crash.*.json
 
 # Mac-specific ignore
 .DS_Store
+**/.DS_Store
 
 # Eclipse-specific ignore
 .project
