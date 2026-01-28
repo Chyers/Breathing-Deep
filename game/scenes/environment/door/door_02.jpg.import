@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dfxmbor5lyo8l"
-path="res://.godot/imported/Dungeon tileset.png-10e95b3301d744470432c5cc391c0770.ctex"
+uid="uid://dntwv8n2wlu27"
+path="res://.godot/imported/door_02.jpg-c392c59947e2b1af7272e381fc71f17f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/Dungeon tileset.png"
-dest_files=["res://.godot/imported/Dungeon tileset.png-10e95b3301d744470432c5cc391c0770.ctex"]
+source_file="res://scenes/environment/door/door_02.jpg"
+dest_files=["res://.godot/imported/door_02.jpg-c392c59947e2b1af7272e381fc71f17f.ctex"]
 
 [params]
 
