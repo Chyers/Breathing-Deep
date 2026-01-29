@@ -1,6 +1,7 @@
 # Godot 4+ specific ignores
 .godot/
 .nomedia
+/android/
 
 # Godot-specific ignores
 .import/
@@ -14,3 +15,10 @@ export_credentials.cfg
 .mono/
 data_*/
 mono_crash.*.json
+
+# Mac-specific ignore
+.DS_Store
+**/.DS_Store
+
+# Eclipse-specific ignore
+.project
