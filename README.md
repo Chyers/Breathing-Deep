@@ -2,6 +2,3 @@
 
 Graph Modeling/Architecture (Follow Roughly):
 (https://github.com/user-attachments/files/24867125/Dungeon.Graph.Modeling_Architecture.Design.docx)
-
-Graphics created by Penzilla Design:
-https://penzilla.itch.io/isometric-protagonist
