@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://b0scabmlfcc4h"]
+
+[ext_resource type="Texture2D" uid="uid://wl0t5kxbhmg5" path="res://assets/characters/enemies/animations/skeleton_2/idle.png" id="1_wu123"]
+
+[sub_resource type="Animation" id="Animation_80pu4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_wu123")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_jb83a"]
+resource_name = "idle"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:texture")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.5),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("1_wu123")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:frame")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.033333335, 0.06666667, 0.10000001, 0.13333334, 0.16666667, 0.20000002, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 5, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_icvei"]
+_data = {
+&"RESET": SubResource("Animation_80pu4"),
+&"idle": SubResource("Animation_jb83a")
+}
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=14134928]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2100309820]
+libraries/ = SubResource("AnimationLibrary_icvei")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=847712423]
+texture = ExtResource("1_wu123")
+hframes = 6
