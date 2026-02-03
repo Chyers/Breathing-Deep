@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4po6sptnxwmp"
-path="res://.godot/imported/enemies-skeleton2_movemen.png-88a97ee67e7e59a33d32eec53997ce1a.ctex"
+uid="uid://dkuf5a20fdwqs"
+path="res://.godot/imported/torch01_animation.png-cbc440407c09c411c2c5c650bb43a557.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/enemies/animations/skeleton_1/enemies-skeleton2_movemen.png"
-dest_files=["res://.godot/imported/enemies-skeleton2_movemen.png-88a97ee67e7e59a33d32eec53997ce1a.ctex"]
+source_file="res://assets/environment/torch01_animation.png"
+dest_files=["res://.godot/imported/torch01_animation.png-cbc440407c09c411c2c5c650bb43a557.ctex"]
 
 [params]
 

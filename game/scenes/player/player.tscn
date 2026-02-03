@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://srmcuynkht6a"]
+
+[ext_resource type="Texture2D" uid="uid://b4swncddlwwup" path="res://assets/characters/main_character/With_Shadows.png" id="1_8afob"]
+[ext_resource type="Script" uid="uid://md0pbtqn02fx" path="res://systems/player/player.gd" id="1_dovo2"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4b1ex"]
+radius = 5.0
+
+[sub_resource type="Animation" id="Animation_dovo2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+
+[sub_resource type="Animation" id="Animation_gmlin"]
+resource_name = "idle"
+length = 0.6
+loop_mode = 1
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_lvxji"]
+_data = {
+&"RESET": SubResource("Animation_dovo2"),
+&"idle": SubResource("Animation_gmlin")
+}
+
+[sub_resource type="AnimationNodeStateMachine" id="AnimationNodeStateMachine_p47bc"]
+
+[node name="Player" type="CharacterBody2D" unique_id=1382008704]
+script = ExtResource("1_dovo2")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1648184333]
+position = Vector2(0, -8)
+texture = ExtResource("1_8afob")
+hframes = 6
+vframes = 24
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=670626374]
+shape = SubResource("CircleShape2D_4b1ex")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=544403904]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1341302856]
+libraries/ = SubResource("AnimationLibrary_lvxji")
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=803763933]
+tree_root = SubResource("AnimationNodeStateMachine_p47bc")
+anim_player = NodePath("../AnimationPlayer")
