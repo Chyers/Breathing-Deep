@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="1_ulwwn"]
 [ext_resource type="Texture2D" uid="uid://dkuf5a20fdwqs" path="res://assets/environment/torch01_animation.png" id="2_5ms1y"]
+[ext_resource type="PackedScene" uid="uid://8vhgjodit74q" path="res://scenes/entities/player/player.tscn" id="3_4aqiv"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ekhbd"]
 texture = ExtResource("1_ulwwn")
@@ -258,3 +259,5 @@ tile_set = SubResource("TileSet_xyafy")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1373532314]
 position = Vector2(530, 205)
+
+[node name="Player" parent="." unique_id=969824928 instance=ExtResource("3_4aqiv")]
