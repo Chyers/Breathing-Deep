@@ -2,23 +2,23 @@ extends CharacterBody2D
 
 #Will allow for the change between player states
 enum State{
-	IDLE,
+	IDLE_DOWN,
 	IDLE_UP,
 	IDLE_RIGHT,
-	WALK,
+	WALK_DOWN,
 	WALK_UP,
 	WALK_RIGHT,
-	ATTACK_SW,
-	ATTACK_SP,
-	HURT,
-	DEATH
+	ATTACK_SW_DOWN,
+	ATTACK_SP_DOWN,
+	HURT_DOWN,
+	DEATH_DOWN
 }
 
 var cardinal_direct : Vector2 = Vector2.DOWN
 var move_direct: Vector2 = Vector2.ZERO
-var state: State = State.IDLE
+var state: State = State.IDLE_DOWN
 
-@export var speed = 40.0	#movement speed is definetly up for change
+@export var speed = 300.0	#movement speed is definetly up for change
 @export var max_health := 30
 var health := max_health
 
@@ -42,17 +42,17 @@ func movement_loop() -> void:
 	set_velocity(motion)
 	move_and_slide()
 	
-	if state == State.IDLE or State.WALK_RIGHT:
+	if state == State.IDLE_DOWN or State.WALK_RIGHT:
 		if move_direct.x < -0.01:
 			$Plain.flip_h = true
 		elif move_direct.x > 0.01:
 			$Plain.flip_h = false
 	
-	if motion != Vector2.ZERO and state == State.IDLE:
-		state = State.WALK
+	if motion != Vector2.ZERO and state == State.IDLE_DOWN:
+		state = State.WALK_DOWN
 		update_anim()
-	elif motion == Vector2.ZERO and state == State.WALK:
-		state = State.IDLE
+	elif motion == Vector2.ZERO and state == State.WALK_DOWN:
+		state = State.IDLE_DOWN
 		update_anim()
 
 func set_direct() -> bool:
@@ -72,18 +72,18 @@ func set_direct() -> bool:
 	return true
 
 func set_state() -> bool:
-	var new_state : State = State.IDLE if move_direct == Vector2.ZERO else State.WALK
+	var new_state : State = State.IDLE_DOWN if move_direct == Vector2.ZERO else State.WALK_DOWN
 	if new_state == state:
 		return false
 	return true
 
 func update_anim() -> void:
 	match state:
-		State.IDLE:
+		State.IDLE_DOWN:
 			anim_playbk.travel("idle")
-		State.WALK:
+		State.WALK_DOWN:
 			anim_playbk.travel("walk")
-		State.ATTACK_SW:
+		State.ATTACK_SW_DOWN:
 			anim_playbk.travel("attack_sw")
 
 func anim_direct() -> String:
