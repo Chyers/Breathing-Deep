@@ -4,10 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://dfxo5wjg8m6vp" path="res://assets/environment/door_01.jpg" id="2_v45ce"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2jnv8"]
-size = Vector2(32, 33)
+size = Vector2(32, 37)
 
 [node name="Door" type="Node2D" unique_id=1974320626]
 script = ExtResource("1_s6om1")
+next_room_scene = "res://scenes/rooms/room_2.tscn"
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1864865642]
 position = Vector2(24, -17.000002)
@@ -19,7 +20,7 @@ collision_layer = 16
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea2D" unique_id=1057455404]
-position = Vector2(24, -16.5)
+position = Vector2(24, -14.5)
 shape = SubResource("RectangleShape2D_2jnv8")
 debug_color = Color(0.70285153, 0.4798553, 0.29215485, 0.41960785)
 
