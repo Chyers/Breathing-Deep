@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://djv0dscqw51mm"]
 
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="1_6a8el"]
-[ext_resource type="PackedScene" uid="uid://dxhgfp6nphv5p" path="res://scenes/environment/door/door.tscn" id="2_3e1ps"]
-[ext_resource type="PackedScene" uid="uid://8vhgjodit74q" path="res://scenes/entities/player/player.tscn" id="3_ar6ir"]
+[ext_resource type="Texture2D" uid="uid://bm10bqxm1bfnv" path="res://assets/items_&_traps/coin/coin_animation.png" id="2_3e1ps"]
+[ext_resource type="PackedScene" uid="uid://cv2ljwgi74htf" path="res://scenes/environment/stairs.tscn" id="3_ar6ir"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0hwry"]
 texture = ExtResource("1_6a8el")
@@ -131,7 +131,7 @@ sources/0 = SubResource("TileSetAtlasSource_3e1ps")
 sources/1 = SubResource("TileSetAtlasSource_ar6ir")
 sources/4 = SubResource("TileSetAtlasSource_0g03g")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tjvhs"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6a8el"]
 texture = ExtResource("1_6a8el")
 0:5/0 = 0
 1:5/0 = 0
@@ -159,7 +159,7 @@ texture = ExtResource("1_6a8el")
 3:8/0 = 0
 
 [sub_resource type="TileSet" id="TileSet_np14n"]
-sources/0 = SubResource("TileSetAtlasSource_tjvhs")
+sources/0 = SubResource("TileSetAtlasSource_6a8el")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sbn3u"]
 texture = ExtResource("1_6a8el")
@@ -190,10 +190,21 @@ texture = ExtResource("1_6a8el")
 [sub_resource type="TileSet" id="TileSet_urnam"]
 sources/0 = SubResource("TileSetAtlasSource_ix842")
 
-[node name="Room2" type="Node2D" unique_id=243363048]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_km8ef"]
+texture = ExtResource("2_3e1ps")
+0:0/animation_speed = 6.0
+0:0/animation_mode = 1
+0:0/animation_frame_0/duration = 1.0
+0:0/animation_frame_1/duration = 1.0
+0:0/animation_frame_2/duration = 1.0
+0:0/animation_frame_3/duration = 1.0
+0:0/0 = 0
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=526349137]
-position = Vector2(523, 218)
+[sub_resource type="TileSet" id="TileSet_0hwry"]
+sources/0 = SubResource("TileSetAtlasSource_km8ef")
+
+[node name="Room2" type="Node2D" unique_id=243363048]
+position = Vector2(-289, -80)
 
 [node name="Floor" type="TileMapLayer" parent="." unique_id=1722344033]
 tile_map_data = PackedByteArray("AAAbABIAAAAEAAsAAAAcABIAAAAFAAsAAAAdABIAAAAFAAsAAAAeABIAAAAFAAsAAAAfABIAAAAFAAsAAAAgABIAAAAFAAsAAAAiABIAAAAFAAsAAAAjABIAAAAFAAsAAAAkABIAAAAFAAsAAAAkABEAAAAFAAoAAAAkABAAAAAFAAoAAAAjABAAAAAFAAoAAAAgABAAAAAFAAoAAAAfABAAAAAFAAoAAAAeABAAAAAFAAoAAAAdABAAAAAFAAoAAAAcABAAAAAFAAoAAAAbABAAAAAEAAoAAAAbABEAAAAEAAoAAAAcABEAAAAFAAoAAAAdABEAAAAFAAoAAAAeABEAAAAFAAoAAAAfABEAAAAFAAoAAAAgABEAAAAFAAoAAAAjABEAAAAFAAoAAAAkAA8AAAAFAAoAAAAjAA8AAAAFAAoAAAAiAA8AAAAFAAoAAAAhAA8AAAAFAAoAAAAgAA8AAAAFAAoAAAAfAA8AAAAFAAoAAAAeAA8AAAAFAAoAAAAdAA8AAAAFAAoAAAAcAA8AAAAFAAoAAAAbAA8AAAAEAAoAAAAlABIAAAAFAAsAAAAmABIAAAAGAAsAAAAmABEAAAAGAAoAAAAmABAAAAAGAAoAAAAlABAAAAAFAAoAAAAlABEAAAAFAAoAAAAmAA8AAAAGAAoAAAAlAA8AAAAFAAoAAAAhABIAAAAFAAsAAAAhABEAAAAFAAoAAAAiABEAAAAFAAoAAAAiABAAAAAFAAoAAAAhABAAAAAFAAoAAAAmAA4AAAAGAAoAAAAmAA0AAAAGAAoAAAAlAA0AAAAFAAoAAAAkAA0AAAAFAAoAAAAjAA0AAAAFAAoAAAAiAA0AAAAFAAoAAAAhAA0AAAAFAAoAAAAgAA0AAAAFAAoAAAAfAA0AAAAFAAoAAAAeAA0AAAAFAAoAAAAdAA0AAAAFAAoAAAAcAA0AAAAFAAoAAAAbAA0AAAAEAAoAAAAbAA4AAAAEAAoAAAAcAA4AAAAFAAoAAAAdAA4AAAAFAAoAAAAeAA4AAAAFAAoAAAAfAA4AAAAFAAoAAAAgAA4AAAAFAAoAAAAhAA4AAAAFAAoAAAAiAA4AAAAFAAoAAAAjAA4AAAAFAAoAAAAkAA4AAAAFAAoAAAAlAA4AAAAFAAoAAAAmAAwAAAAGAAoAAAAlAAwAAAAFAAoAAAAkAAwAAAAFAAoAAAAjAAwAAAAFAAoAAAAiAAwAAAAFAAoAAAAhAAwAAAAFAAoAAAAgAAwAAAAFAAoAAAAfAAwAAAAFAAoAAAAbAAwAAAAEAAoAAAAcAAwAAAAFAAoAAAAdAAwAAAAFAAoAAAAeAAwAAAAFAAoAAAAbAAsAAAAEAAoAAAAbAAoAAAAEAAoAAAAbAAkAAAAEAAkAAAAcAAkAAAAFAAkAAAAdAAkAAAAFAAkAAAAeAAkAAAAFAAkAAAAeAAoAAAAFAAoAAAAfAAoAAAAFAAoAAAAgAAoAAAAFAAoAAAAhAAoAAAAFAAoAAAAiAAoAAAAFAAoAAAAjAAkAAAAFAAkAAAAkAAkAAAAFAAkAAAAlAAkAAAAFAAkAAAAmAAkAAAAGAAoAAAAiAAkAAAAFAAkAAAAhAAkAAAAFAAkAAAAgAAkAAAAFAAkAAAAfAAkAAAAFAAkAAAAlAAoAAAAFAAoAAAAmAAoAAAAGAAoAAAAmAAsAAAAGAAoAAAAlAAsAAAAFAAoAAAAkAAsAAAAFAAoAAAAjAAsAAAAFAAoAAAAiAAsAAAAFAAoAAAAhAAsAAAAFAAoAAAAgAAsAAAAFAAoAAAAfAAsAAAAFAAoAAAAeAAsAAAAFAAoAAAAdAAsAAAAFAAoAAAAcAAsAAAAFAAoAAAAcAAoAAAAFAAoAAAAdAAoAAAAFAAoAAAAjAAoAAAAFAAoAAAAkAAoAAAAFAAoAAAA=")
@@ -214,8 +225,15 @@ tile_set = SubResource("TileSet_q734l")
 tile_map_data = PackedByteArray("AAAcAAoAAAAHAAUAAAAlAAsAAAAMAAUAAAAdAA8AAAALAAUAAAAkABEAAAAPAAQAAAA=")
 tile_set = SubResource("TileSet_urnam")
 
-[node name="Door2" parent="." unique_id=1893431871 instance=ExtResource("2_3e1ps")]
-position = Vector2(505, 146)
+[node name="Stairs" parent="." unique_id=1388756090 instance=ExtResource("3_ar6ir")]
+position = Vector2(476, 202)
 
-[node name="Player" parent="." unique_id=969824928 instance=ExtResource("3_ar6ir")]
-position = Vector2(523, 218)
+[node name="Coin" type="TileMapLayer" parent="." unique_id=1053430530]
+tile_map_data = PackedByteArray("AAAjAA0AAAAAAAAAAAA=")
+tile_set = SubResource("TileSet_0hwry")
+
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1798609559]
+position = Vector2(533, 275)
+
+[node name="Center" type="Marker2D" parent="." unique_id=1218248360]
+position = Vector2(530, 216)
