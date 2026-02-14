@@ -4,12 +4,20 @@
 [ext_resource type="Script" uid="uid://djtowboeuyd5h" path="res://scenes/rooms/main_scene.gd" id="1_es0yc"]
 
 [node name="main_scene" type="Node2D" unique_id=1437714124]
+y_sort_enabled = true
 script = ExtResource("1_es0yc")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1305410241]
 position = Vector2(240, 135)
 
-[node name="rooms" type="Node2D" parent="." unique_id=1497044498]
+[node name="YSort" type="Node2D" parent="." unique_id=1993308838]
+y_sort_enabled = true
 
-[node name="Player" parent="." unique_id=969824928 instance=ExtResource("1_6jndt")]
+[node name="rooms" type="Node2D" parent="YSort" unique_id=1497044498]
+y_sort_enabled = true
+
+[node name="Player" parent="YSort" unique_id=969824928 instance=ExtResource("1_6jndt")]
+y_sort_enabled = true
 position = Vector2(240, 135)
+collision_layer = 2
+collision_mask = 25
