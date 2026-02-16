@@ -250,7 +250,7 @@ tile_set = SubResource("TileSet_e2lbl")
 [node name="FloorDecor" type="TileMapLayer" parent="." unique_id=24569553]
 z_index = 1
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAcAAoAAAAHAAUAAAAlAAsAAAAMAAUAAAAdAA8AAAALAAUAAAAkABEAAAAPAAQAAAA=")
+tile_map_data = PackedByteArray("AAAcAAoAAAAHAAUAAAAlAAsAAAAMAAUAAAAkABEAAAAPAAQAAAA=")
 tile_set = SubResource("TileSet_rah2i")
 
 [node name="BottomWall" type="TileMapLayer" parent="." unique_id=382384815]
