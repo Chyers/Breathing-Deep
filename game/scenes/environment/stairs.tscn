@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cv2ljwgi74htf"]
 
-[ext_resource type="Script" uid="uid://c0owrmxg2auuj" path="res://scenes/environment/stairs.gd" id="1_h7cp2"]
+[ext_resource type="Script" uid="uid://c0owrmxg2auuj" path="res://systems/items/stairs.gd" id="1_h7cp2"]
 [ext_resource type="Texture2D" uid="uid://bv40p252f3qwg" path="res://assets/environment/stairs.png" id="1_iw8q3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qcym6"]

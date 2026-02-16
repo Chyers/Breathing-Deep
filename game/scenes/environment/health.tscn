@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bscoprqh5ulfp"]
 
-[ext_resource type="Script" uid="uid://4h6jm8vokjft" path="res://scenes/environment/health.gd" id="1_2m1b8"]
+[ext_resource type="Script" uid="uid://4h6jm8vokjft" path="res://systems/items/health.gd" id="1_2m1b8"]
 [ext_resource type="Texture2D" uid="uid://byj866y8eais6" path="res://assets/items_&_traps/flasks/health_animated.png" id="1_xqfd2"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jrjmv"]
