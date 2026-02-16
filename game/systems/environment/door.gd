@@ -9,6 +9,19 @@ func _ready() -> void:
 
 func _on_exit_area_2d_body_entered(body: CharacterBody2D) -> void:
 	if body.is_in_group("Player"):
-		print("Player entered door!")  # debug
+		print("Player entered door!")
+		
+		# Stops door from detecting player
+		# during unloading
+		self.set_deferred("monitoring", false)
+		
 		var main_scene = get_tree().get_current_scene()
-		main_scene.spawn_room(next_room_scene, self.get_node_or_null("SpawnPointNextRoom"))
+		
+		# Had issues with doors and collision
+		# so this lets the physics collsion
+		# process before door does
+		main_scene.call_deferred(
+			"load_next_room",
+			self.get_node_or_null("SpawnPointNextRoom")
+			)
+			#load_next_room(self.get_node_or_null("SpawnPointNextRoom"))
