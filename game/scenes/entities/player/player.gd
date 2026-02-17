@@ -102,7 +102,7 @@ func attack() -> void:
 	var mouse_pos: Vector2 = get_global_mouse_position()
 	var attack_dir: Vector2 = (mouse_pos - global_position).normalized()
 	#Keep getting "flip_h" errors
-	$Sprite2D.flip_h = attack_dir.x < 0 and abs(attack_dir.x) >= abs(attack_dir.y)
+	$Plain.flip_h = attack_dir.x < 0 and abs(attack_dir.x) >= abs(attack_dir.y)
 	anim_tree.set("parameters/attack/BlendSpace2D/blend_position", attack_dir)
 	update_anim()
 	
