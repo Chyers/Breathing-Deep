@@ -8,8 +8,7 @@ enum State{
 	WALK_DOWN,
 	WALK_UP,
 	WALK_RIGHT,
-	ATTACK_SW_DOWN,
-	ATTACK_SP_DOWN,
+	ATTACK,
 	HURT_DOWN,
 	DEATH_DOWN
 }
@@ -20,14 +19,23 @@ var state: State = State.IDLE_DOWN
 
 @export var speed = 300.0	#movement speed is definetly up for change
 @export var max_health := 30
+@export var attack_speed: float = 0.8
 var health := max_health
 
 @onready var anim_tree: AnimationTree = $AnimationTree
 @onready var anim_playbk: AnimationNodeStateMachinePlayback = $AnimationTree["parameters/playback"]
 
+func _anim() -> void:
+	anim_tree.set_active(true)
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		attack()
+
 func _physics_process(delta: float) -> void:
 	#function call for movement
-	movement_loop()
+	if not state == State.ATTACK:
+		movement_loop()
 
 func movement_loop() -> void:
 	#gives the move_direct definitions for both the x & y axis
@@ -83,8 +91,23 @@ func update_anim() -> void:
 			anim_playbk.travel("idle")
 		State.WALK_DOWN:
 			anim_playbk.travel("walk")
-		State.ATTACK_SW_DOWN:
+		State.ATTACK:
 			anim_playbk.travel("attack_sw")
+
+func attack() -> void:
+	if state == State.ATTACK:
+		return
+	state = State.ATTACK
+	#mouse clicks to control the attack is temporary
+	var mouse_pos: Vector2 = get_global_mouse_position()
+	var attack_dir: Vector2 = (mouse_pos - global_position).normalized()
+	#Keep getting "flip_h" errors
+	$Sprite2D.flip_h = attack_dir.x < 0 and abs(attack_dir.x) >= abs(attack_dir.y)
+	anim_tree.set("parameters/attack/BlendSpace2D/blend_position", attack_dir)
+	update_anim()
+	
+	await get_tree().create_timer(attack_speed).timeout
+	state = State.IDLE_DOWN
 
 func anim_direct() -> String:
 	if cardinal_direct == Vector2.DOWN:
