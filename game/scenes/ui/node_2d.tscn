@@ -1,3 +1,53 @@
 [gd_scene format=3 uid="uid://cmraod5jenw2d"]
 
-[node name="Node2D" type="Node2D" unique_id=1423663217]
+[ext_resource type="Script" path="res://scenes/ui/Main menu.gd" id="1_okbjf"]
+
+[node name="Main Menu" type="Node2D" unique_id=1423663217]
+script = ExtResource("1_okbjf")
+
+[node name="Button_manager" type="Control" parent="." unique_id=1984424023]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Start" type="TextureButton" parent="Button_manager" unique_id=1495834519]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 4.25
+anchor_top = 1.15
+anchor_right = 7.8
+anchor_bottom = 2.075
+offset_left = 5.0
+offset_top = -2.0
+offset_right = 13.0
+offset_bottom = 6.0
+grow_horizontal = 2
+
+[node name="Options" type="TextureButton" parent="Button_manager" unique_id=1217960652]
+clip_contents = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 4.325
+anchor_top = 2.75
+anchor_right = 7.875
+anchor_bottom = 3.675
+offset_right = 8.0
+offset_bottom = 8.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Quit" type="TextureButton" parent="Button_manager" unique_id=316691794]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 4.3
+anchor_top = 4.35
+anchor_right = 7.85
+anchor_bottom = 5.275
+offset_right = 8.0
+offset_bottom = 8.0
+metadata/_edit_use_anchors_ = true
+
+[connection signal="pressed" from="Button_manager/Start" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="Button_manager/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="Button_manager/Quit" to="." method="_on_quit_pressed"]
