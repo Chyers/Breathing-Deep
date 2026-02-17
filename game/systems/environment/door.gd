@@ -1,27 +1,29 @@
 extends Node2D
 
-# Export the path to the next room scene
-@export var next_room_scene: String = "res://scenes/rooms/room_2.tscn"
+@onready var exit_area = $ExitArea2D
+var can_use: bool = true
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	print("Door ready: ", name)
 
-func _on_exit_area_2d_body_entered(body: CharacterBody2D) -> void:
-	if body.is_in_group("Player"):
-		print("Player entered door!")
+func _on_exit_area_2d_body_entered(body: Node) -> void:
+	if not body.is_in_group("Player") or not can_use:
+		return
+
+	var main_scene = get_tree().get_current_scene()
+	if main_scene.is_transitioning:
+		print("Door blocked - already transitioning")
+		return
 		
-		# Stops door from detecting player
-		# during unloading
-		self.set_deferred("monitoring", false)
+	print("Player entered door!")
+	can_use = false
 		
-		var main_scene = get_tree().get_current_scene()
+	# Disable monitoring safely
+	exit_area.set_deferred("monitoring", false)
+	exit_area.set_deferred("monitorable", false)
 		
-		# Had issues with doors and collision
-		# so this lets the physics collsion
-		# process before door does
-		main_scene.call_deferred(
-			"load_next_room",
-			self.get_node_or_null("SpawnPointNextRoom")
-			)
-			#load_next_room(self.get_node_or_null("SpawnPointNextRoom"))
+	# Load next room safely
+	main_scene.call_deferred(
+		"load_next_room",
+		self.get_node_or_null("SpawnPointNextRoom")
+	)
