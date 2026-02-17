@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Breathing-Deep"
-run/main_scene="uid://r8n41rp1ivon"
+run/main_scene="uid://baa3afpncco58"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
@@ -60,4 +60,4 @@ attack={
 2d_physics/layer_2="PLAYER"
 2d_physics/layer_3="ENEMY"
 2d_physics/layer_4="ITEMS"
-2d_physics/layer_5="DOOR"
+2d_physics/layer_5="DOOR/STAIRS"
