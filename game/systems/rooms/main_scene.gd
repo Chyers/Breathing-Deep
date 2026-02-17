@@ -4,42 +4,94 @@ extends Node2D
 @onready var player = $YSort/Player
 @onready var camera = $Camera2D
 
-var start_room_scene: String = "res://scenes/rooms/starter_scene.tscn"
+var start_room_scene: String = "res://scenes/rooms/starter_room.tscn"
 var current_room: Node = null
+var dungeon_rooms: Array = []
+var current_room_index: int = 0
+var current_room_path: String = ""
+
+var possible_rooms = [
+	"res://scenes/rooms/room_2.tscn",
+	"res://scenes/rooms/room_3.tscn",
+	"res://scenes/rooms/room_4.tscn"
+	# For now this will load any room
+	# placed in the array, later we may
+	# have diff arrays holding diff types
+	# of rooms
+]
 
 const VIEWPORT_CENTER = Vector2(240, 135)
 
 func _ready():
-	spawn_room(start_room_scene)
-
-func spawn_room(scene_path: String, spawn_marker: Node2D = null) -> void:
-	# Remove previous room
-	if current_room:
-		current_room.queue_free()
+	generate_dungeon(5) # N-1 number of rooms
+	spawn_room(dungeon_rooms[0])
 	
-	# Load and instantiate new room
-	var room_scene = load(scene_path)
-	current_room = room_scene.instantiate()
-	rooms_node.add_child(current_room)
+func spawn_room(scene_path: String, spawn_marker: Node2D = null) -> void:
+	# Loads and instantiates a new room
+	var room_scene: PackedScene = load(scene_path)
+	var new_room = room_scene.instantiate()
+	rooms_node.add_child(new_room)
+	current_room_path = scene_path
 	
 	# Center room using 'Center' marker if it exists
-	var center_marker = current_room.get_node_or_null("Center")
+	var center_marker = new_room.get_node_or_null("Center")
 	if center_marker:
-		current_room.position = VIEWPORT_CENTER - center_marker.position
+		new_room.position = VIEWPORT_CENTER - center_marker.position
 	else:
-		current_room.position = VIEWPORT_CENTER
+		new_room.position = VIEWPORT_CENTER
 		print("WARNING: No Center marker found, placing room at viewport center")
 	
 	# Determine spawn point
 	var target_spawn = spawn_marker
 	if not target_spawn:
-		target_spawn = current_room.get_node_or_null("SpawnPoint")
+		target_spawn = new_room.get_node_or_null("SpawnPoint")
 
 	if target_spawn:
-		player.global_position = current_room.position + target_spawn.position
+		player.call_deferred("set_global_position", new_room.position + target_spawn.position)
+		# .global_position = current_room.position + target_spawn.position
 	else:
-		player.global_position = current_room.position
-		print("ERROR: No spawn point found in room: ", current_room.name)
+		player.call_deferred("set_global_postion", new_room.postion)
+		#global_position = current_room.position
+		print("ERROR: No spawn point found in room: ", new_room.name)
 	
 	# Snap camera to room center
-	camera.global_position = VIEWPORT_CENTER
+	camera.call_deferred("set_global_position", VIEWPORT_CENTER)
+	
+	# Removes previous room
+	if current_room:
+		current_room.call_deferred("queue_free")
+		
+	current_room = new_room
+
+func generate_dungeon(room_count: int = 5):
+	dungeon_rooms.clear()
+	current_room_index = 0
+	
+	# First room
+	dungeon_rooms.append(start_room_scene)
+	
+	# Middle rooms
+	for i in range(room_count):
+		dungeon_rooms.append(possible_rooms.pick_random())
+		
+	print("Dungeon generated:", dungeon_rooms)
+
+func load_next_room(spawn_marker: Node2D = null):
+	current_room_index += 1
+	
+	if current_room_index >= dungeon_rooms.size():
+		print("Dungeon complete!")
+		return
+	
+	var next_room = pick_next_room(current_room_path)
+	dungeon_rooms[current_room_index] = next_room
+	spawn_room(next_room, spawn_marker)
+
+func pick_next_room(previous_room: String) -> String:
+	if possible_rooms.size() < 2:
+		return possible_rooms[0]
+		
+	var next_room = previous_room
+	while next_room == previous_room:
+		next_room = possible_rooms.pick_random()
+	return next_room
