@@ -230,7 +230,7 @@ tile_map_data = PackedByteArray("AAAeAAgAAAALAAAAAAA=")
 tile_set = SubResource("TileSet_rgxan")
 
 [node name="Stairs" parent="." unique_id=1388756090 instance=ExtResource("4_x7oow")]
-position = Vector2(529, 129)
+position = Vector2(528, 128)
 
 [node name="Health" parent="." unique_id=526413933 instance=ExtResource("6_m4fsd")]
 position = Vector2(579, 272)
