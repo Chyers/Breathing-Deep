@@ -281,7 +281,7 @@ tile_map_data = PackedByteArray("AAAkAAcAAAABAAMAAAAkAAgAAAABAAQAAAAjAAcAAAAAAAM
 tile_set = SubResource("TileSet_oqwl6")
 
 [node name="Door" parent="." unique_id=1974320626 instance=ExtResource("3_tjvhs")]
-position = Vector2(576, 146)
+position = Vector2(431, 146)
 
 [node name="WallDecor" type="TileMapLayer" parent="." unique_id=2730365]
 tile_map_data = PackedByteArray("AAAeAAgAAAALAAAAAAA=")

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://dkhgpm7an5bm8" path="res://scenes/rooms/room_2.gd" id="1_5bkl7"]
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="2_wynrr"]
 [ext_resource type="PackedScene" uid="uid://dxhgfp6nphv5p" path="res://scenes/environment/door/door.tscn" id="3_wmuqe"]
+[ext_resource type="PackedScene" uid="uid://cv2ljwgi74htf" path="res://scenes/environment/stairs.tscn" id="4_5bkl7"]
 [ext_resource type="PackedScene" uid="uid://bscoprqh5ulfp" path="res://scenes/environment/health.tscn" id="5_6lc7h"]
 [ext_resource type="PackedScene" uid="uid://dr43y0k1fpybp" path="res://scenes/environment/buff.tscn" id="6_6oseh"]
 [ext_resource type="PackedScene" uid="uid://64uu0oy0ptx1" path="res://scenes/environment/coin.tscn" id="7_ip1da"]
@@ -227,6 +228,9 @@ position = Vector2(576, 146)
 [node name="WallDecor" type="TileMapLayer" parent="." unique_id=2730365]
 tile_map_data = PackedByteArray("AAAeAAgAAAALAAAAAAA=")
 tile_set = SubResource("TileSet_q734l")
+
+[node name="Stairs" parent="." unique_id=1388756090 instance=ExtResource("4_5bkl7")]
+position = Vector2(449, 272)
 
 [node name="Health" parent="." unique_id=526413933 instance=ExtResource("5_6lc7h")]
 position = Vector2(579, 272)
