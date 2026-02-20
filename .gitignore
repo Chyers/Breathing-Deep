@@ -2,6 +2,7 @@
 .godot/
 .nomedia
 /android/
+*.gd.uid
 
 # Godot-specific ignores
 .import/
