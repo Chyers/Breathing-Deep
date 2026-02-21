@@ -71,6 +71,12 @@ func spawn_room(scene_path: String, spawn_marker: Node2D = null) -> void:
 
 	current_room = new_room
 	
+	# Start telemetry tracking for this room
+	#Telemetry.start_room()
+	
+	#var encounter_type = EncounterManager.select_random_encounter()
+	#EncounterManager.spawn_encounter(encounter_type)
+	
 func generate_dungeon(room_count):
 	dungeon_rooms.clear()
 	current_room_index = 0

@@ -2,7 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="1_cjque"]
 [ext_resource type="Texture2D" uid="uid://dkuf5a20fdwqs" path="res://assets/environment/torch01_animation.png" id="2_2138x"]
-[ext_resource type="PackedScene" uid="uid://dxhgfp6nphv5p" path="res://scenes/environment/door/door.tscn" id="3_ycvkt"]
+[ext_resource type="PackedScene" uid="uid://dxhgfp6nphv5p" path="res://scenes/environment/door/door_north.tscn" id="3_ycvkt"]
+[ext_resource type="PackedScene" uid="uid://bh1ffx6rjk6ix" path="res://scenes/environment/door/door_east.tscn" id="4_2138x"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ekhbd"]
 texture = ExtResource("1_cjque")
@@ -113,15 +114,18 @@ texture = ExtResource("1_cjque")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_4aqiv")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_gcpf5"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_cjque"]
 texture = ExtResource("1_cjque")
 6:1/0 = 0
-6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 5.333334, 8, 5.333334, 8, 8, -8, 8)
+7:2/0 = 0
+7:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 5.333334, 8, 5.333334, 8, 8, -8, 8)
+7:3/0 = 0
+7:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSet" id="TileSet_1muyl"]
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 6
-sources/0 = SubResource("TileSetAtlasSource_gcpf5")
+sources/0 = SubResource("TileSetAtlasSource_cjque")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2pcud"]
 texture = ExtResource("1_cjque")
@@ -256,7 +260,7 @@ tile_set = SubResource("TileSet_rah2i")
 [node name="BottomWall" type="TileMapLayer" parent="." unique_id=382384815]
 z_index = 1
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAcABIAAAAGAAEAAAAdABIAAAAGAAEAAAAeABIAAAAGAAEAAAAfABIAAAAGAAEAAAAgABIAAAAGAAEAAAAhABIAAAAGAAEAAAAiABIAAAAGAAEAAAAjABIAAAAGAAEAAAAkABIAAAAGAAEAAAAlABIAAAAGAAEAAAAbABIAAAAGAAEAAAAmABIAAAAGAAEAAAA=")
+tile_map_data = PackedByteArray("AAAbABIAAAAGAAEAAAAcABIAAAAGAAEAAAAdABIAAAAGAAEAAAAeABIAAAAGAAEAAAAfABIAAAAGAAEAAAAgABIAAAAGAAEAAAAhABIAAAAGAAEAAAAiABIAAAAGAAEAAAAjABIAAAAGAAEAAAAkABIAAAAGAAEAAAAlABIAAAAGAAEAAAAmABIAAAAGAAEAAAAmABMAAAAHAAIAAAAlABMAAAAHAAIAAAAkABMAAAAHAAIAAAAjABMAAAAHAAIAAAAiABMAAAAHAAIAAAAhABMAAAAHAAIAAAAgABMAAAAHAAIAAAAfABMAAAAHAAIAAAAeABMAAAAHAAIAAAAdABMAAAAHAAIAAAAcABMAAAAHAAIAAAAbABMAAAAHAAIAAAAaABMAAAAHAAMAAAAnABMAAAAHAAMAAAA=")
 tile_set = SubResource("TileSet_1muyl")
 
 [node name="SideWall" type="TileMapLayer" parent="." unique_id=931651141]
@@ -287,3 +291,6 @@ position = Vector2(530, 216)
 
 [node name="Center" type="Marker2D" parent="." unique_id=1457404385]
 position = Vector2(530, 216)
+
+[node name="DoorEast" parent="." unique_id=699459189 instance=ExtResource("4_2138x")]
+position = Vector2(425, 204)

@@ -1,8 +1,8 @@
 [gd_scene format=4 uid="uid://deakca8t65l"]
 
-[ext_resource type="Script" uid="uid://dkhgpm7an5bm8" path="res://scenes/rooms/room_2.gd" id="1_wbpq4"]
+[ext_resource type="Script" uid="uid://dkhgpm7an5bm8" path="res://systems/rooms/room_gen.gd" id="1_wbpq4"]
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="2_nt2nv"]
-[ext_resource type="PackedScene" uid="uid://dxhgfp6nphv5p" path="res://scenes/environment/door/door.tscn" id="3_s8emh"]
+[ext_resource type="PackedScene" uid="uid://dxhgfp6nphv5p" path="res://scenes/environment/door/door_north.tscn" id="3_s8emh"]
 [ext_resource type="PackedScene" uid="uid://cv2ljwgi74htf" path="res://scenes/environment/stairs.tscn" id="4_x7oow"]
 [ext_resource type="PackedScene" uid="uid://bscoprqh5ulfp" path="res://scenes/environment/health.tscn" id="6_m4fsd"]
 [ext_resource type="PackedScene" uid="uid://dr43y0k1fpybp" path="res://scenes/environment/buff.tscn" id="8_33ote"]
@@ -86,15 +86,18 @@ terrain_set_0/terrain_0/name = "Floor"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_tfhis")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_u3c8f"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_53ou7"]
 texture = ExtResource("2_nt2nv")
 6:1/0 = 0
-6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 5.333334, 8, 5.333334, 8, 8, -8, 8)
+7:2/0 = 0
+7:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 5.333334, 8, 5.333334, 8, 8, -8, 8)
+7:3/0 = 0
+7:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
-[sub_resource type="TileSet" id="TileSet_wbpq4"]
+[sub_resource type="TileSet" id="TileSet_u3c8f"]
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 6
-sources/0 = SubResource("TileSetAtlasSource_u3c8f")
+sources/0 = SubResource("TileSetAtlasSource_53ou7")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nt2nv"]
 texture = ExtResource("2_nt2nv")
@@ -206,11 +209,11 @@ script = ExtResource("1_wbpq4")
 tile_map_data = PackedByteArray("AAAbABIAAAAEAAsAAAAcABIAAAAFAAsAAAAdABIAAAAFAAsAAAAeABIAAAAFAAsAAAAfABIAAAAFAAsAAAAgABIAAAAFAAsAAAAiABIAAAAFAAsAAAAjABIAAAAFAAsAAAAkABIAAAAFAAsAAAAkABEAAAAFAAoAAAAkABAAAAAFAAoAAAAjABAAAAAFAAoAAAAgABAAAAAFAAoAAAAfABAAAAAFAAoAAAAeABAAAAAFAAoAAAAdABAAAAAFAAoAAAAcABAAAAAFAAoAAAAbABAAAAAEAAoAAAAbABEAAAAEAAoAAAAcABEAAAAFAAoAAAAdABEAAAAFAAoAAAAeABEAAAAFAAoAAAAfABEAAAAFAAoAAAAgABEAAAAFAAoAAAAjABEAAAAFAAoAAAAkAA8AAAAFAAoAAAAjAA8AAAAFAAoAAAAiAA8AAAAFAAoAAAAhAA8AAAAFAAoAAAAgAA8AAAAFAAoAAAAfAA8AAAAFAAoAAAAeAA8AAAAFAAoAAAAdAA8AAAAFAAoAAAAcAA8AAAAFAAoAAAAbAA8AAAAEAAoAAAAlABIAAAAFAAsAAAAmABIAAAAGAAsAAAAmABEAAAAGAAoAAAAmABAAAAAGAAoAAAAlABAAAAAFAAoAAAAlABEAAAAFAAoAAAAmAA8AAAAGAAoAAAAlAA8AAAAFAAoAAAAhABIAAAAFAAsAAAAhABEAAAAFAAoAAAAiABEAAAAFAAoAAAAiABAAAAAFAAoAAAAhABAAAAAFAAoAAAAmAA4AAAAGAAoAAAAmAA0AAAAGAAoAAAAlAA0AAAAFAAoAAAAkAA0AAAAFAAoAAAAjAA0AAAAFAAoAAAAiAA0AAAAFAAoAAAAhAA0AAAAFAAoAAAAgAA0AAAAFAAoAAAAfAA0AAAAFAAoAAAAeAA0AAAAFAAoAAAAdAA0AAAAFAAoAAAAcAA0AAAAFAAoAAAAbAA0AAAAEAAoAAAAbAA4AAAAEAAoAAAAcAA4AAAAFAAoAAAAdAA4AAAAFAAoAAAAeAA4AAAAFAAoAAAAfAA4AAAAFAAoAAAAgAA4AAAAFAAoAAAAhAA4AAAAFAAoAAAAiAA4AAAAFAAoAAAAjAA4AAAAFAAoAAAAkAA4AAAAFAAoAAAAlAA4AAAAFAAoAAAAmAAwAAAAGAAoAAAAlAAwAAAAFAAoAAAAkAAwAAAAFAAoAAAAjAAwAAAAFAAoAAAAiAAwAAAAFAAoAAAAhAAwAAAAFAAoAAAAgAAwAAAAFAAoAAAAfAAwAAAAFAAoAAAAbAAwAAAAEAAoAAAAcAAwAAAAFAAoAAAAdAAwAAAAFAAoAAAAeAAwAAAAFAAoAAAAbAAsAAAAEAAoAAAAbAAoAAAAEAAoAAAAbAAkAAAAEAAkAAAAcAAkAAAAFAAkAAAAdAAkAAAAFAAkAAAAeAAkAAAAFAAkAAAAeAAoAAAAFAAoAAAAfAAoAAAAFAAoAAAAgAAoAAAAFAAoAAAAhAAoAAAAFAAoAAAAiAAoAAAAFAAoAAAAjAAkAAAAFAAkAAAAkAAkAAAAFAAkAAAAlAAkAAAAFAAkAAAAmAAkAAAAGAAkAAAAiAAkAAAAFAAkAAAAhAAkAAAAFAAkAAAAgAAkAAAAFAAkAAAAfAAkAAAAFAAkAAAAlAAoAAAAFAAoAAAAmAAoAAAAGAAoAAAAmAAsAAAAGAAoAAAAlAAsAAAAFAAoAAAAkAAsAAAAFAAoAAAAjAAsAAAAFAAoAAAAiAAsAAAAFAAoAAAAhAAsAAAAFAAoAAAAgAAsAAAAFAAoAAAAfAAsAAAAFAAoAAAAeAAsAAAAFAAoAAAAdAAsAAAAFAAoAAAAcAAsAAAAFAAoAAAAcAAoAAAAFAAoAAAAdAAoAAAAFAAoAAAAjAAoAAAAFAAoAAAAkAAoAAAAFAAoAAAA=")
 tile_set = SubResource("TileSet_53ou7")
 
-[node name="BottomWall" type="TileMapLayer" parent="." unique_id=1431173167]
+[node name="BottomWall" type="TileMapLayer" parent="." unique_id=506130374]
 z_index = 1
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAcABIAAAAGAAEAAAAdABIAAAAGAAEAAAAeABIAAAAGAAEAAAAfABIAAAAGAAEAAAAgABIAAAAGAAEAAAAhABIAAAAGAAEAAAAiABIAAAAGAAEAAAAjABIAAAAGAAEAAAAkABIAAAAGAAEAAAAlABIAAAAGAAEAAAAbABIAAAAGAAEAAAAmABIAAAAGAAEAAAA=")
-tile_set = SubResource("TileSet_wbpq4")
+tile_map_data = PackedByteArray("AAAbABIAAAAGAAEAAAAcABIAAAAGAAEAAAAdABIAAAAGAAEAAAAeABIAAAAGAAEAAAAfABIAAAAGAAEAAAAgABIAAAAGAAEAAAAhABIAAAAGAAEAAAAiABIAAAAGAAEAAAAjABIAAAAGAAEAAAAkABIAAAAGAAEAAAAlABIAAAAGAAEAAAAmABIAAAAGAAEAAAAmABMAAAAHAAIAAAAlABMAAAAHAAIAAAAkABMAAAAHAAIAAAAjABMAAAAHAAIAAAAiABMAAAAHAAIAAAAhABMAAAAHAAIAAAAgABMAAAAHAAIAAAAfABMAAAAHAAIAAAAeABMAAAAHAAIAAAAdABMAAAAHAAIAAAAcABMAAAAHAAIAAAAbABMAAAAHAAIAAAAaABMAAAAHAAMAAAAnABMAAAAHAAMAAAA=")
+tile_set = SubResource("TileSet_u3c8f")
 
 [node name="SideWall" type="TileMapLayer" parent="." unique_id=238905056]
 tile_map_data = PackedByteArray("AAAaAAcAAAACAAAAAAAnAAcAAAAEAAAAAAAaAAgAAAACAAEAAAAaAAkAAAACAAEAAAAaAAoAAAACAAEAAAAaAAsAAAACAAEAAAAaAAwAAAACAAEAAAAaAA0AAAACAAEAAAAaAA4AAAACAAEAAAAaAA8AAAACAAEAAAAaABAAAAACAAEAAAAaABEAAAACAAEAAAAnAAgAAAACAAEAAAAnAAkAAAACAAEAAAAnAAoAAAACAAEAAAAnAAsAAAACAAEAAAAnAAwAAAACAAEAAAAnAA0AAAACAAEAAAAnAA4AAAACAAEAAAAnAA8AAAACAAEAAAAnABAAAAACAAEAAAAnABEAAAACAAEAAAAaABIAAAACAAIAAAAnABIAAAACAAIAABA=")
@@ -223,7 +226,21 @@ tile_map_data = PackedByteArray("AAAkAAcAAAABAAMAAAAkAAgAAAABAAQAAAAjAAcAAAAAAAM
 tile_set = SubResource("TileSet_iaf8w")
 
 [node name="Door" parent="." unique_id=1974320626 instance=ExtResource("3_s8emh")]
-position = Vector2(513, 146)
+position = Vector2(512, 146)
+
+[node name="DoorMarkers" type="Node2D" parent="." unique_id=1415738375]
+
+[node name="North" type="Node2D" parent="DoorMarkers" unique_id=453968839]
+position = Vector2(535, 131)
+
+[node name="East" type="Node2D" parent="DoorMarkers" unique_id=363558966]
+position = Vector2(632, 214)
+
+[node name="South" type="Node2D" parent="DoorMarkers" unique_id=700132730]
+position = Vector2(536, 305)
+
+[node name="West" type="Node2D" parent="DoorMarkers" unique_id=1862881984]
+position = Vector2(424, 212)
 
 [node name="WallDecor" type="TileMapLayer" parent="." unique_id=2730365]
 tile_map_data = PackedByteArray("AAAeAAgAAAALAAAAAAA=")

@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://bh1ffx6rjk6ix"]
+
+[ext_resource type="Texture2D" uid="uid://c2gvo2h7nmkph" path="res://assets/environment/side_door.png" id="1_jetdg"]
+[ext_resource type="Script" uid="uid://csn18steatlx8" path="res://systems/environment/east_exit_area_2d.gd" id="1_q8adx"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ar7yp"]
+size = Vector2(16.5, 64)
+
+[node name="DoorEast" type="Node2D" unique_id=699459189]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=901706120]
+position = Vector2(-0.8249975, 0)
+scale = Vector2(0.15410157, 0.12949218)
+texture = ExtResource("1_jetdg")
+
+[node name="EastExitArea2D" type="Area2D" parent="." unique_id=628122981]
+script = ExtResource("1_q8adx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EastExitArea2D" unique_id=1665291069]
+position = Vector2(-0.75, 1)
+shape = SubResource("RectangleShape2D_ar7yp")
