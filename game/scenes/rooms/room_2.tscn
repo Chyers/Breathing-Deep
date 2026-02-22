@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://djv0dscqw51mm"]
 
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="1_6a8el"]
-[ext_resource type="Script" uid="uid://x1oqn3gsv5rb" path="res://systems/rooms/room_gen_merged.gd" id="1_nu3hr"]
+[ext_resource type="Script" uid="uid://x1oqn3gsv5rb" path="res://systems/rooms/room_gen.gd" id="1_nu3hr"]
 [ext_resource type="PackedScene" uid="uid://cv2ljwgi74htf" path="res://scenes/environment/stairs.tscn" id="3_ar6ir"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0hwry"]
@@ -281,7 +281,7 @@ tile_map_data = PackedByteArray("AAAeAAgAAAALAAAAAAA=")
 tile_set = SubResource("TileSet_q734l")
 
 [node name="Stairs" parent="." unique_id=1388756090 instance=ExtResource("3_ar6ir")]
-position = Vector2(476, 202)
+position = Vector2(607, 160)
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1798609559]
 position = Vector2(533, 275)
