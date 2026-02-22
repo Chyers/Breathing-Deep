@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://dkuf5a20fdwqs" path="res://assets/environment/torch01_animation.png" id="2_2138x"]
 [ext_resource type="PackedScene" uid="uid://dxhgfp6nphv5p" path="res://scenes/environment/door/door_north.tscn" id="3_ycvkt"]
 [ext_resource type="PackedScene" uid="uid://bh1ffx6rjk6ix" path="res://scenes/environment/door/door_east.tscn" id="4_2138x"]
+[ext_resource type="PackedScene" uid="uid://2s6jeypg8w66" path="res://scenes/environment/door/door_west.tscn" id="5_ycvkt"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ekhbd"]
 texture = ExtResource("1_cjque")
@@ -293,4 +294,7 @@ position = Vector2(530, 216)
 position = Vector2(530, 216)
 
 [node name="DoorEast" parent="." unique_id=699459189 instance=ExtResource("4_2138x")]
-position = Vector2(425, 204)
+position = Vector2(633, 207)
+
+[node name="DoorWest" parent="." unique_id=13408161 instance=ExtResource("5_ycvkt")]
+position = Vector2(425, 203)

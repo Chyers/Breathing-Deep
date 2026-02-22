@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c2gvo2h7nmkph"
-path="res://.godot/imported/side_door.png-818483e1d94ba6fe8491810949b2d212.ctex"
+uid="uid://u3rlgf22vgbm"
+path="res://.godot/imported/west_door.png-c1e86159159985d27fdee4734c9c9936.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/environment/side_door.png"
-dest_files=["res://.godot/imported/side_door.png-818483e1d94ba6fe8491810949b2d212.ctex"]
+source_file="res://assets/environment/west_door.png"
+dest_files=["res://.godot/imported/west_door.png-c1e86159159985d27fdee4734c9c9936.ctex"]
 
 [params]
 
