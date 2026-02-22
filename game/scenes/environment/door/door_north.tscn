@@ -14,7 +14,11 @@ position = Vector2(24, -17.000002)
 scale = Vector2(1, 1.1333332)
 texture = ExtResource("2_v45ce")
 
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1053294893]
+position = Vector2(25, 12)
+
 [node name="NorthExitArea2D" type="Area2D" parent="." unique_id=316195429]
+position = Vector2(0, -1)
 collision_layer = 16
 collision_mask = 2
 script = ExtResource("1_s6om1")
@@ -23,5 +27,3 @@ script = ExtResource("1_s6om1")
 position = Vector2(24, -15)
 shape = SubResource("RectangleShape2D_2jnv8")
 debug_color = Color(0.70285153, 0.4798553, 0.29215485, 0.41960785)
-
-[connection signal="body_entered" from="NorthExitArea2D" to="." method="_on_exit_area_2d_body_entered"]

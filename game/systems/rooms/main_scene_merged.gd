@@ -42,6 +42,7 @@ const DIRECTIONS = {
 
 # --- Lifecycle ---
 func _ready() -> void:
+	print("Main scene ready! Node: ", name, "Path: ", get_path())
 	_initialize_grid()
 	_place_entrance()
 	_generate_path(_start, _critical_path_length, "C")
@@ -49,6 +50,20 @@ func _ready() -> void:
 	_build_grid_map()
 	_print_dungeon()
 
+	current_grid_pos = _start
+	spawn_room(current_grid_pos)
+
+func restart_dungeon() -> void:
+	grid_map.clear()
+	dungeon_grid.clear()
+	_branch_candidates.clear()
+	_start = Vector2i(-1, -1)  # Forces random placement again
+	_initialize_grid()
+	_place_entrance()
+	_generate_path(_start, _critical_path_length, "C")
+	_generate_branches()
+	_build_grid_map()
+	_print_dungeon()
 	current_grid_pos = _start
 	spawn_room(current_grid_pos)
 
@@ -121,7 +136,7 @@ func _build_grid_map() -> void:
 	for x in _dimensions.x:
 		for y in _dimensions.y:
 			var cell = dungeon_grid[x][y]
-			if cell != 0:
+			if typeof(cell) != TYPE_INT:
 				var pos = Vector2i(x, y)
 				var scene_path = start_room_scene if cell == "S" else possible_rooms.pick_random()
 				grid_map[pos] = {
@@ -131,6 +146,8 @@ func _build_grid_map() -> void:
 
 # --- Room Spawning ---
 func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
+	print("spawn_room called: ", grid_pos, " entry: ",entry_direction, " room count: ", rooms_node.get_child_count )
+	
 	if not grid_map.has(grid_pos):
 		push_error("spawn_room: no room at grid position " + str(grid_pos))
 		return
@@ -157,39 +174,52 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 	var active_doors = _get_active_doors(grid_pos)
 	if new_room.has_method("setup_doors"):
 		new_room.setup_doors(active_doors)
+		
+	# Wait one frame so instanced doors can populate scene tree
+	await get_tree().process_frame
 
-	# Player spawn: use the door opposite to entry, or default SpawnPoint
+	# Player spawn: use the opposite door's SpawnPoint, or fall back to room SpawnPoint
 	var spawn_node: Node2D = null
 	if entry_direction != "":
 		var opposite = _opposite_direction(entry_direction)
-		spawn_node = new_room.get_node_or_null("Doors/" + opposite + "/SpawnPoint")
+		# Look for the instanced door under Doors/
+		var doors_node = new_room.get_node_or_null("Doors")
+		if doors_node:
+			for door in doors_node.get_children():
+				if door.name.to_lower() == opposite.to_lower():
+					spawn_node = door.get_node_or_null("SpawnPoint")
+					break
+
 	if not spawn_node:
 		spawn_node = new_room.get_node_or_null("SpawnPoint")
 
 	if spawn_node:
-		player.call_deferred("set_global_position", new_room.position + spawn_node.position)
+		player.global_position = spawn_node.global_position
 	else:
-		player.call_deferred("set_global_position", new_room.position)
+		player.global_position = new_room.position
 		print("ERROR: No spawn point found in room at ", grid_pos)
 
-	camera.call_deferred("set_global_position", VIEWPORT_CENTER)
+	camera.global_position = VIEWPORT_CENTER
 	current_room = new_room
 	current_grid_pos = grid_pos
+	await get_tree().process_frame
 
 # Called by a door trigger in the room scene, passing which door was used
 # e.g. door_node calls: get_tree().root.get_node("MainScene").enter_door("north")
 func enter_door(direction: String) -> void:
 	if is_transitioning:
 		return
+	
+	is_transitioning = true
+	
 	var offset = DIRECTIONS.get(direction, Vector2i.ZERO)
 	var target_pos = current_grid_pos + offset
+	
 	if grid_map.has(target_pos):
-		is_transitioning = true
-		spawn_room(target_pos, direction)
-		await get_tree().process_frame
-		is_transitioning = false
+		await spawn_room(target_pos, direction)
 	else:
 		print("No room in direction: ", direction, " from ", current_grid_pos)
+	is_transitioning = false
 
 # --- Helpers ---
 

@@ -1,12 +1,12 @@
 [gd_scene format=3 uid="uid://2s6jeypg8w66"]
 
 [ext_resource type="Texture2D" uid="uid://u3rlgf22vgbm" path="res://assets/environment/west_door.png" id="1_68l4i"]
-[ext_resource type="Script" uid="uid://3mm1cjnyiqcf" path="res://systems/environment/west_exit_area_2d.gd" id="1_hpgnn"]
+[ext_resource type="Script" uid="uid://3mm1cjnyiqcf" path="res://systems/environment/door_west.gd" id="1_hpgnn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_68l4i"]
-size = Vector2(16, 63.5)
+size = Vector2(18, 63.5)
 
-[node name="DoorWest" type="Node2D" unique_id=13408161]
+[node name="Door" type="Node2D" unique_id=13408161]
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1278299562]
 position = Vector2(-1.0000007, 1.5000006)
@@ -14,7 +14,11 @@ rotation = -3.1415927
 scale = Vector2(0.86666673, 0.6632653)
 texture = ExtResource("1_68l4i")
 
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1421929801]
+position = Vector2(23, 0)
+
 [node name="WestExitArea2D" type="Area2D" parent="." unique_id=333428689]
+collision_mask = 2
 script = ExtResource("1_hpgnn")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WestExitArea2D" unique_id=1061543827]
