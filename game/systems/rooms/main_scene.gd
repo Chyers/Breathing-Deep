@@ -24,7 +24,7 @@ var possible_rooms = [
 # --- Dungeon State ---
 # grid_map: Vector2i -> { "type": String, "scene": String }
 var grid_map: Dictionary = {}
-var dungeon_grid: Array = []         # Raw 2D grid (mirrors main_scene_2 logic)
+var dungeon_grid: Array = []
 var _branch_candidates: Array[Vector2i] = []
 
 var current_room: Node = null

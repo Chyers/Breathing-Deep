@@ -19,8 +19,7 @@ const DOOR_SCENES = {
 func _ready() -> void:
 	randomize()
 	spawn_items()
-	# setup_doors() is called externally by main_scene.gd after instantiation
-	# so we don't call it here
+	# setup_doors() is called externally by main_scene.gd
 
 # Called by main_scene.gd after instantiation
 func setup_doors(active_directions: Array[String]) -> void:

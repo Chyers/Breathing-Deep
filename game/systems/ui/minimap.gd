@@ -21,7 +21,7 @@ const UNVISITED_COLOR = Color(0.2, 0.2, 0.2, 0) # dark - visited but shown dimly
 
 var grid_map: Dictionary = {}
 var visited_rooms: Array[Vector2i] = []
-var current_pos: Vector2i = Vector2i.ZERO
+var current_pos: Vector2i = Vector2i(-1, -1)
 var room_rects: Dictionary = {}  # Vector2i -> ColorRect
 
 func _ready() -> void:

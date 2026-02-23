@@ -7,7 +7,7 @@
 size = Vector2(44, 36)
 
 [node name="Door" type="Node2D" unique_id=1974320626]
-y_sort_enabled = true
+z_index = -1
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1864865642]
 position = Vector2(24, -17.000002)
