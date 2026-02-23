@@ -1,13 +1,8 @@
 [gd_scene format=4 uid="uid://djv0dscqw51mm"]
 
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="1_6a8el"]
-[ext_resource type="Script" uid="uid://dkhgpm7an5bm8" path="res://scenes/rooms/room_2.gd" id="1_nu3hr"]
+[ext_resource type="Script" uid="uid://x1oqn3gsv5rb" path="res://systems/rooms/room_gen.gd" id="1_nu3hr"]
 [ext_resource type="PackedScene" uid="uid://cv2ljwgi74htf" path="res://scenes/environment/stairs.tscn" id="3_ar6ir"]
-[ext_resource type="PackedScene" uid="uid://dxhgfp6nphv5p" path="res://scenes/environment/door/door.tscn" id="3_tjvhs"]
-[ext_resource type="PackedScene" uid="uid://bscoprqh5ulfp" path="res://scenes/environment/health.tscn" id="4_0hwry"]
-[ext_resource type="PackedScene" uid="uid://dr43y0k1fpybp" path="res://scenes/environment/buff.tscn" id="4_nu3hr"]
-[ext_resource type="Texture2D" uid="uid://dm6875vqv3gd4" path="res://assets/items_&_traps/flamethrower/flame_trap_top.png" id="5_0hwry"]
-[ext_resource type="PackedScene" uid="uid://64uu0oy0ptx1" path="res://scenes/environment/coin.tscn" id="5_nu3hr"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0hwry"]
 texture = ExtResource("1_6a8el")
@@ -118,15 +113,18 @@ texture = ExtResource("1_6a8el")
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_ix842")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q734l"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tjvhs"]
 texture = ExtResource("1_6a8el")
 6:1/0 = 0
-6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 5.333334, 8, 5.333334, 8, 8, -8, 8)
+7:2/0 = 0
+7:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 5.333334, 8, 5.333334, 8, 8, -8, 8)
+7:3/0 = 0
+7:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
-[sub_resource type="TileSet" id="TileSet_kxor6"]
+[sub_resource type="TileSet" id="TileSet_np14n"]
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 6
-sources/0 = SubResource("TileSetAtlasSource_q734l")
+sources/0 = SubResource("TileSetAtlasSource_tjvhs")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nolfs"]
 texture = ExtResource("1_6a8el")
@@ -229,26 +227,6 @@ texture = ExtResource("1_6a8el")
 [sub_resource type="TileSet" id="TileSet_q734l"]
 sources/0 = SubResource("TileSetAtlasSource_sbn3u")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_np14n"]
-texture = ExtResource("5_0hwry")
-0:0/animation_separation = Vector2i(3, 0)
-0:0/animation_speed = 5.0
-0:0/animation_frame_0/duration = 1.0
-0:0/animation_frame_1/duration = 1.0
-0:0/animation_frame_2/duration = 1.0
-0:0/animation_frame_3/duration = 1.0
-0:0/0 = 0
-0:1/animation_separation = Vector2i(3, 0)
-0:1/animation_speed = 5.0
-0:1/animation_frame_0/duration = 1.0
-0:1/animation_frame_1/duration = 1.0
-0:1/animation_frame_2/duration = 1.0
-0:1/animation_frame_3/duration = 1.0
-0:1/0 = 0
-
-[sub_resource type="TileSet" id="TileSet_ix842"]
-sources/0 = SubResource("TileSetAtlasSource_np14n")
-
 [node name="Room2" type="Node2D" unique_id=243363048]
 y_sort_enabled = true
 position = Vector2(-289, -80)
@@ -264,11 +242,11 @@ y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAcAAoAAAAHAAUAAAAlAAsAAAAMAAUAAAAkABEAAAAPAAQAAAA=")
 tile_set = SubResource("TileSet_urnam")
 
-[node name="BottomWall" type="TileMapLayer" parent="." unique_id=1431173167]
+[node name="BottomWall" type="TileMapLayer" parent="." unique_id=2122379702]
 z_index = 1
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAcABIAAAAGAAEAAAAdABIAAAAGAAEAAAAeABIAAAAGAAEAAAAfABIAAAAGAAEAAAAgABIAAAAGAAEAAAAhABIAAAAGAAEAAAAiABIAAAAGAAEAAAAjABIAAAAGAAEAAAAkABIAAAAGAAEAAAAlABIAAAAGAAEAAAAbABIAAAAGAAEAAAAmABIAAAAGAAEAAAA=")
-tile_set = SubResource("TileSet_kxor6")
+tile_map_data = PackedByteArray("AAAbABIAAAAGAAEAAAAcABIAAAAGAAEAAAAdABIAAAAGAAEAAAAeABIAAAAGAAEAAAAfABIAAAAGAAEAAAAgABIAAAAGAAEAAAAhABIAAAAGAAEAAAAiABIAAAAGAAEAAAAjABIAAAAGAAEAAAAkABIAAAAGAAEAAAAlABIAAAAGAAEAAAAmABIAAAAGAAEAAAAmABMAAAAHAAIAAAAlABMAAAAHAAIAAAAkABMAAAAHAAIAAAAjABMAAAAHAAIAAAAiABMAAAAHAAIAAAAhABMAAAAHAAIAAAAgABMAAAAHAAIAAAAfABMAAAAHAAIAAAAeABMAAAAHAAIAAAAdABMAAAAHAAIAAAAcABMAAAAHAAIAAAAbABMAAAAHAAIAAAAaABMAAAAHAAMAAAAnABMAAAAHAAMAAAA=")
+tile_set = SubResource("TileSet_np14n")
 
 [node name="SideWall" type="TileMapLayer" parent="." unique_id=238905056]
 tile_map_data = PackedByteArray("AAAaAAcAAAACAAAAAAAnAAcAAAAEAAAAAAAaAAgAAAACAAEAAAAaAAkAAAACAAEAAAAaAAoAAAACAAEAAAAaAAsAAAACAAEAAAAaAAwAAAACAAEAAAAaAA0AAAACAAEAAAAaAA4AAAACAAEAAAAaAA8AAAACAAEAAAAaABAAAAACAAEAAAAaABEAAAACAAEAAAAnAAgAAAACAAEAAAAnAAkAAAACAAEAAAAnAAoAAAACAAEAAAAnAAsAAAACAAEAAAAnAAwAAAACAAEAAAAnAA0AAAACAAEAAAAnAA4AAAACAAEAAAAnAA8AAAACAAEAAAAnABAAAAACAAEAAAAnABEAAAACAAEAAAAaABIAAAACAAIAAAAnABIAAAACAAIAABA=")
@@ -280,28 +258,30 @@ y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAkAAcAAAABAAMAAAAkAAgAAAABAAQAAAAjAAcAAAAAAAMAAAAjAAgAAAAAAAQAAAAlAAcAAAACAAMAAAAmAAcAAAAIAAMAAAAlAAgAAAACAAQAAAAmAAgAAAAIAAQAAAAbAAcAAAAEAAMAAAAbAAgAAAAEAAQAAAAcAAcAAAABAAEAAAAdAAcAAAABAAEAAAAeAAcAAAABAAEAAAAgAAcAAAABAAEAAAAhAAcAAAABAAEAAAAiAAcAAAABAAEAAAAcAAgAAAABAAIAAAAdAAgAAAABAAIAAAAeAAgAAAABAAIAAAAgAAgAAAABAAIAAAAhAAgAAAABAAIAAAAiAAgAAAABAAIAAAAfAAgAAAAMAAQAAAAfAAcAAAAMAAMAAAA=")
 tile_set = SubResource("TileSet_oqwl6")
 
-[node name="Door" parent="." unique_id=1974320626 instance=ExtResource("3_tjvhs")]
-position = Vector2(431, 146)
+[node name="DoorMarkers" type="Node2D" parent="." unique_id=539305696]
+
+[node name="North" type="Node2D" parent="DoorMarkers" unique_id=2090022062]
+position = Vector2(512, 146)
+
+[node name="South" type="Node2D" parent="DoorMarkers" unique_id=2036223969]
+position = Vector2(505, 322)
+
+[node name="East" type="Node2D" parent="DoorMarkers" unique_id=1450781758]
+position = Vector2(633, 215)
+
+[node name="West" type="Node2D" parent="DoorMarkers" unique_id=169924647]
+position = Vector2(425, 212)
+
+[node name="Doors" type="Node2D" parent="." unique_id=1870159268]
+z_index = 1
+y_sort_enabled = true
 
 [node name="WallDecor" type="TileMapLayer" parent="." unique_id=2730365]
 tile_map_data = PackedByteArray("AAAeAAgAAAALAAAAAAA=")
 tile_set = SubResource("TileSet_q734l")
 
 [node name="Stairs" parent="." unique_id=1388756090 instance=ExtResource("3_ar6ir")]
-position = Vector2(476, 202)
-
-[node name="Health" parent="." unique_id=526413933 instance=ExtResource("4_0hwry")]
-position = Vector2(579, 272)
-
-[node name="Buff" parent="." unique_id=1337934078 instance=ExtResource("4_nu3hr")]
-position = Vector2(599, 273)
-
-[node name="Coin" parent="." unique_id=1096075551 instance=ExtResource("5_nu3hr")]
-position = Vector2(581, 214)
-
-[node name="TopFlameTrap" type="TileMapLayer" parent="." unique_id=1415282348]
-tile_map_data = PackedByteArray("AAAhAAkAAAAAAAEAAAAhAAgAAAAAAAAAAAA=")
-tile_set = SubResource("TileSet_ix842")
+position = Vector2(607, 160)
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1798609559]
 position = Vector2(533, 275)
@@ -310,6 +290,7 @@ position = Vector2(533, 275)
 position = Vector2(530, 216)
 
 [node name="ItemSpawn" type="Node2D" parent="." unique_id=1966993477]
+position = Vector2(15, 14)
 
 [node name="Marker2D" type="Marker2D" parent="ItemSpawn" unique_id=761617433]
 position = Vector2(441, 163)

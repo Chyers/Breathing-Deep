@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dt67tlg4gd676"]
+
+[ext_resource type="Script" uid="uid://cd55nh2sv3ge5" path="res://systems/ui/minimap.gd" id="1_4bivy"]
+
+[node name="Minimap" type="CanvasLayer" unique_id=1017776597]
+script = ExtResource("1_4bivy")
+
+[node name="MinimapContainer" type="Control" parent="." unique_id=2043918720]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MinimapGrid" type="Control" parent="MinimapContainer" unique_id=843429764]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0

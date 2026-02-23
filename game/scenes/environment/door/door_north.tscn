@@ -1,27 +1,29 @@
 [gd_scene format=3 uid="uid://dxhgfp6nphv5p"]
 
-[ext_resource type="Script" uid="uid://dcyjdsjrwpnpg" path="res://systems/environment/door.gd" id="1_s6om1"]
+[ext_resource type="Script" uid="uid://dcyjdsjrwpnpg" path="res://systems/environment/door_north.gd" id="1_s6om1"]
 [ext_resource type="Texture2D" uid="uid://dfxo5wjg8m6vp" path="res://assets/environment/door_01.jpg" id="2_v45ce"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2jnv8"]
 size = Vector2(44, 36)
 
 [node name="Door" type="Node2D" unique_id=1974320626]
-y_sort_enabled = true
-script = ExtResource("1_s6om1")
+z_index = -1
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1864865642]
 position = Vector2(24, -17.000002)
 scale = Vector2(1, 1.1333332)
 texture = ExtResource("2_v45ce")
 
-[node name="ExitArea2D" type="Area2D" parent="." unique_id=316195429]
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=1053294893]
+position = Vector2(25, 12)
+
+[node name="NorthExitArea2D" type="Area2D" parent="." unique_id=316195429]
+position = Vector2(0, -1)
 collision_layer = 16
 collision_mask = 2
+script = ExtResource("1_s6om1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ExitArea2D" unique_id=1057455404]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="NorthExitArea2D" unique_id=1057455404]
 position = Vector2(24, -15)
 shape = SubResource("RectangleShape2D_2jnv8")
 debug_color = Color(0.70285153, 0.4798553, 0.29215485, 0.41960785)
-
-[connection signal="body_entered" from="ExitArea2D" to="." method="_on_exit_area_2d_body_entered"]

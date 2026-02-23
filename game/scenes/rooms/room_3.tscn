@@ -1,12 +1,8 @@
 [gd_scene format=4 uid="uid://dta14ty3ehfy3"]
 
-[ext_resource type="Script" uid="uid://dkhgpm7an5bm8" path="res://scenes/rooms/room_2.gd" id="1_5bkl7"]
+[ext_resource type="Script" uid="uid://x1oqn3gsv5rb" path="res://systems/rooms/room_gen.gd" id="1_d8ufh"]
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="2_wynrr"]
-[ext_resource type="PackedScene" uid="uid://dxhgfp6nphv5p" path="res://scenes/environment/door/door.tscn" id="3_wmuqe"]
 [ext_resource type="PackedScene" uid="uid://cv2ljwgi74htf" path="res://scenes/environment/stairs.tscn" id="4_5bkl7"]
-[ext_resource type="PackedScene" uid="uid://bscoprqh5ulfp" path="res://scenes/environment/health.tscn" id="5_6lc7h"]
-[ext_resource type="PackedScene" uid="uid://dr43y0k1fpybp" path="res://scenes/environment/buff.tscn" id="6_6oseh"]
-[ext_resource type="PackedScene" uid="uid://64uu0oy0ptx1" path="res://scenes/environment/coin.tscn" id="7_ip1da"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0hwry"]
 texture = ExtResource("2_wynrr")
@@ -86,15 +82,18 @@ terrain_set_0/terrain_0/name = "Floor"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_0hwry")
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q734l"]
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5bkl7"]
 texture = ExtResource("2_wynrr")
 6:1/0 = 0
-6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 5.333334, 8, 5.333334, 8, 8, -8, 8)
+7:2/0 = 0
+7:2/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 5.333334, 8, 5.333334, 8, 8, -8, 8)
+7:3/0 = 0
+7:3/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
-[sub_resource type="TileSet" id="TileSet_kxor6"]
+[sub_resource type="TileSet" id="TileSet_wynrr"]
 physics_layer_0/collision_layer = 1
 physics_layer_0/collision_mask = 6
-sources/0 = SubResource("TileSetAtlasSource_q734l")
+sources/0 = SubResource("TileSetAtlasSource_5bkl7")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_nolfs"]
 texture = ExtResource("2_wynrr")
@@ -200,17 +199,17 @@ sources/0 = SubResource("TileSetAtlasSource_sbn3u")
 [node name="Room3" type="Node2D" unique_id=243363048]
 y_sort_enabled = true
 position = Vector2(-289, -80)
-script = ExtResource("1_5bkl7")
+script = ExtResource("1_d8ufh")
 
 [node name="Floor" type="TileMapLayer" parent="." unique_id=1722344033]
 tile_map_data = PackedByteArray("AAAbABIAAAAEAAsAAAAcABIAAAAFAAsAAAAdABIAAAAFAAsAAAAeABIAAAAFAAsAAAAfABIAAAAFAAsAAAAgABIAAAAFAAsAAAAiABIAAAAFAAsAAAAjABIAAAAFAAsAAAAkABIAAAAFAAsAAAAkABEAAAAFAAoAAAAkABAAAAAFAAoAAAAjABAAAAAFAAoAAAAgABAAAAAFAAoAAAAfABAAAAAFAAoAAAAeABAAAAAFAAoAAAAdABAAAAAFAAoAAAAcABAAAAAFAAoAAAAbABAAAAAEAAoAAAAbABEAAAAEAAoAAAAcABEAAAAFAAoAAAAdABEAAAAFAAoAAAAeABEAAAAFAAoAAAAfABEAAAAFAAoAAAAgABEAAAAFAAoAAAAjABEAAAAFAAoAAAAkAA8AAAAFAAoAAAAjAA8AAAAFAAoAAAAiAA8AAAAFAAoAAAAhAA8AAAAFAAoAAAAgAA8AAAAFAAoAAAAfAA8AAAAFAAoAAAAeAA8AAAAFAAoAAAAdAA8AAAAFAAoAAAAcAA8AAAAFAAoAAAAbAA8AAAAEAAoAAAAlABIAAAAFAAsAAAAmABIAAAAGAAsAAAAmABEAAAAGAAoAAAAmABAAAAAGAAoAAAAlABAAAAAFAAoAAAAlABEAAAAFAAoAAAAmAA8AAAAGAAoAAAAlAA8AAAAFAAoAAAAhABIAAAAFAAsAAAAhABEAAAAFAAoAAAAiABEAAAAFAAoAAAAiABAAAAAFAAoAAAAhABAAAAAFAAoAAAAmAA4AAAAGAAoAAAAmAA0AAAAGAAoAAAAlAA0AAAAFAAoAAAAkAA0AAAAFAAoAAAAjAA0AAAAFAAoAAAAiAA0AAAAFAAoAAAAhAA0AAAAFAAoAAAAgAA0AAAAFAAoAAAAfAA0AAAAFAAoAAAAeAA0AAAAFAAoAAAAdAA0AAAAFAAoAAAAcAA0AAAAFAAoAAAAbAA0AAAAEAAoAAAAbAA4AAAAEAAoAAAAcAA4AAAAFAAoAAAAdAA4AAAAFAAoAAAAeAA4AAAAFAAoAAAAfAA4AAAAFAAoAAAAgAA4AAAAFAAoAAAAhAA4AAAAFAAoAAAAiAA4AAAAFAAoAAAAjAA4AAAAFAAoAAAAkAA4AAAAFAAoAAAAlAA4AAAAFAAoAAAAmAAwAAAAGAAoAAAAlAAwAAAAFAAoAAAAkAAwAAAAFAAoAAAAjAAwAAAAFAAoAAAAiAAwAAAAFAAoAAAAhAAwAAAAFAAoAAAAgAAwAAAAFAAoAAAAfAAwAAAAFAAoAAAAbAAwAAAAEAAoAAAAcAAwAAAAFAAoAAAAdAAwAAAAFAAoAAAAeAAwAAAAFAAoAAAAbAAsAAAAEAAoAAAAbAAoAAAAEAAoAAAAbAAkAAAAEAAkAAAAcAAkAAAAFAAkAAAAdAAkAAAAFAAkAAAAeAAkAAAAFAAkAAAAeAAoAAAAFAAoAAAAfAAoAAAAFAAoAAAAgAAoAAAAFAAoAAAAhAAoAAAAFAAoAAAAiAAoAAAAFAAoAAAAjAAkAAAAFAAkAAAAkAAkAAAAFAAkAAAAlAAkAAAAFAAkAAAAmAAkAAAAGAAkAAAAiAAkAAAAFAAkAAAAhAAkAAAAFAAkAAAAgAAkAAAAFAAkAAAAfAAkAAAAFAAkAAAAlAAoAAAAFAAoAAAAmAAoAAAAGAAoAAAAmAAsAAAAGAAoAAAAlAAsAAAAFAAoAAAAkAAsAAAAFAAoAAAAjAAsAAAAFAAoAAAAiAAsAAAAFAAoAAAAhAAsAAAAFAAoAAAAgAAsAAAAFAAoAAAAfAAsAAAAFAAoAAAAeAAsAAAAFAAoAAAAdAAsAAAAFAAoAAAAcAAsAAAAFAAoAAAAcAAoAAAAFAAoAAAAdAAoAAAAFAAoAAAAjAAoAAAAFAAoAAAAkAAoAAAAFAAoAAAA=")
 tile_set = SubResource("TileSet_nu3hr")
 
-[node name="BottomWall" type="TileMapLayer" parent="." unique_id=1431173167]
+[node name="BottomWall" type="TileMapLayer" parent="." unique_id=1422979831]
 z_index = 1
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAcABIAAAAGAAEAAAAdABIAAAAGAAEAAAAeABIAAAAGAAEAAAAfABIAAAAGAAEAAAAgABIAAAAGAAEAAAAhABIAAAAGAAEAAAAiABIAAAAGAAEAAAAjABIAAAAGAAEAAAAkABIAAAAGAAEAAAAlABIAAAAGAAEAAAAbABIAAAAGAAEAAAAmABIAAAAGAAEAAAA=")
-tile_set = SubResource("TileSet_kxor6")
+tile_map_data = PackedByteArray("AAAbABIAAAAGAAEAAAAcABIAAAAGAAEAAAAdABIAAAAGAAEAAAAeABIAAAAGAAEAAAAfABIAAAAGAAEAAAAgABIAAAAGAAEAAAAhABIAAAAGAAEAAAAiABIAAAAGAAEAAAAjABIAAAAGAAEAAAAkABIAAAAGAAEAAAAlABIAAAAGAAEAAAAmABIAAAAGAAEAAAAmABMAAAAHAAIAAAAlABMAAAAHAAIAAAAkABMAAAAHAAIAAAAjABMAAAAHAAIAAAAiABMAAAAHAAIAAAAhABMAAAAHAAIAAAAgABMAAAAHAAIAAAAfABMAAAAHAAIAAAAeABMAAAAHAAIAAAAdABMAAAAHAAIAAAAcABMAAAAHAAIAAAAbABMAAAAHAAIAAAAaABMAAAAHAAMAAAAnABMAAAAHAAMAAAA=")
+tile_set = SubResource("TileSet_wynrr")
 
 [node name="SideWall" type="TileMapLayer" parent="." unique_id=238905056]
 tile_map_data = PackedByteArray("AAAaAAcAAAACAAAAAAAnAAcAAAAEAAAAAAAaAAgAAAACAAEAAAAaAAkAAAACAAEAAAAaAAoAAAACAAEAAAAaAAsAAAACAAEAAAAaAAwAAAACAAEAAAAaAA0AAAACAAEAAAAaAA4AAAACAAEAAAAaAA8AAAACAAEAAAAaABAAAAACAAEAAAAaABEAAAACAAEAAAAnAAgAAAACAAEAAAAnAAkAAAACAAEAAAAnAAoAAAACAAEAAAAnAAsAAAACAAEAAAAnAAwAAAACAAEAAAAnAA0AAAACAAEAAAAnAA4AAAACAAEAAAAnAA8AAAACAAEAAAAnABAAAAACAAEAAAAnABEAAAACAAEAAAAaABIAAAACAAIAAAAnABIAAAACAAIAABA=")
@@ -222,8 +221,23 @@ y_sort_enabled = true
 tile_map_data = PackedByteArray("AAAkAAcAAAABAAMAAAAkAAgAAAABAAQAAAAjAAcAAAAAAAMAAAAjAAgAAAAAAAQAAAAlAAcAAAACAAMAAAAmAAcAAAAIAAMAAAAlAAgAAAACAAQAAAAmAAgAAAAIAAQAAAAbAAcAAAAEAAMAAAAbAAgAAAAEAAQAAAAcAAcAAAABAAEAAAAdAAcAAAABAAEAAAAeAAcAAAABAAEAAAAgAAcAAAABAAEAAAAhAAcAAAABAAEAAAAiAAcAAAABAAEAAAAcAAgAAAABAAIAAAAdAAgAAAABAAIAAAAeAAgAAAABAAIAAAAgAAgAAAABAAIAAAAhAAgAAAABAAIAAAAiAAgAAAABAAIAAAAfAAgAAAAMAAQAAAAfAAcAAAAMAAMAAAA=")
 tile_set = SubResource("TileSet_oqwl6")
 
-[node name="Door" parent="." unique_id=1974320626 instance=ExtResource("3_wmuqe")]
-position = Vector2(576, 146)
+[node name="DoorMarkers" type="Node2D" parent="." unique_id=793227969]
+
+[node name="North" type="Node2D" parent="DoorMarkers" unique_id=1256085734]
+position = Vector2(512, 146)
+
+[node name="South" type="Node2D" parent="DoorMarkers" unique_id=482699305]
+position = Vector2(505, 322)
+
+[node name="East" type="Node2D" parent="DoorMarkers" unique_id=111962526]
+position = Vector2(633, 215)
+
+[node name="West" type="Node2D" parent="DoorMarkers" unique_id=1549898792]
+position = Vector2(425, 212)
+
+[node name="Doors" type="Node2D" parent="." unique_id=607990323]
+z_index = 1
+y_sort_enabled = true
 
 [node name="WallDecor" type="TileMapLayer" parent="." unique_id=2730365]
 tile_map_data = PackedByteArray("AAAeAAgAAAALAAAAAAA=")
@@ -231,15 +245,6 @@ tile_set = SubResource("TileSet_q734l")
 
 [node name="Stairs" parent="." unique_id=1388756090 instance=ExtResource("4_5bkl7")]
 position = Vector2(449, 272)
-
-[node name="Health" parent="." unique_id=526413933 instance=ExtResource("5_6lc7h")]
-position = Vector2(579, 272)
-
-[node name="Buff" parent="." unique_id=1337934078 instance=ExtResource("6_6oseh")]
-position = Vector2(599, 273)
-
-[node name="Coin" parent="." unique_id=1096075551 instance=ExtResource("7_ip1da")]
-position = Vector2(581, 214)
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1798609559]
 position = Vector2(533, 275)
