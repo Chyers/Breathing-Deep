@@ -41,24 +41,11 @@ const DIRECTIONS = {
 	"west":  Vector2i(-1, 0)
 }
 
-# --- Lifecycle ---
-func _ready() -> void:
-	_initialize_grid()
-	_place_entrance()
-	_generate_path(_start, _critical_path_length, "C")
-	_generate_branches()
-	_build_grid_map()
-	_print_dungeon()
-	minimap.initialize(grid_map, current_grid_pos)
-
-	current_grid_pos = _start
-	spawn_room(current_grid_pos)
-
-func restart_dungeon() -> void:
+func _generate_dungeon() -> void:
 	grid_map.clear()
 	dungeon_grid.clear()
 	_branch_candidates.clear()
-	_start = Vector2i(-1, -1)  # Forces random placement again
+	_start = Vector2i(-1, -1)
 	_initialize_grid()
 	_place_entrance()
 	_generate_path(_start, _critical_path_length, "C")
@@ -66,7 +53,15 @@ func restart_dungeon() -> void:
 	_build_grid_map()
 	_print_dungeon()
 	current_grid_pos = _start
-	
+
+# --- Lifecycle ---
+func _ready() -> void:
+	_generate_dungeon()
+	await spawn_room(current_grid_pos)
+	minimap.initialize(grid_map, current_grid_pos)
+
+func restart_dungeon() -> void:
+	_generate_dungeon()
 	minimap.visited_rooms.clear()
 	minimap.room_rects.clear()
 	minimap.grid_map = grid_map
@@ -84,9 +79,9 @@ func _initialize_grid() -> void:
 
 func _place_entrance() -> void:
 	if _start.x < 0 or _start.x >= _dimensions.x:
-		_start.x = randi_range(0, _dimensions.x - 1)
+		_start.x = randi_range(1, _dimensions.x - 2)
 	if _start.y < 0 or _start.y >= _dimensions.y:
-		_start.y = randi_range(0, _dimensions.y - 1)
+		_start.y = randi_range(1, _dimensions.y - 2)
 	dungeon_grid[_start.x][_start.y] = "S"
 
 func _generate_path(from: Vector2i, length: int, marker: String) -> bool:
@@ -103,6 +98,9 @@ func _generate_path(from: Vector2i, length: int, marker: String) -> bool:
 		var nx = current.x + direction.x
 		var ny = current.y + direction.y
 		if nx >= 0 and nx < _dimensions.x and ny >= 0 and ny < _dimensions.y and not dungeon_grid[nx][ny]:
+			if nx == 0 and ny == 0:
+				direction = Vector2i(direction.y, -direction.x)
+				continue
 			current += direction
 			dungeon_grid[current.x][current.y] = marker
 			if length > 1:
@@ -150,11 +148,30 @@ func _build_grid_map() -> void:
 					"type": str(cell),
 					"scene": scene_path
 				}
+	_place_boss_room()
+
+func _place_boss_room() -> void:
+	# Find critical path room furthest from start
+	var furthest_pos: Vector2i = Vector2i(-1, -1)
+	var furthest_dist: float = 0.0
+	
+	for pos in grid_map.keys():
+		if grid_map[pos]["type"] == "C" :
+			var dist = _start.distance_to(Vector2(pos.x, pos.y))
+			if dist > furthest_dist:
+				furthest_dist = dist
+				furthest_pos = pos
+	
+	if furthest_pos == Vector2i.ZERO:
+		push_warning("Could not find furthest critical path room for boss!")
+		return
+	
+	grid_map[furthest_pos]["type"] = "B"
+	grid_map[furthest_pos]["scene"] = "res://scenes/rooms/boss_room.tscn"
+	dungeon_grid[furthest_pos.x][furthest_pos.y] = "B"
 
 # --- Room Spawning ---
 func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
-	print("spawn_room called: ", grid_pos, " entry: ",entry_direction, " room count: ", rooms_node.get_child_count )
-	
 	if not grid_map.has(grid_pos):
 		push_error("spawn_room: no room at grid position " + str(grid_pos))
 		return
@@ -179,6 +196,7 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 
 	# Determine active doors based on grid neighbors
 	var active_doors = _get_active_doors(grid_pos)
+		
 	if new_room.has_method("setup_doors"):
 		new_room.setup_doors(active_doors)
 		
