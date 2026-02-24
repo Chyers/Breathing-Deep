@@ -18,7 +18,8 @@ const DOOR_SCENES = {
 
 func _ready() -> void:
 	randomize()
-	spawn_items()
+	if not is_in_group("boss_room"):
+		spawn_items()
 	# setup_doors() is called externally by main_scene.gd
 
 # Called by main_scene.gd after instantiation

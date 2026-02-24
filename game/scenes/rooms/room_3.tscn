@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://x1oqn3gsv5rb" path="res://systems/rooms/room_gen.gd" id="1_d8ufh"]
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="2_wynrr"]
-[ext_resource type="PackedScene" uid="uid://cv2ljwgi74htf" path="res://scenes/environment/stairs.tscn" id="4_5bkl7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0hwry"]
 texture = ExtResource("2_wynrr")
@@ -242,9 +241,6 @@ y_sort_enabled = true
 [node name="WallDecor" type="TileMapLayer" parent="." unique_id=2730365]
 tile_map_data = PackedByteArray("AAAeAAgAAAALAAAAAAA=")
 tile_set = SubResource("TileSet_q734l")
-
-[node name="Stairs" parent="." unique_id=1388756090 instance=ExtResource("4_5bkl7")]
-position = Vector2(449, 272)
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1798609559]
 position = Vector2(533, 275)

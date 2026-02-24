@@ -2,7 +2,6 @@
 
 [ext_resource type="Script" uid="uid://x1oqn3gsv5rb" path="res://systems/rooms/room_gen.gd" id="1_nvm38"]
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="2_nt2nv"]
-[ext_resource type="PackedScene" uid="uid://cv2ljwgi74htf" path="res://scenes/environment/stairs.tscn" id="4_x7oow"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tfhis"]
 texture = ExtResource("2_nt2nv")
@@ -242,9 +241,6 @@ position = Vector2(425, 212)
 [node name="Doors" type="Node2D" parent="." unique_id=2056732744]
 z_index = 1
 y_sort_enabled = true
-
-[node name="Stairs" parent="." unique_id=1388756090 instance=ExtResource("4_x7oow")]
-position = Vector2(597, 180)
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1798609559]
 position = Vector2(533, 275)
