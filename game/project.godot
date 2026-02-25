@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="Breathing-Deep"
-run/main_scene="uid://baa3afpncco58"
+run/main_scene="uid://d4iduxqkbmxka"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="uid://caf7mhmbvsqh5"
 
