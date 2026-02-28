@@ -12,10 +12,11 @@ const COLORS = {
 	"1": Color(0.2, 0.6, 1),   # blue - branch 1
 	"2": Color(0.2, 0.6, 1),   # blue - branch 2
 	"3": Color(0.2, 0.6, 1),   # blue - branch 3
-	"B": Color(1, 0, 0),       # red - boss room (for later)
+	"B": Color(1, 0, 0),       # red - boss room
+	"P": Color(1, 0, 0.8)      # pink - shop/purchase room
 }
 const CURRENT_ROOM_COLOR = Color(1, 1, 0)   # yellow - player is here
-const UNVISITED_COLOR = Color(0.2, 0.2, 0.2, 0) # dark - visited but shown dimly
+const UNVISITED_COLOR = Color(0.2, 0.2, 0.2, 0) # transparent - visited but shown dimly
 
 @onready var minimap_grid = $MinimapContainer/MinimapGrid
 

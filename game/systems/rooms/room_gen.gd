@@ -13,7 +13,11 @@ const DOOR_SCENES = {
 	"north": preload("res://scenes/environment/door/door_north.tscn"),
 	"south": preload("res://scenes/environment/door/door_south.tscn"),
 	"east":  preload("res://scenes/environment/door/door_east.tscn"),
-	"west":  preload("res://scenes/environment/door/door_west.tscn")
+	"west":  preload("res://scenes/environment/door/door_west.tscn"),
+	"north_boss": preload("res://scenes/environment/door/north_boss.tscn"),
+	"south_boss": preload("res://scenes/environment/door/south_boss.tscn"),
+	"east_boss":  preload("res://scenes/environment/door/east_boss.tscn"),
+	"west_boss":  preload("res://scenes/environment/door/west_boss.tscn"),
 }
 
 func _ready() -> void:
@@ -39,13 +43,14 @@ func setup_doors(active_directions: Array[String]) -> void:
 			continue
 
 		# Find the marker that tells us where to place this door
-		var marker = get_node_or_null("DoorMarkers/" + dir.capitalize())
+		var base_dir = dir.replace("_boss", "")
+		var marker = get_node_or_null("DoorMarkers/" + base_dir.capitalize())
 		if not marker:
-			push_warning("No DoorMarker found for direction: " + dir + " in room " + name)
+			push_warning("No DoorMarker found for direction: " + base_dir + " in room " + name)
 			continue
 
 		var door = DOOR_SCENES[dir].instantiate()
-		door.name = dir.capitalize()
+		door.name = base_dir.capitalize()
 		door.position = marker.position
 		doors_node.add_child(door)
 
