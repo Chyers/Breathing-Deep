@@ -1,26 +1,28 @@
-[gd_scene format=3 uid="uid://2s6jeypg8w66"]
+[gd_scene format=3 uid="uid://bpecvd7yv2irm"]
 
-[ext_resource type="Texture2D" uid="uid://u3rlgf22vgbm" path="res://assets/environment/west_door.png" id="1_68l4i"]
-[ext_resource type="Script" uid="uid://3mm1cjnyiqcf" path="res://systems/environment/door_west.gd" id="1_hpgnn"]
+[ext_resource type="Script" uid="uid://y7cg8w1o5b4" path="res://systems/environment/west_boss.gd" id="1_e5c6q"]
+[ext_resource type="Texture2D" uid="uid://cy20sy1g40j7o" path="res://assets/environment/side_boss.png" id="2_e5c6q"]
+[ext_resource type="Script" uid="uid://3mm1cjnyiqcf" path="res://systems/environment/door_west.gd" id="3_tvgaw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_68l4i"]
-size = Vector2(18, 36)
+size = Vector2(18, 35.5)
 
 [node name="Door" type="Node2D" unique_id=13408161]
+script = ExtResource("1_e5c6q")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1278299562]
 position = Vector2(-1.0000007, 1.5000006)
 rotation = -3.1415927
 scale = Vector2(0.86666673, 0.6632653)
-texture = ExtResource("1_68l4i")
+texture = ExtResource("2_e5c6q")
 
 [node name="SpawnPoint" type="Marker2D" parent="." unique_id=1421929801]
 position = Vector2(23, 0)
 
 [node name="WestExitArea2D" type="Area2D" parent="." unique_id=333428689]
 collision_mask = 2
-script = ExtResource("1_hpgnn")
+script = ExtResource("3_tvgaw")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WestExitArea2D" unique_id=1061543827]
-position = Vector2(-1, 2)
+position = Vector2(-1, 2.75)
 shape = SubResource("RectangleShape2D_68l4i")

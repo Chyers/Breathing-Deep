@@ -1,12 +1,12 @@
 extends Node2D
 
-# --- Node References ---
+# Node References #
 @onready var rooms_node = $YSort/rooms
 @onready var player = $YSort/Player
 @onready var camera = $Camera2D
 @onready var minimap = $Minimap
 
-# --- Room Assets ---
+# Room Assets #
 var start_room_scene: String = "res://scenes/rooms/starter_room.tscn"
 var possible_rooms = [
 	"res://scenes/rooms/room_2.tscn",
@@ -14,14 +14,14 @@ var possible_rooms = [
 	"res://scenes/rooms/room_4.tscn"
 ]
 
-# --- Grid Algorithm Parameters ---
+# Grid Algorithm Parameters #
 @export var _dimensions: Vector2i = Vector2i(7, 5)
 @export var _start: Vector2i = Vector2i(-1, -1)
 @export var _critical_path_length: int = 13
 @export var _branches: int = 3
 @export var _branch_length: Vector2i = Vector2i(1, 4)
 
-# --- Dungeon State ---
+# Dungeon State #
 # grid_map: Vector2i -> { "type": String, "scene": String }
 var grid_map: Dictionary = {}
 var dungeon_grid: Array = []
@@ -33,7 +33,7 @@ var is_transitioning: bool = false
 
 const VIEWPORT_CENTER = Vector2(240, 135)
 
-# Cardinal direction helpers
+# Cardinal Direction Helpers #
 const DIRECTIONS = {
 	"north": Vector2i(0, 1),
 	"south": Vector2i(0, -1),
@@ -51,10 +51,11 @@ func _generate_dungeon() -> void:
 	_generate_path(_start, _critical_path_length, "C")
 	_generate_branches()
 	_build_grid_map()
+	_place_boss_room()
 	_print_dungeon()
 	current_grid_pos = _start
 
-# --- Lifecycle ---
+# Lifecycle #
 func _ready() -> void:
 	_generate_dungeon()
 	await spawn_room(current_grid_pos)
@@ -66,10 +67,9 @@ func restart_dungeon() -> void:
 	minimap.room_rects.clear()
 	minimap.grid_map = grid_map
 	minimap._build_minimap()
-	
 	await spawn_room(current_grid_pos)
 
-# --- Grid Generation (from main_scene_2.gd) ---
+# Grid Generation #
 func _initialize_grid() -> void:
 	dungeon_grid.clear()
 	for x in _dimensions.x:
@@ -134,8 +134,7 @@ func _print_dungeon() -> void:
 		dungeon_as_string += "\n"
 	print(dungeon_as_string)
 
-# --- Grid Map Build ---
-# Converts the raw dungeon_grid into grid_map: position -> { type, scene }
+# Grid Map Build #
 func _build_grid_map() -> void:
 	grid_map.clear()
 	for x in _dimensions.x:
@@ -148,29 +147,112 @@ func _build_grid_map() -> void:
 					"type": str(cell),
 					"scene": scene_path
 				}
-	_place_boss_room()
 
 func _place_boss_room() -> void:
-	# Find critical path room furthest from start
-	var furthest_pos: Vector2i = Vector2i(-1, -1)
-	var furthest_dist: float = 0.0
-	
+	# Collect all "C" rooms sorted by distance from start, furthest first
+	var candidates: Array = []
 	for pos in grid_map.keys():
-		if grid_map[pos]["type"] == "C" :
+		if grid_map[pos]["type"] == "C":
 			var dist = _start.distance_to(Vector2(pos.x, pos.y))
-			if dist > furthest_dist:
-				furthest_dist = dist
-				furthest_pos = pos
-	
-	if furthest_pos == Vector2i.ZERO:
-		push_warning("Could not find furthest critical path room for boss!")
-		return
-	
-	grid_map[furthest_pos]["type"] = "B"
-	grid_map[furthest_pos]["scene"] = "res://scenes/rooms/boss_room.tscn"
-	dungeon_grid[furthest_pos.x][furthest_pos.y] = "B"
+			candidates.append({ "pos": pos, "dist": dist })
+	candidates.sort_custom(func(a, b): return a["dist"] > b["dist"])
 
-# --- Room Spawning ---
+	# Pick the furthest candidate where every neighbor has at least one other neighbor
+	var boss_pos: Vector2i = Vector2i(-1, -1)
+	for candidate in candidates:
+		var pos: Vector2i = candidate["pos"]
+		var strands_a_room = false
+		for dir in DIRECTIONS.values():
+			var neighbor = pos + dir
+			if not grid_map.has(neighbor):
+				continue
+			# Count how many connections this neighbor has excluding the candidate
+			var other_connections = 0
+			for dir2 in DIRECTIONS.values():
+				var neighbor_of_neighbor = neighbor + dir2
+				if neighbor_of_neighbor != pos and grid_map.has(neighbor_of_neighbor):
+					other_connections += 1
+			if other_connections == 0:
+				strands_a_room = true
+				break
+		if not strands_a_room:
+			boss_pos = pos
+			break
+
+	# Fallback: use the furthest room regardless
+	if boss_pos == Vector2i(-1, -1):
+		push_warning("No ideal boss candidate found - using furthest room.")
+		boss_pos = candidates[0]["pos"]
+
+	grid_map[boss_pos]["type"] = "B"
+	grid_map[boss_pos]["scene"] = "res://scenes/rooms/boss_room.tscn"
+	dungeon_grid[boss_pos.x][boss_pos.y] = "B"
+	_place_shop_room(boss_pos)
+
+
+# BFS from start, only stepping through ciritical path rooms.
+# Returns an ordered Array[Vector2i] from start (exclusive) to boss (inclusive),
+# or an empty one if no path exists.
+func _find_critical_path_to_boss(boss_pos: Vector2i) -> Array[Vector2i]:
+	var came_from: Dictionary = {}   # Vector2i -> Vector2i  (child -> parent)
+	var queue: Array[Vector2i] = [_start]
+	came_from[_start] = _start
+
+	while queue.size() > 0:
+		var current: Vector2i = queue.pop_front()
+		if current == boss_pos:
+			# Reconstruct path from boss back to start, then reverse
+			var path: Array[Vector2i] = []
+			var step: Vector2i = boss_pos
+			while step != _start:
+				path.append(step)
+				step = came_from[step]
+			path.reverse()   # now ordered start -> boss (start is excluded)
+			return path
+
+		for dir in DIRECTIONS.values():
+			var neighbor: Vector2i = current + dir
+			if came_from.has(neighbor):
+				continue
+			if not grid_map.has(neighbor):
+				continue
+			var t: String = grid_map[neighbor]["type"]
+			# Walk any room type - branch rooms sitting between C rooms must
+			# not create false dead-ends that break the path to the boss
+			if t != "S":
+				came_from[neighbor] = current
+				queue.append(neighbor)
+
+	return []
+
+func _place_shop_room(boss_pos: Vector2i) -> void:
+	# Walk the actual connected path from start -> boss and pick the midpoint.
+	var path: Array[Vector2i] = _find_critical_path_to_boss(boss_pos)
+
+	if path.size() < 3:
+		push_warning("Critical path too short to place a shop!")
+		return
+
+	# Filter path down to only "C" rooms so the shop never lands on a branch room,
+	# then pick the middle of that filtered list.
+	var critical_only: Array[Vector2i] = []
+	for p in path:
+		if grid_map[p]["type"] == "C":
+			critical_only.append(p)
+
+	if critical_only.size() < 1:
+		push_warning("No C rooms on path to place shop!")
+		return
+
+	var mid_index: int = critical_only.size() / 2
+	var shop_pos: Vector2i = critical_only[mid_index]
+
+	grid_map[shop_pos]["type"] = "P"
+	grid_map[shop_pos]["scene"] = "res://scenes/rooms/shop_room.tscn"
+	dungeon_grid[shop_pos.x][shop_pos.y] = "P"
+	print("Shop placed at path index %d / %d : %s" % [mid_index, critical_only.size() - 1, str(shop_pos)])
+
+# Room Spawning #
 func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 	if not grid_map.has(grid_pos):
 		push_error("spawn_room: no room at grid position " + str(grid_pos))
@@ -186,7 +268,6 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 	var new_room = room_scene.instantiate()
 	rooms_node.add_child(new_room)
 
-	# Center room on viewport
 	var center_marker = new_room.get_node_or_null("Center")
 	if center_marker:
 		new_room.position = VIEWPORT_CENTER - center_marker.position
@@ -194,20 +275,16 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 		new_room.position = VIEWPORT_CENTER
 		print("WARNING: No Center marker found in room at ", grid_pos)
 
-	# Determine active doors based on grid neighbors
 	var active_doors = _get_active_doors(grid_pos)
-		
+
 	if new_room.has_method("setup_doors"):
 		new_room.setup_doors(active_doors)
-		
-	# Wait one frame so instanced doors can populate scene tree
+
 	await get_tree().process_frame
 
-	# Player spawn: use the opposite door's SpawnPoint, or fall back to room SpawnPoint
 	var spawn_node: Node2D = null
 	if entry_direction != "":
 		var opposite = _opposite_direction(entry_direction)
-		# Look for the instanced door under Doors/
 		var doors_node = new_room.get_node_or_null("Doors")
 		if doors_node:
 			for door in doors_node.get_children():
@@ -231,32 +308,35 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 		minimap.update_minimap(current_grid_pos)
 	await get_tree().process_frame
 
-# Called by a door trigger in the room scene, passing which door was used
-# e.g. door_node calls: get_tree().root.get_node("MainScene").enter_door("north")
 func enter_door(direction: String) -> void:
 	if is_transitioning:
 		return
-	
+
 	is_transitioning = true
-	
+
 	var offset = DIRECTIONS.get(direction, Vector2i.ZERO)
 	var target_pos = current_grid_pos + offset
-	
+
 	if grid_map.has(target_pos):
 		await spawn_room(target_pos, direction)
 	else:
 		print("No room in direction: ", direction, " from ", current_grid_pos)
 	is_transitioning = false
 
-# --- Helpers ---
+# Helpers #
 
-# Returns array of direction strings where a neighboring room exists
+# Returns the directions in which this room has a neighbor, uses the
+# "_boss" suffix when the neighbor is the boss room so setup_doors() can
+# spawn the correct door.
 func _get_active_doors(grid_pos: Vector2i) -> Array[String]:
 	var active: Array[String] = []
 	for dir_name in DIRECTIONS:
 		var neighbor = grid_pos + DIRECTIONS[dir_name]
 		if grid_map.has(neighbor):
-			active.append(dir_name)
+			if grid_map[neighbor]["type"] == "B":
+				active.append(dir_name + "_boss")
+			else:
+				active.append(dir_name)
 	return active
 
 func _opposite_direction(dir: String) -> String:
