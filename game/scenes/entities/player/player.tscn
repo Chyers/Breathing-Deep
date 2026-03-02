@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://5s02uif8cvan" path="res://systems/player/player.gd" id="1_635qg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
-radius = 6.0827627
+radius = 6.0
 
 [sub_resource type="Animation" id="Animation_635qg"]
 length = 0.001
