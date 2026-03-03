@@ -22,8 +22,8 @@ const FOG_COLOR = Color(1, 1, 1, 0.6) # Semi-transparent
 @onready var minimap_grid = $MinimapContainer/MinimapGrid
 @onready var minimap_lines = $MinimapContainer/MinimapLines
 
-var grid_map: Dictionary = {}
-var visited_rooms: Array[Vector2i] = []
+var grid_map: Dictionary = {} # Dungeon room data
+var visited_rooms: Array[Vector2i] = [] # Grid pos the player has entered
 var current_pos: Vector2i = Vector2i(-1, -1)
 var room_rects: Dictionary = {}  # Vector2i -> ColorRect
 
@@ -43,13 +43,15 @@ func initialize(map: Dictionary, start_pos: Vector2i) -> void:
 	_build_minimap()
 	update_minimap(start_pos)
 
+# Positions ColorRect per room and positions them to match the
+# grid layout. Adds icons for special rooms
 func _build_minimap() -> void:
 	# Clear existing
 	for child in minimap_grid.get_children():
 		child.queue_free()
 	room_rects.clear()
 
-	# Find grid bounds for positioning
+	# Find min grid cooridnates for positioning
 	var min_x = INF
 	var min_y = INF
 	for pos in grid_map.keys():
@@ -62,13 +64,13 @@ func _build_minimap() -> void:
 		rect.size = Vector2(ROOM_SIZE, ROOM_SIZE)
 		rect.color = Color(0, 0, 0, 0)  # Invisible until visited
 		rect.visible = false
-		# Position relative to grid bounds
+		# # Flip Y since grid Y increases upward, screen Y increases downward
 		rect.position = Vector2(
 			(pos.x - min_x) * (ROOM_SIZE + ROOM_GAP),
-			# Flip Y since grid Y increases upward but screen Y increases downward
 			-(pos.y - min_y) * (ROOM_SIZE + ROOM_GAP)
 		)
 		
+		# Add icon for special room types (boss, shop, special)
 		var room_type = grid_map[pos]["type"]
 		var icon_path = _get_room_icon(room_type)
 		if icon_path != "":
@@ -83,7 +85,8 @@ func _build_minimap() -> void:
 		minimap_grid.add_child(rect)
 		room_rects[pos] = rect
 
-	# Offset minimap grid so it sits neatly in the corner
+	# Calculate total grid size and offset minimap grid so it 
+	# sits neatly in the corner
 	var total_width = 0
 	var total_height = 0
 	for pos in grid_map.keys():
@@ -97,6 +100,9 @@ func _build_minimap() -> void:
 	minimap_lines.position = minimap_grid.position
 	_draw_connections()
 
+# Called when player enters a new room.
+# Handles visited room coloring, fog of war, current room
+# highlight, and icon display
 func update_minimap(new_pos: Vector2i) -> void:
 	if room_rects.is_empty():
 		return
@@ -105,10 +111,11 @@ func update_minimap(new_pos: Vector2i) -> void:
 
 	current_pos = new_pos
 
-	# Add to visited if not already
+	# Track curr room as visited
 	if new_pos not in visited_rooms:
 		visited_rooms.append(new_pos)
 
+	# Color visited rooms, hide others
 	for pos in grid_map.keys():
 		if not room_rects.has(pos):
 			continue
@@ -116,6 +123,7 @@ func update_minimap(new_pos: Vector2i) -> void:
 			var room_type = grid_map[pos]["type"]
 			room_rects[pos].color = COLORS.get(room_type, UNVISITED_COLOR)
 			room_rects[pos].visible = true
+			# Hide special icon once room is visited
 			var icon = room_rects[pos].get_node_or_null("RoomIcon")
 			if icon and room_type in ["1", "2", "3"]:
 				icon.visible = false
@@ -123,6 +131,7 @@ func update_minimap(new_pos: Vector2i) -> void:
 			room_rects[pos].visible = false
 			room_rects[pos].color = Color(0, 0, 0, 0)
 	
+	# Fog of war: show unvisited neighbors of visited rooms as dull squares
 	const DIRECTIONS = [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]
 	for pos in visited_rooms:
 		for dir in DIRECTIONS:
@@ -136,11 +145,15 @@ func update_minimap(new_pos: Vector2i) -> void:
 			room_rects[neighbor].visible = true
 			room_rects[neighbor].color = FOG_COLOR
 	
+	# Highlight current room last so nothing overwrites it
 	room_rects[new_pos].color = CURRENT_ROOM_COLOR
 	room_rects[new_pos].visible = true
 	
 	_draw_connections()
 
+# Helpers #
+# Passes current state to MiniMapLines and triggers redraw
+# of connecting lines between visited rooms
 func _draw_connections() -> void:
 	minimap_lines.room_rects = room_rects
 	minimap_lines.grid_map = grid_map
