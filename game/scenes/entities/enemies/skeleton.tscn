@@ -328,7 +328,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_3tgof")
 }],
-"loop": true,
+"loop": false,
 "name": &"death",
 "speed": 15.0
 }, {
@@ -395,6 +395,5 @@ animations = [{
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=867065892]
 sprite_frames = SubResource("SpriteFrames_dx3v6")
-animation = &"damage"
-frame = 4
-frame_progress = 1.0
+animation = &"attack"
+frame_progress = 0.30891424

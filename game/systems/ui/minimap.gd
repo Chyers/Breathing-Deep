@@ -153,7 +153,7 @@ func update_minimap(new_pos: Vector2i) -> void:
 
 # Helpers #
 # Passes current state to MiniMapLines and triggers redraw
-# of connecting lines between visited rooms
+# of the lines between connecting rooms
 func _draw_connections() -> void:
 	minimap_lines.room_rects = room_rects
 	minimap_lines.grid_map = grid_map

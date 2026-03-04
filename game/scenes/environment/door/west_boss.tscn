@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bpecvd7yv2irm"]
 
-[ext_resource type="Script" uid="uid://y7cg8w1o5b4" path="res://systems/environment/west_boss.gd" id="1_e5c6q"]
+[ext_resource type="Script" uid="uid://cqfavoklevi2h" path="res://systems/environment/west_boss.gd" id="1_e5c6q"]
 [ext_resource type="Texture2D" uid="uid://cy20sy1g40j7o" path="res://assets/environment/side_boss.png" id="2_e5c6q"]
-[ext_resource type="Script" uid="uid://3mm1cjnyiqcf" path="res://systems/environment/door_west.gd" id="3_tvgaw"]
+[ext_resource type="Script" uid="uid://bjvwbn08kar7b" path="res://systems/environment/door_west.gd" id="3_tvgaw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_68l4i"]
 size = Vector2(18, 35.5)
