@@ -1,24 +1,24 @@
 extends Node
 class_name Telemetry
 
-# --- Recent room metrics ---
+# Recent room metrics #
 var room_start_time : float = 0.0
 var recent_damage_taken : Array = []
 var recent_clear_times : Array = []
 
-# --- Success tracking ---
+# Success tracking #
 var success_streak : int = 0
 
-# --- Floor/room progression ---
+# Floor/room progression #
 var rooms_cleared : int = 0
 var total_rooms : int = 0
 var floor_scalar : float = 1.0
 
-# --- Constants ---
+# Constants #
 const METRIC_WINDOW : int = 5  # Number of recent rooms to track
 const TARGET_ROOM_TIME : float = 150.0  # 2-3 minutes = 120-180s, midpoint 150
 
-# --- Room lifecycle ---
+# Room lifecycle #
 func start_room():
 	room_start_time = Time.get_ticks_msec() / 1000.0
 	
@@ -41,26 +41,26 @@ func end_room(damage_taken: float, player_died: bool):
 		
 	rooms_cleared += 1
 
-# --- Average damage taken in recent rooms ---
+# Average damage taken in recent rooms #
 func get_avg_recent_damage() -> float:
 	if recent_damage_taken.is_empty():
 		return 0.0
 	return recent_damage_taken.reduce(func(a,b): return a + b) / recent_damage_taken.size()
 	
-# --- Clear time delta from target room time ---
+# Clear time delta from target room time #
 func get_avg_clear_time_delta() -> float:
 	if recent_clear_times.is_empty():
 		return 0.0
 	var avg = recent_clear_times.reduce(func(a,b): return a + b) / recent_clear_times.size()
 	return clamp((avg - TARGET_ROOM_TIME) / TARGET_ROOM_TIME, -1.0, 1.0)
 
-# --- Rooms cleared ratio ---
+# Rooms cleared ratio #
 func get_rooms_cleared_ratio() -> float:
 	if total_rooms == 0:
 		return 0.0
 	return float(rooms_cleared) / float(total_rooms)
 
-# --- Recent success streak (normalized) ---
+# Recent success streak (normalized) #
 func get_success_streak() -> float:
 	return clamp(float(success_streak) / METRIC_WINDOW, 0.0, 1.0)
 

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dt67tlg4gd676"]
 
-[ext_resource type="Script" uid="uid://cd55nh2sv3ge5" path="res://systems/ui/minimap.gd" id="1_4bivy"]
-[ext_resource type="Script" uid="uid://c2bgm5eyb70jg" path="res://scenes/rooms/minimap_lines.gd" id="2_lf177"]
+[ext_resource type="Script" uid="uid://clrbyia17wms0" path="res://systems/ui/minimap.gd" id="1_4bivy"]
+[ext_resource type="Script" uid="uid://u8koxg3rshw5" path="res://systems/ui/minimap_lines.gd" id="2_lf177"]
 
 [node name="Minimap" type="CanvasLayer" unique_id=1017776597]
 script = ExtResource("1_4bivy")

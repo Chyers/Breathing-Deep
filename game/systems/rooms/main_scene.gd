@@ -34,6 +34,8 @@ var is_transitioning: bool = false
 const VIEWPORT_CENTER = Vector2(240, 135)
 
 # Cardinal Direction Helpers #
+# Used for connecting doors, room transitions,
+# and neighbor lookups
 const DIRECTIONS = {
 	"north": Vector2i(0, 1),
 	"south": Vector2i(0, -1),
@@ -70,6 +72,7 @@ func restart_dungeon() -> void:
 	await spawn_room(current_grid_pos)
 
 # Grid Generation #
+# Fills dungeon grid w zeros
 func _initialize_grid() -> void:
 	dungeon_grid.clear()
 	for x in _dimensions.x:
@@ -77,6 +80,7 @@ func _initialize_grid() -> void:
 		for y in _dimensions.y:
 			dungeon_grid[x].append(0)
 
+# Chooses random cell and places entrance
 func _place_entrance() -> void:
 	if _start.x < 0 or _start.x >= _dimensions.x:
 		_start.x = randi_range(1, _dimensions.x - 2)
@@ -84,6 +88,10 @@ func _place_entrance() -> void:
 		_start.y = randi_range(1, _dimensions.y - 2)
 	dungeon_grid[_start.x][_start.y] = "S"
 
+# Recursive backtracking DFS generator for path
+# Picks random direction and attempts to make room there.
+# If call succeeds, keeps path. If fails, erases cell 
+# and tries new direction
 func _generate_path(from: Vector2i, length: int, marker: String) -> bool:
 	if length == 0:
 		return true
@@ -114,6 +122,8 @@ func _generate_path(from: Vector2i, length: int, marker: String) -> bool:
 		direction = Vector2i(direction.y, -direction.x)
 	return false
 
+# Picks random candidate rooms from crit path and tries to grow
+# a branch of rand length from each
 func _generate_branches() -> void:
 	var branches_created: int = 0
 	while branches_created < _branches and _branch_candidates.size() > 0:
@@ -123,6 +133,7 @@ func _generate_branches() -> void:
 		else:
 			_branch_candidates.erase(candidate)
 
+# Debug func
 func _print_dungeon() -> void:
 	var dungeon_as_string: String = ""
 	for y in range(_dimensions.y - 1, -1, -1):
@@ -135,6 +146,8 @@ func _print_dungeon() -> void:
 	print(dungeon_as_string)
 
 # Grid Map Build #
+# Converts dungeon_grid markers into grid_map dictionary
+# and assigns scene paths to each room
 func _build_grid_map() -> void:
 	grid_map.clear()
 	for x in _dimensions.x:
@@ -148,6 +161,10 @@ func _build_grid_map() -> void:
 					"scene": scene_path
 				}
 
+# Searches for furthest reachable crit path room
+# from start and places boss room (so long as boss room
+# does not hae any stranded neighbors)
+# Also uses boss position to place shop room
 func _place_boss_room() -> void:
 	# Collect all "C" rooms sorted by distance from start, furthest first
 	var candidates: Array = []
@@ -193,6 +210,7 @@ func _place_boss_room() -> void:
 # BFS from start, only stepping through ciritical path rooms.
 # Returns an ordered Array[Vector2i] from start (exclusive) to boss (inclusive),
 # or an empty one if no path exists.
+# Also used by _place_shop_room() to find midpoint of main route
 func _find_critical_path_to_boss(boss_pos: Vector2i) -> Array[Vector2i]:
 	var came_from: Dictionary = {}   # Vector2i -> Vector2i  (child -> parent)
 	var queue: Array[Vector2i] = [_start]
@@ -225,6 +243,7 @@ func _find_critical_path_to_boss(boss_pos: Vector2i) -> Array[Vector2i]:
 
 	return []
 
+# Places shop at midpoint of crit path between start and boss
 func _place_shop_room(boss_pos: Vector2i) -> void:
 	# Walk the actual connected path from start -> boss and pick the midpoint.
 	var path: Array[Vector2i] = _find_critical_path_to_boss(boss_pos)
@@ -253,6 +272,9 @@ func _place_shop_room(boss_pos: Vector2i) -> void:
 	print("Shop placed at path index %d / %d : %s" % [mid_index, critical_only.size() - 1, str(shop_pos)])
 
 # Room Spawning #
+# Handles loading, instantiating, and positioning rooms
+# Also repositions player at correct spawn point based on
+# which door they entered from
 func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 	if not grid_map.has(grid_pos):
 		push_error("spawn_room: no room at grid position " + str(grid_pos))
@@ -268,6 +290,7 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 	var new_room = room_scene.instantiate()
 	rooms_node.add_child(new_room)
 
+	# Center room in viewport using Center marker
 	var center_marker = new_room.get_node_or_null("Center")
 	if center_marker:
 		new_room.position = VIEWPORT_CENTER - center_marker.position
@@ -275,13 +298,14 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 		new_room.position = VIEWPORT_CENTER
 		print("WARNING: No Center marker found in room at ", grid_pos)
 
+	# Tells room which doors to spawn based on its neighbors
 	var active_doors = _get_active_doors(grid_pos)
-
 	if new_room.has_method("setup_doors"):
 		new_room.setup_doors(active_doors)
 
 	await get_tree().process_frame
 
+	# Spawn player at door they came through, or default spawn
 	var spawn_node: Node2D = null
 	if entry_direction != "":
 		var opposite = _opposite_direction(entry_direction)
@@ -308,6 +332,8 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 		minimap.update_minimap(current_grid_pos)
 	await get_tree().process_frame
 
+# Handles player walking through a door and prevents
+# double-transitions
 func enter_door(direction: String) -> void:
 	if is_transitioning:
 		return
@@ -324,7 +350,6 @@ func enter_door(direction: String) -> void:
 	is_transitioning = false
 
 # Helpers #
-
 # Returns the directions in which this room has a neighbor, uses the
 # "_boss" suffix when the neighbor is the boss room so setup_doors() can
 # spawn the correct door.
