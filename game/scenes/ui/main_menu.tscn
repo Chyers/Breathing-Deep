@@ -1,13 +1,13 @@
 [gd_scene format=3 uid="uid://d4iduxqkbmxka"]
 
-[ext_resource type="Texture2D" uid="uid://hhf0ybyk2453" path="res://systems/ui/start_game_128x64 (1).png" id="2_qhvax"]
+[ext_resource type="Texture2D" uid="uid://hhf0ybyk2453" path="res://assets/ui/start_game_128x64 (1).png" id="2_qhvax"]
 [ext_resource type="Texture2D" uid="uid://caf7mhmbvsqh5" path="res://assets/ui/main_theme.png" id="2_urydw"]
-[ext_resource type="Texture2D" uid="uid://cx2wknh5h0cso" path="res://systems/ui/start_hover.png" id="3_5hoan"]
-[ext_resource type="Texture2D" uid="uid://buhxafg8jwg7v" path="res://systems/ui/Start_pressed.png" id="3_de6vd"]
-[ext_resource type="Texture2D" uid="uid://buqskx7ur2wdm" path="res://systems/ui/quit_button_128x64.png" id="3_qhvax"]
-[ext_resource type="Texture2D" uid="uid://dnq4suko8e1vv" path="res://systems/ui/options_button_128x64_new.png" id="5_de6vd"]
-[ext_resource type="Texture2D" uid="uid://b7vecndu4dbol" path="res://systems/ui/quit_button_hover.png" id="7_6vlf1"]
-[ext_resource type="Texture2D" uid="uid://bavmyw80hxthf" path="res://systems/ui/quit_button_pressed.png" id="7_t5d2d"]
+[ext_resource type="Texture2D" uid="uid://cx2wknh5h0cso" path="res://assets/ui/start_hover.png" id="3_5hoan"]
+[ext_resource type="Texture2D" uid="uid://buhxafg8jwg7v" path="res://assets/ui/Start_pressed.png" id="3_de6vd"]
+[ext_resource type="Texture2D" uid="uid://buqskx7ur2wdm" path="res://assets/ui/quit_button_128x64.png" id="3_qhvax"]
+[ext_resource type="Texture2D" uid="uid://dnq4suko8e1vv" path="res://assets/ui/options_button_128x64_new.png" id="5_de6vd"]
+[ext_resource type="Texture2D" uid="uid://b7vecndu4dbol" path="res://assets/ui/quit_button_hover.png" id="7_6vlf1"]
+[ext_resource type="Texture2D" uid="uid://bavmyw80hxthf" path="res://assets/ui/quit_button_pressed.png" id="7_t5d2d"]
 
 [sub_resource type="GDScript" id="GDScript_qfblm"]
 script/source = "extends Control
