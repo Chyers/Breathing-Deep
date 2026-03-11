@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://d4iduxqkbmxka"]
+
+[ext_resource type="Texture2D" uid="uid://hhf0ybyk2453" path="res://assets/ui/start_game_128x64 (1).png" id="2_qhvax"]
+[ext_resource type="Texture2D" uid="uid://caf7mhmbvsqh5" path="res://assets/ui/main_theme.png" id="2_urydw"]
+[ext_resource type="Texture2D" uid="uid://cx2wknh5h0cso" path="res://assets/ui/start_hover.png" id="3_5hoan"]
+[ext_resource type="Texture2D" uid="uid://buhxafg8jwg7v" path="res://assets/ui/Start_pressed.png" id="3_de6vd"]
+[ext_resource type="Texture2D" uid="uid://buqskx7ur2wdm" path="res://assets/ui/quit_button_128x64.png" id="3_qhvax"]
+[ext_resource type="Texture2D" uid="uid://dnq4suko8e1vv" path="res://assets/ui/options_button_128x64_new.png" id="5_de6vd"]
+[ext_resource type="Texture2D" uid="uid://b7vecndu4dbol" path="res://assets/ui/quit_button_hover.png" id="7_6vlf1"]
+[ext_resource type="Texture2D" uid="uid://bavmyw80hxthf" path="res://assets/ui/quit_button_pressed.png" id="7_t5d2d"]
+
+[sub_resource type="GDScript" id="GDScript_qfblm"]
+script/source = "extends Control
+
+func _on_start_button_pressed():
+	get_tree().change_scene_to_file(\"res://scenes/rooms/main_scene.tscn\")
+
+func _on_options_button_pressed():
+	print(\"Options pressed\")
+
+func _on_quit_button_pressed():
+	get_tree().quit()
+"
+
+[node name="MainMenu" type="Control" unique_id=815509216]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = SubResource("GDScript_qfblm")
+
+[node name="Background" type="TextureRect" parent="." unique_id=1763178320]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_urydw")
+expand_mode = 3
+stretch_mode = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1880162960]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -98.0
+offset_right = 48.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 0
+alignment = 1
+
+[node name="StartButton" type="TextureButton" parent="VBoxContainer" unique_id=362841287]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("2_qhvax")
+texture_pressed = ExtResource("3_de6vd")
+texture_hover = ExtResource("3_5hoan")
+
+[node name="OptionsButton" type="TextureButton" parent="VBoxContainer" unique_id=1174007666]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("5_de6vd")
+stretch_mode = 1
+
+[node name="QuitButton" type="TextureButton" parent="VBoxContainer" unique_id=37141069]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture_normal = ExtResource("3_qhvax")
+texture_pressed = ExtResource("7_t5d2d")
+texture_hover = ExtResource("7_6vlf1")
+
+[connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
