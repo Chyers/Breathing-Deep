@@ -2,6 +2,7 @@ extends Node2D
 
 @export var min_items: int = 1
 @export var max_items: int = 4
+@export var is_boss_room: bool = false
 
 var item_scenes = [
 	preload("res://scenes/environment/coin.tscn"),
@@ -22,7 +23,11 @@ const DOOR_SCENES = {
 
 func _ready() -> void:
 	randomize()
-	if not is_in_group("boss_room"):
+	if is_boss_room:
+		print("Room:", name, " | Boss room detected")
+		get_tree().current_scene.play_music(preload("res://audio/Boss Battle.ogg"))
+	else:
+		get_tree().current_scene.play_music(preload("res://audio/Memoraphile - Spooky Dungeon.mp3"))
 		spawn_items()
 	# setup_doors() is called externally by main_scene.gd
 

@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://c7vfv86ifetc8"]
 
-[ext_resource type="Script" uid="uid://x1oqn3gsv5rb" path="res://systems/rooms/room_gen.gd" id="1_cirqo"]
+[ext_resource type="Script" uid="uid://cmpsrh50vqtuc" path="res://systems/rooms/room_gen.gd" id="1_cirqo"]
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="2_u6evn"]
 [ext_resource type="Texture2D" uid="uid://dkuf5a20fdwqs" path="res://assets/environment/torch01_animation.png" id="3_gfdek"]
 [ext_resource type="PackedScene" uid="uid://cv2ljwgi74htf" path="res://scenes/environment/stairs.tscn" id="3_u6evn"]
@@ -269,7 +269,7 @@ tile_set = SubResource("TileSet_e2lbl")
 [node name="FloorDecor" type="TileMapLayer" parent="." unique_id=24569553]
 z_index = 1
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAcAAoAAAAHAAUAAAAlAAsAAAAMAAUAAAAkABEAAAAPAAQAAAA=")
+tile_map_data = PackedByteArray("AAAcAAoAAAAHAAUAAAAlAAsAAAAMAAUAAAAkABEAAAAPAAQAAAAdAA0AAAAPAAQAAAAiAAsAAAAPAAQAAAAgABAAAAAPAAQAAAAlAA0AAAAPAAQAAAA=")
 tile_set = SubResource("TileSet_rah2i")
 
 [node name="SideWall" type="TileMapLayer" parent="." unique_id=931651141]
