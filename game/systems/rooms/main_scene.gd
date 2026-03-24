@@ -5,6 +5,19 @@ extends Node2D
 @onready var player = $YSort/Player
 @onready var camera = $Camera2D
 @onready var minimap = $Minimap
+@onready var music_player = $MusicPlayer
+
+func play_music(track: AudioStream):
+	if music_player.stream == track:
+		return # don't restart same song
+	
+	music_player.stop()
+	music_player.stream = track
+	
+	music_player.stream = track
+	music_player.stream.loop = true
+	
+	music_player.play()
 
 # Room Assets #
 var start_room_scene: String = "res://scenes/rooms/starter_room.tscn"
@@ -288,6 +301,10 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 	var scene_path: String = grid_map[grid_pos]["scene"]
 	var room_scene: PackedScene = load(scene_path)
 	var new_room = room_scene.instantiate()
+	
+	if grid_map[grid_pos]["type"] == "B":
+		new_room.is_boss_room = true
+	
 	rooms_node.add_child(new_room)
 
 	# Center room in viewport using Center marker
