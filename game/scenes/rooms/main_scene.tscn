@@ -3,6 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://8vhgjodit74q" path="res://scenes/entities/player/player.tscn" id="1_6jndt"]
 [ext_resource type="Script" uid="uid://bnanarhldcsg5" path="res://systems/rooms/main_scene.gd" id="1_es0yc"]
 [ext_resource type="PackedScene" uid="uid://dt67tlg4gd676" path="res://scenes/ui/Minimap.tscn" id="3_nuqkj"]
+[ext_resource type="Script" uid="uid://dhwgy8b83ou3m" path="res://scenes/rooms/progress_bar.gd" id="4_8joo4"]
 
 [node name="main_scene" type="Node2D" unique_id=1437714124]
 y_sort_enabled = true
@@ -26,3 +27,19 @@ collision_mask = 25
 [node name="Minimap" parent="." unique_id=1017776597 instance=ExtResource("3_nuqkj")]
 
 [node name="MusicPlayer" type="AudioStreamPlayer2D" parent="." unique_id=504785228]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1814336335]
+
+[node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" unique_id=1178319831]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 126.0
+offset_top = -27.0
+offset_right = -130.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+value = 100.0
+script = ExtResource("4_8joo4")
