@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cfow465myivsl"]
+
+[node name="Node2D" type="Node2D" unique_id=674257554]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1424208752]
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=2092623089]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Sprite2D" unique_id=150809419]
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D/Sprite2D/CollisionShape2D" unique_id=575373809]
