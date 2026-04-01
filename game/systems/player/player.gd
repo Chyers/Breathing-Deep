@@ -21,11 +21,13 @@ var move_direct: Vector2 = Vector2.ZERO
 @export var speed = 150.0	#movement speed is definetly up for change
 @export var attack_speed: float = 0.8
 @export var max_health := 30
-var health := max_health
+#var health := max_health
+#@onready var health_bar = $"../CanvasLayer/ProgressBar"
 
 @onready var anim_tree: AnimationTree = $AnimationTree
 @onready var anim_playbk: AnimationNodeStateMachinePlayback = $AnimationTree["parameters/playback"]
 @onready var state_mach : PlayerStateMachine
+
 
 func _ready() -> void:
 	#state_mach.initialize(self)
