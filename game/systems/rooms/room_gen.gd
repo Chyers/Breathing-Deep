@@ -3,6 +3,9 @@ extends Node2D
 @export var min_items: int = 1
 @export var max_items: int = 4
 @export var is_boss_room: bool = false
+@export var min_enemies: int = 1
+@export var max_enemies: int = 3
+@export var enemy_scenes: Array[PackedScene] = []
 
 var item_scenes = [
 	preload("res://scenes/environment/coin.tscn"),
@@ -29,6 +32,7 @@ func _ready() -> void:
 	else:
 		get_tree().current_scene.play_music(preload("res://audio/Memoraphile - Spooky Dungeon.mp3"))
 		spawn_items()
+		spawn_enemies()
 	# setup_doors() is called externally by main_scene.gd
 
 # Called by main_scene.gd after instantiation
@@ -67,3 +71,34 @@ func spawn_items() -> void:
 		var item = item_scenes.pick_random().instantiate()
 		item.position = spawn_points[i].position
 		add_child(item)
+
+func spawn_enemies() -> void:
+	print("=== spawn_enemies called in: ", name)
+	print("enemy_scenes size: ", enemy_scenes.size())
+	
+	if enemy_scenes.is_empty():
+		print("EXIT: enemy_scenes is empty")
+		return
+		
+	var spawn_points = get_node_or_null("EnemySpawn")
+	if not spawn_points:
+		print("EXIT: No EnemySpawn node found in ", name)
+		return
+		
+	var points = spawn_points.get_children()
+	print("Spawn points found: ", points.size())
+	
+	if points.is_empty():
+		print("EXIT: EnemySpawn has no Marker2D children")
+		return
+
+	var enemy_count = randi_range(min_enemies, max_enemies)
+	print("Trying to spawn ", enemy_count, " enemies")
+	points.shuffle()
+	
+	for i in range(min(enemy_count, points.size())):
+		var enemy = enemy_scenes.pick_random().instantiate()
+		enemy.global_position = points[i].global_position  # uses global_position since parent is changing
+		add_child(enemy)
+		print("Spawning enemy at: ", enemy.global_position)
+		print("Enemy added: ", enemy.name)

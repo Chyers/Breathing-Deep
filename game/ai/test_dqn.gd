@@ -13,12 +13,12 @@ func simulate_outcome(encounter_type: int, floor_scalar: float, hp_ratio: float)
 	# Rough difficulty curve per type
 	var base_damage: float
 	match encounter_type:
-		0: base_damage = 0.35  # SWARM   — many weak hits
-		1: base_damage = 0.40  # RANGED  — moderate, avoidable
+		0: base_damage = 0.35  # SWARM — many weak hits
+		1: base_damage = 0.40  # RANGED — moderate, avoidable
 		2: base_damage = 0.55  # BRUISER — high single hits
 		3: base_damage = 0.38  # FLANKER — moderate, positional
-		4: base_damage = 0.65  # ELITE   — hardest single enemy
-		5: base_damage = 0.45  # MIXED   — moderate spread
+		4: base_damage = 0.65  # ELITE — hardest single enemy
+		5: base_damage = 0.45  # MIXED — moderate spread
 		_: base_damage = 0.40
 	var difficulty = base_damage + floor_scalar * 0.2
 	var damage: float = clamp(difficulty * randf_range(0.8, 1.2), 0.0, 1.0)
