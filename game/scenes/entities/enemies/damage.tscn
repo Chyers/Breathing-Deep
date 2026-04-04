@@ -44,7 +44,7 @@ _data = {
 size = Vector2(20, 26)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_40hxf"]
-radius = 34.261356
+radius = 18.69394
 
 [node name="Damage" type="Sprite2D" unique_id=1043806984]
 position = Vector2(709, 229)
@@ -67,5 +67,5 @@ shape = SubResource("RectangleShape2D_wdabd")
 [node name="Area2D" type="Area2D" parent="CharacterBody2D/CollisionShape2D" unique_id=1755036382]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/CollisionShape2D/Area2D" unique_id=44310022]
-position = Vector2(-0.35242286, 0.8095238)
+position = Vector2(0, 1.7619047)
 shape = SubResource("CircleShape2D_40hxf")
