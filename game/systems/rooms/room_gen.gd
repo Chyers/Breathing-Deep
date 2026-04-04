@@ -3,6 +3,7 @@ extends Node2D
 @export var min_items: int = 1
 @export var max_items: int = 4
 @export var is_boss_room: bool = false
+@export var already_visited: bool = false
 @export var min_enemies: int = 1
 @export var max_enemies: int = 3
 @export var enemy_scenes: Array[PackedScene] = []
@@ -98,7 +99,7 @@ func spawn_enemies() -> void:
 	
 	for i in range(min(enemy_count, points.size())):
 		var enemy = enemy_scenes.pick_random().instantiate()
-		enemy.global_position = points[i].global_position  # uses global_position since parent is changing
 		add_child(enemy)
+		enemy.global_position = points[i].global_position  # uses global_position since parent is changing
 		print("Spawning enemy at: ", enemy.global_position)
 		print("Enemy added: ", enemy.name)
