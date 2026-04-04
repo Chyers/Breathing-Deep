@@ -1,11 +1,34 @@
 [gd_scene format=3 uid="uid://cfow465myivsl"]
 
-[node name="Node2D" type="Node2D" unique_id=674257554]
+<<<<<<< Updated upstream
+[ext_resource type="Script" uid="uid://b3whig4lomugm" path="res://systems/rooms/main_scene.gd" id="1_p1oa6"]
+[ext_resource type="PackedScene" uid="uid://8vhgjodit74q" path="res://scenes/entities/player/player.tscn" id="2_nc0ar"]
+[ext_resource type="PackedScene" uid="uid://dt67tlg4gd676" path="res://scenes/ui/Minimap.tscn" id="3_k78nq"]
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1424208752]
+[node name="main_scene" type="Node2D" unique_id=1437714124]
+y_sort_enabled = true
+script = ExtResource("1_p1oa6")
 
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=2092623089]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1305410241]
+position = Vector2(240, 135)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Sprite2D" unique_id=150809419]
+[node name="YSort" type="Node2D" parent="." unique_id=1993308838]
+y_sort_enabled = true
 
-[node name="Area2D" type="Area2D" parent="CharacterBody2D/Sprite2D/CollisionShape2D" unique_id=575373809]
+[node name="rooms" type="Node2D" parent="YSort" unique_id=1497044498]
+y_sort_enabled = true
+
+[node name="Player" parent="YSort" unique_id=969824928 instance=ExtResource("2_nc0ar")]
+y_sort_enabled = true
+position = Vector2(240, 135)
+collision_layer = 2
+collision_mask = 25
+
+[node name="Minimap" parent="." unique_id=1017776597 instance=ExtResource("3_k78nq")]
+
+[node name="MusicPlayer" type="AudioStreamPlayer2D" parent="." unique_id=504785228]
+=======
+[node name="Node2D" type="Node2D" unique_id=1307578914]
+
+[node name="Enemy" type="CharacterBody2D" parent="." unique_id=687586848]
+>>>>>>> Stashed changes

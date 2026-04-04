@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://bt1qkti3l8fak"]
+
+[ext_resource type="Texture2D" uid="uid://cmoo3gnkp1grw" path="res://assets/characters/enemies/animations/skeleton_1/damage.png" id="1_jaksp"]
+
+[sub_resource type="Animation" id="Animation_jmhoy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0009999999),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 4]
+}
+
+[sub_resource type="Animation" id="Animation_7nq4r"]
+resource_name = "damage"
+length = 0.8
+step = 0.1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [1, 2, 3, 4]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ef0an"]
+_data = {
+&"RESET": SubResource("Animation_jmhoy"),
+&"damage": SubResource("Animation_7nq4r")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wdabd"]
+size = Vector2(20, 26)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_40hxf"]
+radius = 34.261356
+
+[node name="Damage" type="Sprite2D" unique_id=1043806984]
+position = Vector2(709, 229)
+scale = Vector2(2.8375, 5.25)
+texture = ExtResource("1_jaksp")
+hframes = 5
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1019972502]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1653884561]
+libraries/ = SubResource("AnimationLibrary_ef0an")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1394840623]
+scale = Vector2(1.0000001, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=689203870]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_wdabd")
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D/CollisionShape2D" unique_id=1755036382]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/CollisionShape2D/Area2D" unique_id=44310022]
+position = Vector2(-0.35242286, 0.8095238)
+shape = SubResource("CircleShape2D_40hxf")
