@@ -8,7 +8,7 @@ const HIDDEN2_SIZE: int = 16
 const OUTPUT_SIZE: int = 6    # One Q-value per EncounterType
 
 # Online network weights
-var weights1: Array = []  # INPUT_SIZE   × HIDDEN1_SIZE
+var weights1: Array = []  # INPUT_SIZE × HIDDEN1_SIZE
 var weights2: Array = []  # HIDDEN1_SIZE × HIDDEN2_SIZE
 var weights3: Array = []  # HIDDEN2_SIZE × OUTPUT_SIZE
 

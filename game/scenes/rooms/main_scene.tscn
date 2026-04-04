@@ -27,6 +27,7 @@ collision_mask = 25
 [node name="Minimap" parent="." unique_id=1017776597 instance=ExtResource("3_nuqkj")]
 
 [node name="MusicPlayer" type="AudioStreamPlayer2D" parent="." unique_id=504785228]
+
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1814336335]
 
 [node name="ProgressBar" type="ProgressBar" parent="CanvasLayer" unique_id=1178319831]
