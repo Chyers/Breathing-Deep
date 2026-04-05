@@ -46,10 +46,24 @@ const DIRECTIONS = {
 func play_music(track: AudioStream) -> void:
 	if music_player.stream == track:
 		return
+		
+	var tween = create_tween()
+	
+	# Fade out current track
+	# To-Do: Exiting boss room does not play original music unless boss room is reentered and reexited
+	# Boss music also does not play upon reentering once the original music is playing again
+	tween.tween_property(music_player, "volume_db", -40.0, 1.5)
+	await tween.finished
+	
 	music_player.stop()
 	music_player.stream = track
 	music_player.stream.loop = true
+	music_player.volume_db = -40.0
 	music_player.play()
+	
+	# Fade new track in
+	tween = create_tween()
+	tween.tween_property(music_player, "volume_db", 0.0, 1.5)
 
 # Lifecycle
 func _ready() -> void:
