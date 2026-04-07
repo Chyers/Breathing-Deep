@@ -406,3 +406,5 @@ frame_progress = 0.30891424
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=311520641]
 position = Vector2(-3, 9)
 shape = SubResource("CircleShape2D_3w83s")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=2004269752]
