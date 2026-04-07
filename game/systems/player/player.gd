@@ -38,6 +38,7 @@ func _ready() -> void:
 	anim_tree.set_active(true)
 	anim_playbk = anim_tree.get("parameters/playback")
 	_enter_state(State.IDLE)
+	add_to_group("player")
 
 
 func _physics_process(delta: float) -> void:

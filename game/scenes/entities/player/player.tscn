@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://baiylvjfj5c0d" path="res://systems/player/player.gd" id="1_635qg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
-radius = 6.0
+radius = 5.0
 
 [sub_resource type="Animation" id="Animation_635qg"]
 length = 0.001
@@ -573,6 +573,7 @@ hframes = 6
 vframes = 24
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1300195684]
+position = Vector2(0, -5)
 shape = SubResource("CircleShape2D_onrkg")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=492556865]
@@ -583,3 +584,6 @@ libraries/ = SubResource("AnimationLibrary_yywfu")
 [node name="AnimationTree" type="AnimationTree" parent="." unique_id=2067804513]
 tree_root = SubResource("AnimationNodeStateMachine_l2s38")
 anim_player = NodePath("../AnimationPlayer")
+
+[node name="EnemyTarget" type="Marker2D" parent="." unique_id=1061896105]
+position = Vector2(0, -12)
