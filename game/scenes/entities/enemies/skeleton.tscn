@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://csbk48acax1k4"]
 
+[ext_resource type="Script" uid="uid://bpm2bionfr60i" path="res://systems/enemies/skeleton_animation.gd" id="1_3w83s"]
 [ext_resource type="Texture2D" uid="uid://cpsbo8fyl2nnr" path="res://assets/characters/enemies/animations/skeleton_2/attack.png" id="1_gt0u0"]
 [ext_resource type="Texture2D" uid="uid://mivvbd8fck5c" path="res://assets/characters/enemies/animations/skeleton_2/damage.png" id="2_3w83s"]
 [ext_resource type="Texture2D" uid="uid://cr8di0gxhjukk" path="res://assets/characters/enemies/animations/skeleton_2/death.png" id="3_ey25l"]
@@ -391,9 +392,19 @@ animations = [{
 "speed": 10.0
 }]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_3w83s"]
+radius = 5.0
+
 [node name="Skeleton" type="CharacterBody2D" unique_id=1147805820]
+script = ExtResource("1_3w83s")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=867065892]
 sprite_frames = SubResource("SpriteFrames_dx3v6")
 animation = &"attack"
 frame_progress = 0.30891424
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=311520641]
+position = Vector2(-3, 9)
+shape = SubResource("CircleShape2D_3w83s")
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=2004269752]
