@@ -17,10 +17,10 @@ enum State{
 #var state: State = State.IDLE
 
 #stats
-@export var speed = 150.0	#movement speed is definetly up for change
+@export var speed : float = 150.0	#movement speed is definetly up for change
 @export var attack_speed: float = 0.8
-@export var max_health := 100
-var health := max_health
+@export var max_health : int = 100
+var health : int = max_health
 var curr_state: State = State.IDLE
 var prev_state: State = State.IDLE
 var is_dead: bool = false
@@ -28,15 +28,10 @@ var is_attack: bool = false
 var is_hurt: bool = false
 
 var cardinal_direct : Vector2 = Vector2.DOWN
-var move_direct: Vector2 = Vector2.ZERO
-@onready var anim_tree: AnimationTree = $AnimationTree
-@onready var anim_playbk: AnimationNodeStateMachinePlayback = $AnimationTree["parameters/playback"]
-@onready var state_mach : PlayerStateMachine
+
+@onready var anim_player: AnimationPlayer = $AnimationPlayer
 
 func _ready() -> void:
-	anim_tree = $AnimationTree
-	anim_tree.set_active(true)
-	anim_playbk = anim_tree.get("parameters/playback")
 	_enter_state(State.IDLE)
 	add_to_group("player")
 
@@ -44,7 +39,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-
+	
 	movement_loop()
 	move_and_slide()
 	
@@ -52,29 +47,30 @@ func _physics_process(delta: float) -> void:
 		attack_sw()
 	elif Input.is_action_just_pressed("attack_sp"):
 		attack_sp()
-	
+		
 	set_state()
-	update_anim()
+	_update_anim()
 
 #Input & movement
-
 func movement_loop() -> void:
 	if is_attack or is_hurt:
 		velocity = Vector2.ZERO
 		return
 	
-	var input = Vector2(
-		Input.get_axis("ui_left", "ui_right"),
-		Input.get_axis("ui_up", "ui_down")
-	).normalized()
-	
+	var raw := Vector2(
+		Input.get_axis("left", "right"),
+		Input.get_axis("up", "down")
+	)
+
+	# Avoids zero-vector issues
+	var input := raw.normalized() if raw.length() > 0 else Vector2.ZERO
+
 	velocity = input * speed
-	
+
 	if input != Vector2.ZERO:
 		cardinal_direct = input
 
 #State Resolution
-
 func set_state() -> void:
 	# Priority: death > hurt > attack > move > idle
 	if is_dead:
@@ -85,32 +81,31 @@ func set_state() -> void:
 		return
 	if is_attack:
 		return
-	var moving = velocity.length() > 0
-	
-	if moving:
+	if velocity.length() > 0:
 		_resolve_move_state()
 	else:
 		_resolve_idle_state()
 
 func _resolve_move_state() -> void:
 	# Determine walk direction based on input
-	var input = Vector2(
-		Input.get_axis("ui_left", "ui_right"),
-		Input.get_axis("ui_up", "ui_down")
-		)
+	var raw := Vector2(
+		Input.get_axis("left", "right"),
+		Input.get_axis("up", "down")
+	)
 
-	if abs(input.y) > abs(input.x):
-		if input.y < 0:
-			_enter_state(State.WALK_UP)
-		else:
-			_enter_state(State.WALK)       # Walk down = default forward
+	if raw == Vector2.ZERO:
+		_enter_state(State.IDLE)
+		return
+
+	if abs(raw.y) > abs(raw.x):
+		_enter_state(State.WALK_UP if raw.y < 0 else State.WALK)
 	else:
-		_enter_state(State.WALK_RIGHT)     # Sprite flip handles left
+		_enter_state(State.WALK_RIGHT) # Srpite flip handles left
 
 func _resolve_idle_state() -> void:
 	# Mirror last facing direction into idle state
-	if abs(facing_direction.y) > abs(facing_direction.x):
-		if facing_direction.y < 0:
+	if abs(cardinal_direct.y) > abs(cardinal_direct.x):
+		if cardinal_direct.y < 0:
 			_enter_state(State.IDLE_UP)
 		else:
 			_enter_state(State.IDLE)
@@ -118,50 +113,50 @@ func _resolve_idle_state() -> void:
 		_enter_state(State.IDLE_RIGHT)
 
 #State Enter
-
 func _enter_state(new_state: State) -> void:
-	if new_state == current_state:
+	if new_state == curr_state:
 		return
-	previous_state = current_state
-	current_state = new_state
+	prev_state = curr_state
+	curr_state = new_state
 
 #Animation
-
 func _update_anim() -> void:
 	# Flip sprite for left-facing
-	if facing_direction.x < 0:
+	if cardinal_direct.x < 0:
 		$Plain.flip_h = true
-	elif facing_direction.x > 0:
+	elif cardinal_direct.x > 0:
 		$Plain.flip_h = false
 	
-	var anim_name: String = _state_to_anim(current_state)
-	anim_state.travel(anim_name)
+	var anim_name = _state_to_anim(curr_state)
+	# Only restart if it's a different animation
+	if anim_player.current_animation != anim_name:
+		anim_player.play(anim_name)
 
 func _state_to_anim(state: State) -> String:
 	match state:
-		State.IDLE:        return "Idle"
-		State.IDLE_UP:     return "Idle_Up"
-		State.IDLE_RIGHT:  return "Idle_Right"
-		State.WALK:        return "Walk"
-		State.WALK_UP:     return "Walk_Up"
-		State.WALK_RIGHT:  return "Walk_Right"
-		State.ATTACK_SW:   return "Attack_SW"
-		State.ATTACK_SP:   return "Attack_SP"
-		State.HURT:        return "Hurt"
-		State.DEATH:       return "Death"
-		return "Idle"
+		State.IDLE:        return "idle"
+		State.IDLE_UP:     return "idle_up"
+		State.IDLE_RIGHT:  return "idle_right"
+		State.WALK:        return "walk"
+		State.WALK_UP:     return "walk_up"
+		State.WALK_RIGHT:  return "walk_right"
+		State.ATTACK_SW:   return "attack_sw"
+		State.ATTACK_SP:   return "attack_sp"
+		State.HURT:        return "hurt"
+		State.DEATH:       return "death"
+		_:                 return "idle"
 
 #API
 func attack_sw() -> void:
-	if is_dead or is_hurt or is_attacking:
+	if is_dead or is_hurt or is_attack:
 		return
-	is_attacking = true
+	is_attack = true
 	_enter_state(State.ATTACK_SW)
 
 func attack_sp() -> void:
-	if is_dead or is_hurt or is_attacking:
+	if is_dead or is_hurt or is_attack:
 		return
-	is_attacking = true
+	is_attack = true
 	_enter_state(State.ATTACK_SP)
 
 func take_damage(amount: int) -> void:
@@ -175,17 +170,15 @@ func take_damage(amount: int) -> void:
 		is_hurt = true
 
 #Animation signals
-
 func _on_animation_finished(anim_name: String) -> void:
 	match anim_name:
-		"Attack_SW", "Attack_SP":
-			is_attacking = false
+		"attack_sw", "attack_sp":
+			is_attack = false
 			_enter_state(State.IDLE)
-		
-		"Hurt":
+		"hurt":
 			is_hurt = false
 			# Return to whatever the player was doing
 			_enter_state(State.IDLE)
-		"Death":
+		"death":
 			# Freeze on last frame — emit signal, load death screen, etc.
 			set_physics_process(false)
