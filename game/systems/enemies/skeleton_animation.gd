@@ -33,7 +33,6 @@ func _physics_process(_delta: float) -> void:
 		return
 
 	nav_agent.target_position = player_target.global_position
-	print("target: ", nav_agent.target_position, " | next: ", nav_agent.get_next_path_position(), " | finished: ", nav_agent.is_navigation_finished())
 
 	if nav_agent.is_navigation_finished():
 		velocity = Vector2.ZERO
