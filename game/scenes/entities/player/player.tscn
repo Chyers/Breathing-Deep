@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://8vhgjodit74q"]
 
 [ext_resource type="Texture2D" uid="uid://d0y6nvl7ipxxd" path="res://assets/characters/main_character/Plain.png" id="1_1hmtu"]
-[ext_resource type="Script" uid="uid://bvpb845h7yy6m" path="res://systems/player/player.gd" id="1_635qg"]
+[ext_resource type="Script" uid="uid://baiylvjfj5c0d" path="res://systems/player/player.gd" id="1_635qg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
 radius = 5.0
@@ -562,6 +562,9 @@ graph_offset = Vector2(1104.3943, -72.560036)
 collision_layer = 3
 collision_mask = 17
 script = ExtResource("1_635qg")
+speed = null
+attack_speed = null
+max_health = null
 
 [node name="Plain" type="Sprite2D" parent="." unique_id=1436333961]
 position = Vector2(0, -8)
