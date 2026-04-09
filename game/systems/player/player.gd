@@ -17,6 +17,9 @@ enum State{
 #var state: State = State.IDLE
 
 #stats
+var inventory: Array[Item] = []
+var max_slots: int = 5
+
 @export var speed : float = 150.0	#movement speed is definetly up for change
 @export var attack_speed: float = 0.8
 @export var max_health : int = 100
@@ -34,7 +37,37 @@ var cardinal_direct : Vector2 = Vector2.DOWN
 func _ready() -> void:
 	_enter_state(State.IDLE)
 	add_to_group("player")
+	print("READY RUNNING")
 
+	# Create a test item
+	var item = Item.new()
+	item.name = "Potion"
+	item.icon = preload("res://assets/items_&_traps/flasks/flasks_4_1.png") # adjust path if needed
+
+	# Add it to inventory
+	add_item(item)
+
+@onready var slots = get_tree().get_root().get_node("main_scene/CanvasLayer/Panel/GridContainer").get_children()
+
+
+func add_item(item: Item):
+	if inventory.size() < max_slots:
+		inventory.append(item)
+		print(item.name + " added!")
+		update_inventory_ui()
+	else:
+		print("Inventory full!")
+
+func remove_item(item: Item):
+	inventory.erase(item)
+	update_inventory_ui()
+
+func update_inventory_ui():
+	for i in range(slots.size()):
+		if i < inventory.size():
+			slots[i].texture = inventory[i].icon
+		else:
+			slots[i].texture = null
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
