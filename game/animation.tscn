@@ -1,5 +1,0 @@
-[gd_scene format=3 uid="uid://w5fhv83d4s6d"]
-
-[node name="Node2D" type="Node2D" unique_id=1307578914]
-
-[node name="Enemy" type="CharacterBody2D" parent="." unique_id=687586848]

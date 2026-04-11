@@ -27,11 +27,7 @@ const DOOR_SCENES = {
 
 func _ready() -> void:
 	randomize()
-	if is_boss_room:
-		print("Room:", name, " | Boss room detected")
-		get_tree().current_scene.play_music(preload("res://audio/Boss Battle.ogg"))
-	else:
-		get_tree().current_scene.play_music(preload("res://audio/Memoraphile - Spooky Dungeon.mp3"))
+	if not is_boss_room:
 		spawn_items()
 		spawn_enemies()
 	# setup_doors() is called externally by main_scene.gd
