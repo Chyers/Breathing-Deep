@@ -83,9 +83,9 @@ terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_0hwry")
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_ar6ir"]
-vertices = PackedVector2Array(615.3125, 197.86719, 615.9375, 303, 443, 303, 593.09375, 195.39844, 466.21094, 156, 615.0469, 154.04688, 615.1328, 166.57031, 576.6719, 169.13281, 471.35938, 171.45313, 463.3203, 180.14063, 446, 175.8125, 443, 154.9375, 446, 156)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 6, 7, 8), PackedInt32Array(8, 7, 3, 2, 9), PackedInt32Array(10, 9, 2), PackedInt32Array(10, 2, 11, 12), PackedInt32Array(12, 11, 5, 4)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(433, 145, 625, 144, 626, 313, 433, 313), PackedVector2Array(594, 178, 599, 186, 608, 187, 609, 177), PackedVector2Array(456, 166, 456, 168, 460, 169, 459, 166)])
+vertices = PackedVector2Array(615.3125, 197.86719, 615.9375, 303, 443, 303, 593.09375, 195.39844, 474, 156.82031, 615.0469, 154.04688, 615.1328, 166.57031, 576.6719, 169.13281, 481.92188, 160.78125, 491.14063, 170, 481.92188, 179.21875, 474, 183.17969, 466.07813, 179.21875, 456.85938, 170, 443, 154.9375, 466.07813, 160.78125)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 6, 7, 8), PackedInt32Array(9, 7, 3, 2, 10), PackedInt32Array(11, 10, 2), PackedInt32Array(12, 11, 2), PackedInt32Array(13, 12, 2), PackedInt32Array(13, 2, 14), PackedInt32Array(15, 13, 14), PackedInt32Array(7, 9, 8), PackedInt32Array(4, 15, 14), PackedInt32Array(4, 14, 5)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(433, 145, 625, 144, 626, 313, 433, 313), PackedVector2Array(594, 178, 599, 186, 608, 187, 609, 177), PackedVector2Array(472, 169, 471, 170, 472, 171, 474, 172, 476, 171, 477, 170, 476, 169, 474, 168)])
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ix842"]
 texture = ExtResource("1_6a8el")
@@ -248,7 +248,8 @@ navigation_polygon = SubResource("NavigationPolygon_ar6ir")
 [node name="FloorDecor" type="TileMapLayer" parent="." unique_id=677193052]
 z_index = 1
 y_sort_enabled = true
-tile_map_data = PackedByteArray("AAAcAAoAAAAHAAUAAAAlAAsAAAAMAAUAAAAkABEAAAAPAAQAAAA=")
+position = Vector2(18, 4)
+tile_map_data = PackedByteArray("AAAkABEAAAAPAAQAAAAcAAoAAAAHAAUAAAAkAAsAAAAMAAUAAAA=")
 tile_set = SubResource("TileSet_urnam")
 
 [node name="BottomWall" type="TileMapLayer" parent="." unique_id=2122379702]
