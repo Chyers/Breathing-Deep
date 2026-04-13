@@ -43,7 +43,7 @@ func _ready() -> void:
 	
 	# Create a test item
 	var item = Item.new()
-	item.name = "Potion"
+	item.item_name = "Potion"
 	item.icon = preload("res://assets/items_&_traps/flasks/flasks_4_1.png") # adjust path if needed
 
 	# Add it to inventory
@@ -52,9 +52,16 @@ func _ready() -> void:
 @onready var slots = get_tree().get_root().get_node("/root/main_scene/CanvasLayer/Panel/GridContainer").get_children()
 
 func add_item(item: Item):
+	# Check if item already exists in inventory
+	for existing in inventory:
+		if existing.item_name == item.item_name:
+			if existing.quantity < existing.max_stack:
+				existing.quantity += 1
+				update_inventory_ui()
+				return
+	# No existing stack found, add as new slot
 	if inventory.size() < max_slots:
 		inventory.append(item)
-		print(item.name + " added!")
 		update_inventory_ui()
 	else:
 		print("Inventory full!")
@@ -64,16 +71,19 @@ func remove_item(item: Item):
 	update_inventory_ui()
 
 func update_inventory_ui():
-	print("Slots size: ", slots.size())
-	print("Inventory size: ", inventory.size())
 	for i in range(slots.size()):
+		var slot = slots[i]
+		var label = slot.get_node_or_null("Label")
 		if i < inventory.size():
-			slots[i].texture = inventory[i].icon
-			slots[i].expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
-			slots[i].stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-			print("Slot ", i, " | visible: ", slots[i].visible, " | size: ", slots[i].size, " | global_pos: ", slots[i].global_position)
+			slot.texture = inventory[i].icon
+			slot.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+			slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			if label:
+				label.text = str(inventory[i].quantity) if inventory[i].quantity > 1 else ""
 		else:
-			slots[i].texture = null
+			slot.texture = null
+			if label:
+				label.text = ""
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
