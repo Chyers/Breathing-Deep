@@ -1,16 +1,16 @@
 extends Area2D
 
 @export var health_value: int = 25
+@export var item_icon: Texture2D = null
 
 func _ready() -> void:
-	# Connect the signal to a method on this node
 	connect("body_entered", Callable(self, "_on_body_entered"))
 
-# Function called when a PhysicsBody2D enters the area
 func _on_body_entered(body: Node) -> void:
-	if body.is_in_group("Player"):
-		# Add health to the player
-		if body.has_method("add_health"):
-			body.add_health(health_value)
-		# Remove the flask
+	if body.is_in_group("player"):
+		var item = Item.new()
+		item.item_name = "Health"
+		item.icon = item_icon
+		if body.has_method("add_item"):
+			body.add_item(item)
 		queue_free()

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dr43y0k1fpybp"]
 
 [ext_resource type="Script" uid="uid://bsalnytolyx33" path="res://systems/items/buff.gd" id="1_tjc5s"]
+[ext_resource type="Texture2D" uid="uid://c3xsx2k2if654" path="res://assets/items_&_traps/flasks/flasks_2_1.png" id="2_3l4d6"]
 [ext_resource type="Texture2D" uid="uid://bmb7i4cwjd3wh" path="res://assets/items_&_traps/flasks/buff_animated.png" id="2_3vg0h"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jrjmv"]
@@ -46,6 +47,7 @@ animations = [{
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_tjc5s")
+item_icon = ExtResource("2_3l4d6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1610309896]
 shape = SubResource("CircleShape2D_jrjmv")

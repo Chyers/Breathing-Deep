@@ -40,14 +40,6 @@ func _ready() -> void:
 	print("READY RUNNING")
 	print("Slots found: ", slots.size())
 	print("Panel path check: ", get_node_or_null("/root/main_scene/CanvasLayer/Panel"))
-	
-	# Create a test item
-	var item = Item.new()
-	item.item_name = "Potion"
-	item.icon = preload("res://assets/items_&_traps/flasks/flasks_4_1.png") # adjust path if needed
-
-	# Add it to inventory
-	add_item(item)
 
 @onready var slots = get_tree().get_root().get_node("/root/main_scene/CanvasLayer/Panel/GridContainer").get_children()
 
