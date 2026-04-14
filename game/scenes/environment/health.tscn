@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://4h6jm8vokjft" path="res://systems/items/health.gd" id="1_2m1b8"]
 [ext_resource type="Texture2D" uid="uid://byj866y8eais6" path="res://assets/items_&_traps/flasks/health_animated.png" id="1_xqfd2"]
+[ext_resource type="Texture2D" uid="uid://bf5ha2ve4bhly" path="res://assets/items_&_traps/flasks/flasks_1_1.png" id="2_wyiwo"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jrjmv"]
 radius = 4.1231055
@@ -46,6 +47,7 @@ animations = [{
 collision_layer = 8
 collision_mask = 2
 script = ExtResource("1_2m1b8")
+item_icon = ExtResource("2_wyiwo")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1610309896]
 shape = SubResource("CircleShape2D_jrjmv")

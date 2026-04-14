@@ -38,22 +38,22 @@ func _ready() -> void:
 	_enter_state(State.IDLE)
 	add_to_group("player")
 	print("READY RUNNING")
+	print("Slots found: ", slots.size())
+	print("Panel path check: ", get_node_or_null("/root/main_scene/CanvasLayer/Panel"))
 
-	# Create a test item
-	var item = Item.new()
-	item.name = "Potion"
-	item.icon = preload("res://assets/items_&_traps/flasks/flasks_4_1.png") # adjust path if needed
-
-	# Add it to inventory
-	add_item(item)
-
-@onready var slots = get_tree().get_root().get_node("main_scene/CanvasLayer/Panel/GridContainer").get_children()
-
+@onready var slots = get_tree().get_root().get_node("/root/main_scene/CanvasLayer/Panel/GridContainer").get_children()
 
 func add_item(item: Item):
+	# Check if item already exists in inventory
+	for existing in inventory:
+		if existing.item_name == item.item_name:
+			if existing.quantity < existing.max_stack:
+				existing.quantity += 1
+				update_inventory_ui()
+				return
+	# No existing stack found, add as new slot
 	if inventory.size() < max_slots:
 		inventory.append(item)
-		print(item.name + " added!")
 		update_inventory_ui()
 	else:
 		print("Inventory full!")
@@ -64,10 +64,18 @@ func remove_item(item: Item):
 
 func update_inventory_ui():
 	for i in range(slots.size()):
+		var slot = slots[i]
+		var label = slot.get_node_or_null("Label")
 		if i < inventory.size():
-			slots[i].texture = inventory[i].icon
+			slot.texture = inventory[i].icon
+			slot.expand_mode = TextureRect.EXPAND_FIT_WIDTH_PROPORTIONAL
+			slot.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			if label:
+				label.text = str(inventory[i].quantity) if inventory[i].quantity > 1 else ""
 		else:
-			slots[i].texture = null
+			slot.texture = null
+			if label:
+				label.text = ""
 
 func _physics_process(delta: float) -> void:
 	if is_dead:
@@ -105,6 +113,10 @@ func movement_loop() -> void:
 
 #State Resolution
 func set_state() -> void:
+	# If both flags are set, hurt takes priority and cancels attack
+	if is_hurt and is_attack:
+		is_attack = false
+
 	# Priority: death > hurt > attack > move > idle
 	if is_dead:
 		_enter_state(State.DEATH)
@@ -199,19 +211,31 @@ func take_damage(amount: int) -> void:
 	if health <= 0:
 		health = 0
 		is_dead = true
+		is_hurt = false
+		is_attack = false
+		_enter_state(State.DEATH)
+		anim_player.play("death")
 	else:
 		is_hurt = true
 
 #Animation signals
 func _on_animation_finished(anim_name: String) -> void:
+	if is_dead and anim_name != "death":
+		return
 	match anim_name:
 		"attack_sw", "attack_sp":
 			is_attack = false
+			is_hurt = false
 			_enter_state(State.IDLE)
 		"hurt":
 			is_hurt = false
+			is_attack = false
 			# Return to whatever the player was doing
 			_enter_state(State.IDLE)
 		"death":
 			# Freeze on last frame — emit signal, load death screen, etc.
 			set_physics_process(false)
+
+func add_coins(amount: int):
+	# For now just print, add a coin counter var if needed
+	print("Collected ", amount, " coin(s)")
