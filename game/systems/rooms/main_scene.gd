@@ -368,3 +368,7 @@ func _print_dungeon() -> void:
 			output += "[" + str(dungeon_grid[x][y]) + "]" if dungeon_grid[x][y] else "   "
 		output += "\n"
 	print(output)
+
+
+func _on_resume_pressed() -> void:
+	pass # Replace with function body.

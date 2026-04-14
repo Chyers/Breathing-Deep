@@ -93,6 +93,10 @@ func _physics_process(delta: float) -> void:
 	_update_anim()
 
 #Input & movement
+func _input(event):
+	if event.is_action_pressed("ui_cancel"): # ESC key
+		get_node("/root/main_scene/Control/Panel/Pau").toggle_pause()
+
 func movement_loop() -> void:
 	if is_attack or is_hurt:
 		velocity = Vector2.ZERO
