@@ -9,9 +9,17 @@ enum State{
 	WALK_UP,
 	WALK_RIGHT,
 	ATTACK_SW,
+	ATTACK_SW_UP,
+	ATTACK_SW_RIGHT,
 	ATTACK_SP,
+	ATTACK_SP_UP,
+	ATTACK_SP_RIGHT,
 	HURT,
-	DEATH
+	HURT_UP,
+	HURT_RIGHT,
+	DEATH,
+	DEATH_UP,
+	DEATH_RIGHT
 }
 
 #var state: State = State.IDLE
@@ -40,6 +48,7 @@ func _ready() -> void:
 	print("READY RUNNING")
 	print("Slots found: ", slots.size())
 	print("Panel path check: ", get_node_or_null("/root/main_scene/CanvasLayer/Panel"))
+	$Hurtbox.area_entered.connect(on_hit)
 
 @onready var slots = get_tree().get_root().get_node("/root/main_scene/CanvasLayer/Panel/GridContainer").get_children()
 
@@ -235,6 +244,15 @@ func _on_animation_finished(anim_name: String) -> void:
 		"death":
 			# Freeze on last frame — emit signal, load death screen, etc.
 			set_physics_process(false)
+
+func hit_sw_attack():
+	$Hitbox/CollisionShape2D.disabled = false
+	await get_tree().create_timer(0.2).timeout
+	$Hitbox/CollisionShape2D.disabled = true
+
+func on_hit(area: Area2D):
+	if area.is_in_group("hitbox"):
+		take_damage(area.damage)
 
 func add_coins(amount: int):
 	# For now just print, add a coin counter var if needed
