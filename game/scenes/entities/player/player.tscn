@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://8vhgjodit74q"]
 
 [ext_resource type="Texture2D" uid="uid://d0y6nvl7ipxxd" path="res://assets/characters/main_character/Plain.png" id="1_1hmtu"]
-[ext_resource type="Script" uid="uid://bvpb845h7yy6m" path="res://systems/player/player.gd" id="1_635qg"]
+[ext_resource type="Script" uid="uid://baiylvjfj5c0d" path="res://systems/player/player.gd" id="1_635qg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
 radius = 5.0
@@ -466,6 +466,13 @@ _data = {
 &"walk_up": SubResource("Animation_70kwc")
 }
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_635qg"]
+radius = 4.0
+height = 14.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_58kc7"]
+size = Vector2(14, 6)
+
 [node name="Player" type="CharacterBody2D" unique_id=969824928 groups=["Player"]]
 collision_layer = 3
 collision_mask = 17
@@ -487,6 +494,21 @@ shape = SubResource("CircleShape2D_onrkg")
 libraries/ = SubResource("AnimationLibrary_yywfu")
 
 [node name="EnemyTarget" type="Marker2D" parent="." unique_id=1061896105]
-position = Vector2(0, -12)
+position = Vector2(0, -11)
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1366261430]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1171481976]
+position = Vector2(0, -7)
+shape = SubResource("CapsuleShape2D_635qg")
+debug_color = Color(0.9796862, 0.13119817, 0.1444971, 0.41960785)
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=2078834642]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=134552232]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_58kc7")
+disabled = true
+debug_color = Color(0.8842802, 0.33268023, 0.06059894, 0.41960785)
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_finished"]
