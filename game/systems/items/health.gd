@@ -10,6 +10,7 @@ func _on_body_entered(body: Node) -> void:
 	if body.is_in_group("player"):
 		var item = Item.new()
 		item.item_name = "Health"
+		item.item_type = Item.Type.HEALTH
 		item.icon = item_icon
 		if body.has_method("add_item"):
 			body.add_item(item)
