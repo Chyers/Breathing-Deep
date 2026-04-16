@@ -2,6 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://dntwv8n2wlu27" path="res://assets/environment/door_02.jpg" id="1_mnfla"]
 [ext_resource type="Script" uid="uid://bpvnb2uknasdw" path="res://systems/environment/door_south.gd" id="2_wt2hg"]
+[ext_resource type="AudioStream" uid="uid://do7os0aj17hhf" path="res://audio/soundreality-opening-door-411632.mp3" id="3_wt2hg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_k14up"]
 size = Vector2(44, 9)
@@ -26,3 +27,6 @@ script = ExtResource("2_wt2hg")
 position = Vector2(24, -4.5)
 shape = SubResource("RectangleShape2D_k14up")
 debug_color = Color(0.70285153, 0.4798553, 0.29215485, 0.41960785)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="SouthExitArea2D/CollisionShape2D" unique_id=443500305]
+stream = ExtResource("3_wt2hg")
