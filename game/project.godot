@@ -19,6 +19,10 @@ run/main_scene="uid://d4iduxqkbmxka"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="uid://caf7mhmbvsqh5"
 
+[autoload]
+
+DoorAudio="*uid://bijoxl6xmj251"
+
 [display]
 
 window/size/viewport_width=480
