@@ -80,3 +80,5 @@ use_item={
 2d_physics/layer_3="ENEMY"
 2d_physics/layer_4="ITEMS"
 2d_physics/layer_5="DOOR/STAIRS"
+2d_physics/layer_6="HITBOX"
+2d_physics/layer_7="HURTBOX"
