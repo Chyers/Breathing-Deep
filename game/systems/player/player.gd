@@ -22,8 +22,6 @@ enum State{
 	DEATH_RIGHT
 }
 
-#var state: State = State.IDLE
-
 #stats
 var inventory: Array[Item] = []
 var max_slots: int = 5
@@ -37,6 +35,8 @@ var prev_state: State = State.IDLE
 var is_dead: bool = false
 var is_attack: bool = false
 var is_hurt: bool = false
+var last_dir:= ""
+var attack_type = "" #sw or sp
 
 var cardinal_direct : Vector2 = Vector2.DOWN
 
@@ -102,6 +102,20 @@ func _physics_process(delta: float) -> void:
 	_update_anim()
 
 #Input & movement
+
+func get_dir_suffix() -> String:
+	if velocity.y < 0:
+		$Plain.flip_h = false
+		last_dir = "_UP"
+		return "_UP"
+	if velocity.x != 0:
+		$Plain.flip_h = velocity.x < 0   # flip RIGHT anim for left movement
+		last_dir = "_RIGHT"
+		return "_RIGHT"
+	$Plain.flip_h = false
+	last_dir = ""
+	return ""
+
 func movement_loop() -> void:
 	if is_attack or is_hurt:
 		velocity = Vector2.ZERO
@@ -111,7 +125,7 @@ func movement_loop() -> void:
 		Input.get_axis("left", "right"),
 		Input.get_axis("up", "down")
 	)
-
+	
 	# Avoids zero-vector issues
 	var input := raw.normalized() if raw.length() > 0 else Vector2.ZERO
 
@@ -186,19 +200,32 @@ func _update_anim() -> void:
 	if anim_player.current_animation != anim_name:
 		anim_player.play(anim_name)
 
-func _state_to_anim(state: State) -> String:
+func _state_to_anim(state: String) -> String:
 	match state:
-		State.IDLE:        return "idle"
-		State.IDLE_UP:     return "idle_up"
-		State.IDLE_RIGHT:  return "idle_right"
-		State.WALK:        return "walk"
-		State.WALK_UP:     return "walk_up"
-		State.WALK_RIGHT:  return "walk_right"
-		State.ATTACK_SW:   return "attack_sw"
-		State.ATTACK_SP:   return "attack_sp"
-		State.HURT:        return "hurt"
-		State.DEATH:       return "death"
+		"IDLE":        return "idle"
+		"IDLE_UP":     return "idle_up"
+		"IDLE_RIGHT":  return "idle_right"
+		"WALK":        return "walk"
+		"WALK_UP":     return "walk_up"
+		"WALK_RIGHT":  return "walk_right"
+		"ATTACK_SW":   return "attack_sw"
+		"ATTACK_SW_RIGHT": return "attack_sw_right"
+		"ATTACK_SW_UP": return "attack_sw_up"
+		"ATTACK_SP":   return "attack_sp"
+		"ATTACK_SP_RIGHT": return "attack_sp_right"
+		"ATTACK_SP_UP": return "attack_sp_up"
+		"HURT":        return "hurt"
+		"HURT_RIGHT":  return "hurt_right"
+		"HURT_UP":     return "hurt_up"
+		"DEATH":       return "death"
+		"DEATH_RIGHT": return "death_right"
+		"DEATH_UP":    return "death_up"
 		_:                 return "idle"
+
+func _play_anim(base: String, dir: String = ""):
+	var anim_name := _state_to_anim(base + dir)
+	if anim.animation != anim_name:
+		anim.play(anim_name)
 
 #API
 func attack_sw() -> void:
