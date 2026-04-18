@@ -395,15 +395,42 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_3w83s"]
 radius = 5.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3w83s"]
+size = Vector2(16, 8)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ey25l"]
+radius = 6.0
+height = 16.0
+
 [node name="Skeleton" type="CharacterBody2D" unique_id=1147805820]
 script = ExtResource("1_3w83s")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=867065892]
 sprite_frames = SubResource("SpriteFrames_dx3v6")
 animation = &"attack"
+frame = 14
+frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=311520641]
 position = Vector2(-3, 9)
 shape = SubResource("CircleShape2D_3w83s")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=88348623]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1989835612]
+position = Vector2(8, 6)
+shape = SubResource("RectangleShape2D_3w83s")
+disabled = true
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1629802271]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1932673292]
+position = Vector2(-1, 6)
+shape = SubResource("CapsuleShape2D_ey25l")
+debug_color = Color(0.9626878, 0.06452384, 0.4646926, 0.41960785)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=2004269752]

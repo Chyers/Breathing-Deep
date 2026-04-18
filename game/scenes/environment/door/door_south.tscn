@@ -28,5 +28,6 @@ position = Vector2(24, -4.5)
 shape = SubResource("RectangleShape2D_k14up")
 debug_color = Color(0.70285153, 0.4798553, 0.29215485, 0.41960785)
 
-[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="SouthExitArea2D/CollisionShape2D" unique_id=443500305]
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=443500305]
+position = Vector2(24, -4.5)
 stream = ExtResource("3_wt2hg")
