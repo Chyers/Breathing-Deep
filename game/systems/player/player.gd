@@ -53,18 +53,17 @@ var buff_cooldown: float = 15.0
 # Node References
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var slots = get_tree().get_root().get_node("/root/main_scene/CanvasLayer/Panel/GridContainer").get_children()
+@onready var player_hitbox: CollisionShape2D = $Hitbox/CollisionShape2D
 
 # Ready
 func _ready() -> void:
+	$Hitbox.area_entered.connect(_on_hitbox_area_entered)
 	add_to_group("player")
 	_enter_state(State.IDLE)
-
 	for i in slots.size():
 		var slot = slots[i]
 		slot.mouse_filter = Control.MOUSE_FILTER_STOP
 		slot.gui_input.connect(_on_slot_gui_input.bind(i))
-
-	print("READY RUNNING | Slots:", slots.size())
 
 # Inventory
 func add_item(item: Item) -> void:
@@ -175,19 +174,14 @@ func _update_buff(delta: float) -> void:
 		if item_cooldowns[type] <= 0.0:
 			item_cooldowns.erase(type)
 
-	buff_timer -= delta
-	if buff_timer <= 0.0:
-		damage_multiplier = 1.0
-		buff_timer = 0.0
-
 # Input
 func _handle_input() -> void:
 	if Input.is_action_just_pressed("attack_sw"):
 		attack_sw()
 	elif Input.is_action_just_pressed("attack_sp"):
 		attack_sp()
-    
-  if Input.is_action_just_pressed("use_item"):
+		
+	if Input.is_action_just_pressed("use_item"):
 		use_selected_item()
 
 	if Input.is_action_just_pressed("ui_right"):
@@ -221,10 +215,10 @@ func movement_loop() -> void:
 	var input := Vector2(
 		Input.get_axis("left", "right"),
 		Input.get_axis("up", "down")
-	)
+	).normalized()
 	
 	# Avoids zero-vector issues
-	var input := raw.normalized() if raw.length() > 0 else Vector2.ZERO
+	# var input := raw.normalized() if raw.length() > 0 else Vector2.ZERO
 
 	velocity = input * speed
 
@@ -278,7 +272,7 @@ func _enter_state(new_state: State) -> void:
 func _update_anim() -> void:
 	$Plain.flip_h = cardinal_direct.x < 0
 
-	var anim := _state_to_anim(curr_state)
+	var anim := _state_to_anim(State.keys()[curr_state])
 	if anim_player.current_animation != anim:
 		anim_player.play(anim)
 
@@ -304,10 +298,10 @@ func _state_to_anim(state: String) -> String:
 		"DEATH_UP":    return "death_up"
 		_:                 return "idle"
 
-func _play_anim(base: String, dir: String = ""):
-	var anim_name := _state_to_anim(base + dir)
-	if anim.animation != anim_name:
-		anim.play(anim_name)
+#func _play_anim(base: String, dir: String = ""):
+	#var anim_name := _state_to_anim(base + dir)
+	#if anim_player.animation != anim_name:
+		#anim_player.play(anim_name)
 
 #API
 func attack_sw() -> void:
@@ -315,19 +309,19 @@ func attack_sw() -> void:
 		return
 	is_attack = true
 	_enter_state(State.ATTACK_SW)
+	hit_sw_attack()
 
 func attack_sp() -> void:
 	if is_dead or is_hurt or is_attack:
 		return
 	is_attack = true
 	_enter_state(State.ATTACK_SP)
+	hit_sw_attack()
 
 func take_damage(amount: int) -> void:
 	if is_dead:
 		return
-
 	health -= amount
-
 	if health <= 0:
 		health = 0
 		is_dead = true
@@ -357,14 +351,23 @@ func _on_animation_finished(anim_name: String) -> void:
 		"death":
 			set_physics_process(false)
 
-func hit_sw_attack():
-	$Hitbox/CollisionShape2D.disabled = false
+func hit_sw_attack() -> void:
+	if not is_instance_valid(player_hitbox):
+		return
+	player_hitbox.disabled = false
 	await get_tree().create_timer(0.2).timeout
-	$Hitbox/CollisionShape2D.disabled = true
+	if is_instance_valid(player_hitbox):
+		player_hitbox.disabled = true
 
-func on_hit(area: Area2D):
-	if area.is_in_group("hitbox"):
-		take_damage(area.damage)
+#func on_hit(area: Area2D):
+	#if area.is_in_group("hitbox"):
+		#take_damage(area.damage)
+
+func _on_hitbox_area_entered(area: Area2D) -> void:
+	if area.is_in_group("hurtbox"):
+		var parent = area.get_parent()
+		if parent.has_method("take_damage"):
+			parent.take_damage(10)
 
 func add_coins(amount: int):
 	# For now just print, add a coin counter var if needed
