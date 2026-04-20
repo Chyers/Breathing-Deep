@@ -1,6 +1,6 @@
 extends Area2D
 
-const DIRECTION = "west"
+const DIRECTION = "south"
 var can_use: bool = true
 var audio_player: AudioStreamPlayer2D
 
