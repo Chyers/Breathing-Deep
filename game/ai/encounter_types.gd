@@ -3,7 +3,6 @@ class_name EncounterTypes
 
 enum EncounterType {
 	SWARM,
-	RANGED,
 	BRUISER,
 	FLANKER,
 	ELITE,

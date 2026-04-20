@@ -329,6 +329,7 @@ func take_damage(amount: int) -> void:
 		is_attack = false
 		_enter_state(State.DEATH)
 		anim_player.play("death")
+		print("Final score: ", ScoreManager.get_score())
 	else:
 		is_hurt = true
 

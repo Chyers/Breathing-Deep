@@ -8,6 +8,8 @@ extends Node2D
 @export var max_enemies: int = 3
 @export var enemy_scenes: Array[PackedScene] = []
 
+var _boss_ref: Node = null
+
 var item_scenes = [
 	preload("res://scenes/environment/coin.tscn"),
 	preload("res://scenes/environment/health.tscn"),
@@ -29,8 +31,9 @@ func _ready() -> void:
 	randomize()
 	if not is_boss_room:
 		spawn_items()
-		spawn_enemies()
-	# setup_doors() is called externally by main_scene.gd
+		# spawn_enemies() is now called by main_scene.gd 
+		# after EncounterManager decides
+		# setup_doors() is called externally by main_scene.gd
 
 # Called by main_scene.gd after instantiation
 func setup_doors(active_directions: Array[String]) -> void:
@@ -39,7 +42,7 @@ func setup_doors(active_directions: Array[String]) -> void:
 		push_warning("Room has no Doors node: " + name)
 		return
 
-	# Clear any leftover doors from a previous load (safety net)
+	# Clears any leftover doors from a previous load (safety net)
 	for child in doors_node.get_children():
 		child.queue_free()
 
@@ -48,7 +51,7 @@ func setup_doors(active_directions: Array[String]) -> void:
 			push_warning("No door scene registered for direction: " + dir)
 			continue
 
-		# Find the marker that tells us where to place this door
+		# Finds the marker that tells us where to place this door
 		var base_dir = dir.replace("_boss", "")
 		var marker = get_node_or_null("DoorMarkers/" + base_dir.capitalize())
 		if not marker:
@@ -69,33 +72,48 @@ func spawn_items() -> void:
 		item.position = spawn_points[i].position
 		add_child(item)
 
-func spawn_enemies() -> void:
-	print("=== spawn_enemies called in: ", name)
-	print("enemy_scenes size: ", enemy_scenes.size())
-	
-	if enemy_scenes.is_empty():
-		print("EXIT: enemy_scenes is empty")
-		return
-		
+func spawn_enemies(injected_enemies: Array = []) -> void:
 	var spawn_points = get_node_or_null("EnemySpawn")
 	if not spawn_points:
-		print("EXIT: No EnemySpawn node found in ", name)
 		return
-		
 	var points = spawn_points.get_children()
-	print("Spawn points found: ", points.size())
-	
-	if points.is_empty():
-		print("EXIT: EnemySpawn has no Marker2D children")
+	if points.is_empty() or injected_enemies.is_empty():
 		return
 
-	var enemy_count = randi_range(min_enemies, max_enemies)
-	print("Trying to spawn ", enemy_count, " enemies")
 	points.shuffle()
-	
-	for i in range(min(enemy_count, points.size())):
-		var enemy = enemy_scenes.pick_random().instantiate()
+	for i in range(min(injected_enemies.size(), points.size())):
+		var enemy = injected_enemies[i]
 		add_child(enemy)
-		enemy.global_position = points[i].global_position  # uses global_position since parent is changing
-		print("Spawning enemy at: ", enemy.global_position)
-		print("Enemy added: ", enemy.name)
+		enemy.global_position = points[i].global_position
+		print("Spawned %s (%s) at %s" % [enemy.name, enemy.get("max_health"), enemy.global_position])
+		
+		if is_boss_room and enemy.has_signal("boss_defeated"):
+			_boss_ref = enemy
+			enemy.boss_defeated.connect(_on_boss_defeated)
+	
+	if is_boss_room:
+		await get_tree().process_frame
+		_lock_doors(true)
+
+func _on_boss_defeated() -> void:
+	var stairs = get_node_or_null("Stairs")
+	if stairs and stairs.has_method("unlock"):
+		stairs.unlock()
+	_lock_doors(false)
+	print("Boss defeated — stairs unlocked!")
+
+	print("Boss defeated — stairs unlocked!")
+
+func _lock_doors(locked: bool) -> void:
+	var doors_node = get_node_or_null("Doors")
+	if not doors_node:
+		return
+	for door in doors_node.get_children():
+		# Grabs the Area2D regardless of its directional name
+		var area = door.find_child("*ExitArea2D", true, false)
+		if area:
+			area.set_deferred("monitoring", not locked)
+			area.set_deferred("monitorable", not locked)
+			var col = area.get_node_or_null("CollisionShape2D")
+			if col:
+				col.set_deferred("disabled", locked)

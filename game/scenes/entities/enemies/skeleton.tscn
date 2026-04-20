@@ -411,13 +411,10 @@ height = 16.0
 
 [node name="Skeleton" type="CharacterBody2D" unique_id=1147805820]
 script = ExtResource("1_3w83s")
-max_health = 30
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=867065892]
 sprite_frames = SubResource("SpriteFrames_dx3v6")
 animation = &"attack"
-frame = 14
-frame_progress = 1.0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=311520641]
 position = Vector2(-3, 9)

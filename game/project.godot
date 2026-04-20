@@ -22,6 +22,7 @@ config/icon="uid://caf7mhmbvsqh5"
 [autoload]
 
 DoorAudio="*uid://bijoxl6xmj251"
+ScoreManager="*uid://bvji6gwixdcfq"
 
 [display]
 
