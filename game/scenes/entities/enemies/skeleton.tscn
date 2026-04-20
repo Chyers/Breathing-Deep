@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://cr8di0gxhjukk" path="res://assets/characters/enemies/animations/skeleton_2/death.png" id="3_ey25l"]
 [ext_resource type="Texture2D" uid="uid://wl0t5kxbhmg5" path="res://assets/characters/enemies/animations/skeleton_2/idle.png" id="4_iet1o"]
 [ext_resource type="Texture2D" uid="uid://q2u1diu7ry60" path="res://assets/characters/enemies/animations/skeleton_2/movement.png" id="5_aub10"]
+[ext_resource type="Script" uid="uid://lsqv7gejs0sp" path="res://systems/enemies/hitbox.gd" id="7_ey25l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_efa2h"]
 atlas = ExtResource("1_gt0u0")
@@ -395,6 +396,19 @@ animations = [{
 [sub_resource type="CircleShape2D" id="CircleShape2D_3w83s"]
 radius = 5.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3w83s"]
+size = Vector2(16, 8)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ey25l"]
+size = Vector2(16, 11)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_iet1o"]
+size = Vector2(11, 16)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ey25l"]
+radius = 6.0
+height = 16.0
+
 [node name="Skeleton" type="CharacterBody2D" unique_id=1147805820]
 script = ExtResource("1_3w83s")
 
@@ -405,5 +419,38 @@ animation = &"attack"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=311520641]
 position = Vector2(-3, 9)
 shape = SubResource("CircleShape2D_3w83s")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=88348623]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("7_ey25l")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1989835612]
+position = Vector2(8, 6)
+shape = SubResource("RectangleShape2D_3w83s")
+disabled = true
+debug_color = Color(0, 0.64705884, 0.25882354, 0.41960785)
+
+[node name="CollisionShape2D_Up" type="CollisionShape2D" parent="Hitbox" unique_id=1626539843]
+position = Vector2(1.5, -1.9999999)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_ey25l")
+disabled = true
+debug_color = Color(0, 0.6458188, 0.25850913, 0.41960785)
+
+[node name="CollisionShape2D_Down" type="CollisionShape2D" parent="Hitbox" unique_id=749790520]
+position = Vector2(1.5, 14)
+shape = SubResource("RectangleShape2D_iet1o")
+disabled = true
+debug_color = Color(0, 0.64705884, 0.25882354, 0.41960785)
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1629802271 groups=["hurtbox"]]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1932673292]
+position = Vector2(-1, 6)
+shape = SubResource("CapsuleShape2D_ey25l")
+debug_color = Color(0.9626878, 0.06452384, 0.4646926, 0.41960785)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=2004269752]

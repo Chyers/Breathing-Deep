@@ -27,6 +27,9 @@ y_sort_enabled = true
 position = Vector2(240, 135)
 collision_layer = 2
 collision_mask = 25
+speed = null
+attack_speed = null
+max_health = null
 
 [node name="Minimap" parent="." unique_id=1017776597 instance=ExtResource("3_nuqkj")]
 
@@ -53,8 +56,9 @@ script = ExtResource("4_x721j")
 [node name="Panel" type="Panel" parent="CanvasLayer" unique_id=1055175239]
 anchors_preset = 9
 anchor_bottom = 1.0
+offset_left = 5.0
 offset_top = 37.0
-offset_right = 110.0
+offset_right = 115.0
 offset_bottom = -201.0
 grow_vertical = 2
 

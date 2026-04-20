@@ -1,8 +1,9 @@
 [gd_scene format=3 uid="uid://bb4dlssrk5bgk"]
 
-[ext_resource type="Script" uid="uid://dagwhkvyo71pq" path="res://systems/environment/north_boss.gd" id="1_wydet"]
+[ext_resource type="Script" uid="uid://cia736r4idg87" path="res://systems/environment/north_boss.gd" id="1_wydet"]
 [ext_resource type="Texture2D" uid="uid://bdno7h8cvdkx1" path="res://assets/environment/north_boss.png" id="2_wydet"]
-[ext_resource type="Script" uid="uid://dcyjdsjrwpnpg" path="res://systems/environment/door_north.gd" id="3_18xly"]
+[ext_resource type="Script" uid="uid://ck3e1bipj6cng" path="res://systems/environment/door_north.gd" id="3_18xly"]
+[ext_resource type="AudioStream" uid="uid://dr8p1ydtww5n8" path="res://audio/dragon-studio-heavy-door-unlocking-515258.mp3" id="4_ybxkn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2jnv8"]
 size = Vector2(44, 36)
@@ -29,3 +30,7 @@ script = ExtResource("3_18xly")
 position = Vector2(24, -15)
 shape = SubResource("RectangleShape2D_2jnv8")
 debug_color = Color(0.70285153, 0.4798553, 0.29215485, 0.41960785)
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1952745725]
+position = Vector2(-1, 2)
+stream = ExtResource("4_ybxkn")

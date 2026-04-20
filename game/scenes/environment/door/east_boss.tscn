@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://ch0iokrpfnn0o" path="res://systems/environment/east_boss.gd" id="1_w6td4"]
 [ext_resource type="Texture2D" uid="uid://cy20sy1g40j7o" path="res://assets/environment/side_boss.png" id="2_w6td4"]
 [ext_resource type="Script" uid="uid://pcgsejwfrodu" path="res://systems/environment/door_east.gd" id="3_bgbhg"]
+[ext_resource type="AudioStream" uid="uid://dr8p1ydtww5n8" path="res://audio/dragon-studio-heavy-door-unlocking-515258.mp3" id="4_3tik4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ar7yp"]
 size = Vector2(18, 36)
@@ -25,3 +26,7 @@ script = ExtResource("3_bgbhg")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EastExitArea2D" unique_id=1665291069]
 position = Vector2(-1, 1)
 shape = SubResource("RectangleShape2D_ar7yp")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=890423509]
+position = Vector2(-1, 2)
+stream = ExtResource("4_3tik4")

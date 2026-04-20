@@ -270,6 +270,9 @@ position = Vector2(443, 155)
 [node name="Marker2D3" type="Marker2D" parent="EnemySpawn" unique_id=1210912387]
 position = Vector2(603, 273)
 
+[node name="Marker2D4" type="Marker2D" parent="EnemySpawn" unique_id=763344501]
+position = Vector2(551, 240)
+
 [node name="ItemSpawn" type="Node2D" parent="." unique_id=1966993477]
 
 [node name="Marker2D" type="Marker2D" parent="ItemSpawn" unique_id=761617433]

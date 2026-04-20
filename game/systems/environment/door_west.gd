@@ -2,6 +2,7 @@ extends Area2D
 
 const DIRECTION = "west"
 var can_use: bool = true
+var audio_player: AudioStreamPlayer2D
 
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
@@ -18,6 +19,12 @@ func _on_body_entered(body: Node) -> void:
 		
 	print("Player entered ", DIRECTION, "door!")
 	can_use = false
+	
+	var is_boss = false
+	if "IS_BOSS_DOOR" in get_parent():
+		is_boss = get_parent().IS_BOSS_DOOR
+	
+	DoorAudio.play_door_sound(is_boss)
 		
 	# Disable monitoring safely
 	set_deferred("monitoring", false)

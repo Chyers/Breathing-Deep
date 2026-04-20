@@ -6,12 +6,12 @@ func _ready() -> void:
 	connect("body_entered", Callable(self, "_on_body_entered"))
 
 func _on_body_entered(body: Node) -> void:
-	if body.is_in_group("player"):  # lowercase to match player script
+	if body.is_in_group("player"):
 		if body.has_method("add_coins"):
 			body.add_coins(coin_value)
 
 		var item = Item.new()
-		item.item_name = "Coin"  # item_name instead of name for stacking
+		item.item_name = "Coin"
 		var sprite = $AnimatedSprite2D
 		item.icon = sprite.sprite_frames.get_frame_texture(sprite.animation, 0)
 
