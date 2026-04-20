@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://doepo35ol7upb"]
+
+[ext_resource type="Texture2D" uid="uid://c2gvo2h7nmkph" path="res://assets/environment/east_door.png" id="1_sagoe"]
+[ext_resource type="Script" uid="uid://pcgsejwfrodu" path="res://systems/environment/door_east.gd" id="2_y4rdv"]
+[ext_resource type="AudioStream" uid="uid://do7os0aj17hhf" path="res://audio/soundreality-opening-door-411632.mp3" id="3_jt7xq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ar7yp"]
+size = Vector2(18, 37)
+
+[node name="Door" type="Node2D" unique_id=699459189]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=901706120]
+position = Vector2(-1.0000007, 1.5000006)
+scale = Vector2(0.86666673, 0.6632653)
+texture = ExtResource("1_sagoe")
+
+[node name="SpawnPoint" type="Marker2D" parent="." unique_id=734378719]
+position = Vector2(-24, 0)
+
+[node name="EastExitArea2D" type="Area2D" parent="." unique_id=628122981]
+collision_mask = 2
+script = ExtResource("2_y4rdv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EastExitArea2D" unique_id=1665291069]
+position = Vector2(-1, 0.5)
+shape = SubResource("RectangleShape2D_ar7yp")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=2012045579]
+stream = ExtResource("3_jt7xq")
