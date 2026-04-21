@@ -10,6 +10,7 @@ signal boss_defeated
 @export var attack_cooldown: float = 1.2
 @export var hit_offset: float = 10.0
 @export var points: int = 500
+@onready var health_bar: ProgressBar = $HealthBarPivot/HealthBar
 
 var player: Node2D = null
 var player_target: Node2D = null
@@ -34,6 +35,7 @@ const PHASE2_COOLDOWN_MULT  := 0.75
 @onready var hitbox_shape: CollisionShape2D = $Hitbox/CollisionShape2D
 @onready var hitbox_shape_up: CollisionShape2D = $Hitbox/CollisionShape2D_Up
 @onready var hitbox_shape_down: CollisionShape2D = $Hitbox/CollisionShape2D_Down
+@onready var damage_sound: AudioStreamPlayer2D = $DamageSound
 
 func _ready() -> void:
 	health = max_health
@@ -47,6 +49,13 @@ func _ready() -> void:
 	_set_hitboxes(true)
 	await get_tree().process_frame
 	_find_player()
+	health = max_health
+	
+	health_bar.max_value = max_health
+	health_bar.value = health
+	health_bar.visible = false
+	
+	hitbox.damage = attack_damage
 
 func _find_player() -> void:
 	var players := get_tree().get_nodes_in_group("player")
@@ -111,7 +120,12 @@ func _set_hitboxes(disabled: bool) -> void:
 func take_damage(amount: int) -> void:
 	if is_dead:
 		return
+		
 	health -= amount
+	damage_sound.stop()
+	damage_sound.play()
+	health_bar.value = health
+	health_bar.visible = true
 	
 	if not in_phase2 and float(health) / float(max_health) <= phase2_threshold:
 		_enter_phase2()

@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" uid="uid://505d213fl0ib" path="res://systems/enemies/vampire.gd" id="1_h5es4"]
 [ext_resource type="Texture2D" uid="uid://c0awlksjiitj4" path="res://assets/characters/enemies/animations/vampire/Vampire.png" id="2_whbrm"]
-[ext_resource type="Script" uid="uid://lsqv7gejs0sp" path="res://systems/enemies/hitbox.gd" id="6_smptb"]
+[ext_resource type="AudioStream" uid="uid://ch8ox3ixpai7" path="res://audio/freesound_community-hit-swing-sword-small-2-95566.mp3" id="4_whbrm"]
+[ext_resource type="Script" uid="uid://te60g7u2pikd" path="res://systems/enemies/hitbox.gd" id="6_smptb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ybvg"]
 atlas = ExtResource("2_whbrm")
@@ -386,6 +387,12 @@ height = 22.0
 radius = 6.0
 height = 16.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h5es4"]
+bg_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_whbrm"]
+bg_color = Color(0.7607843, 0, 0, 1)
+
 [node name="Vampire" type="CharacterBody2D" unique_id=1008056816]
 script = ExtResource("1_h5es4")
 
@@ -430,3 +437,19 @@ shape = SubResource("CapsuleShape2D_vmohw")
 debug_color = Color(0.9626878, 0.06452384, 0.4646926, 0.41960785)
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="." unique_id=1539845349]
+
+[node name="HealthBarPivot" type="Node2D" parent="." unique_id=884934451]
+
+[node name="HealthBar" type="ProgressBar" parent="HealthBarPivot" unique_id=1840880808]
+offset_left = -12.0
+offset_top = -11.0
+offset_right = 4.0
+offset_bottom = -8.0
+theme_override_styles/background = SubResource("StyleBoxFlat_h5es4")
+theme_override_styles/fill = SubResource("StyleBoxFlat_whbrm")
+value = 100.0
+show_percentage = false
+
+[node name="DamageSound" type="AudioStreamPlayer2D" parent="." unique_id=663460225]
+stream = ExtResource("4_whbrm")
+volume_db = 24.0

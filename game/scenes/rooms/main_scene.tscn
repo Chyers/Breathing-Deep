@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://baa3afpncco58"]
 
 [ext_resource type="PackedScene" uid="uid://8vhgjodit74q" path="res://scenes/entities/player/player.tscn" id="1_6jndt"]
-[ext_resource type="Script" uid="uid://bnanarhldcsg5" path="res://systems/rooms/main_scene.gd" id="1_es0yc"]
+[ext_resource type="Script" uid="uid://ttmsk81oc8ll" path="res://systems/rooms/main_scene.gd" id="1_es0yc"]
 [ext_resource type="PackedScene" uid="uid://dt67tlg4gd676" path="res://scenes/ui/Minimap.tscn" id="3_nuqkj"]
-[ext_resource type="Script" uid="uid://dhwgy8b83ou3m" path="res://systems/ui/progress_bar.gd" id="4_8joo4"]
+[ext_resource type="Script" uid="uid://noa3wjfjbwob" path="res://systems/ui/progress_bar.gd" id="4_x721j"]
+[ext_resource type="PackedScene" uid="uid://byks3rut603tu" path="res://scenes/rooms/pause_menu.tscn" id="5_wxxke"]
+[ext_resource type="PackedScene" uid="uid://c87xvdx0vycb0" path="res://scenes/ui/game_over_menu.tscn" id="6_lxejf"]
 
 [node name="main_scene" type="Node2D" unique_id=1437714124]
 y_sort_enabled = true
@@ -23,9 +25,6 @@ y_sort_enabled = true
 position = Vector2(240, 135)
 collision_layer = 2
 collision_mask = 25
-speed = null
-attack_speed = null
-max_health = null
 
 [node name="Minimap" parent="." unique_id=1017776597 instance=ExtResource("3_nuqkj")]
 
@@ -47,7 +46,7 @@ grow_vertical = 0
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 value = 100.0
-script = ExtResource("4_8joo4")
+script = ExtResource("4_x721j")
 
 [node name="Panel" type="Panel" parent="CanvasLayer" unique_id=1055175239]
 anchors_preset = 9
@@ -108,3 +107,7 @@ offset_bottom = 23.0
 theme_override_font_sizes/font_size = 10
 horizontal_alignment = 2
 vertical_alignment = 2
+
+[node name="PauseMenu" parent="CanvasLayer/Panel" unique_id=2005001826 instance=ExtResource("5_wxxke")]
+
+[node name="GameOverMenu" parent="CanvasLayer" unique_id=1578638756 instance=ExtResource("6_lxejf")]

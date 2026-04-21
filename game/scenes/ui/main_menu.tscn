@@ -5,23 +5,137 @@
 [ext_resource type="Texture2D" uid="uid://cx2wknh5h0cso" path="res://assets/ui/start_hover.png" id="3_5hoan"]
 [ext_resource type="Texture2D" uid="uid://buhxafg8jwg7v" path="res://assets/ui/Start_pressed.png" id="3_de6vd"]
 [ext_resource type="Texture2D" uid="uid://buqskx7ur2wdm" path="res://assets/ui/quit_button_128x64.png" id="3_qhvax"]
-[ext_resource type="Texture2D" uid="uid://dnq4suko8e1vv" path="res://assets/ui/options_button_128x64_new.png" id="5_de6vd"]
+[ext_resource type="Texture2D" uid="uid://drc18ypacyudf" path="res://assets/ui/options_button_Normal.png" id="5_7suek"]
+[ext_resource type="Texture2D" uid="uid://dm4lvr2wepvic" path="res://assets/ui/options_button_Pressed.png" id="6_otr3d"]
 [ext_resource type="Texture2D" uid="uid://b7vecndu4dbol" path="res://assets/ui/quit_button_hover.png" id="7_6vlf1"]
+[ext_resource type="Texture2D" uid="uid://do3s7tbsfohux" path="res://assets/ui/options_button_Hover.png" id="7_8ekit"]
 [ext_resource type="Texture2D" uid="uid://bavmyw80hxthf" path="res://assets/ui/quit_button_pressed.png" id="7_t5d2d"]
 [ext_resource type="AudioStream" uid="uid://c56fvp40cywm1" path="res://audio/Hero Immortal.mp3" id="9_q85j6"]
+[ext_resource type="Texture2D" uid="uid://8xtt777mqyni" path="res://assets/ui/options_bg.png.png" id="12_otr3d"]
+[ext_resource type="Texture2D" uid="uid://c1fmfare47ool" path="res://assets/ui/Sword_Grabb.png" id="13_n4uci"]
+[ext_resource type="Texture2D" uid="uid://b407e3d332xk" path="res://assets/ui/Sword_Grabb_Highlight.png" id="14_ayp64"]
+[ext_resource type="AudioStream" uid="uid://cfrd88kn7wois" path="res://audio/VolumeSlider_Feedback.mp3" id="14_n4uci"]
+[ext_resource type="Texture2D" uid="uid://d0fhl6x3rhvy6" path="res://assets/ui/Sword_Grabb_Disable.png" id="15_y2j7i"]
+[ext_resource type="Texture2D" uid="uid://dt1n12uqyjmte" path="res://assets/ui/Options_Back_button.png" id="16_y2j7i"]
+[ext_resource type="Texture2D" uid="uid://dd8b0544j2lfk" path="res://assets/ui/Options_Back_button_Pressed.png" id="17_pw24t"]
+[ext_resource type="Texture2D" uid="uid://em6vmu8bpyqd" path="res://assets/ui/Options_Back_button_hover.png" id="18_5dct7"]
 
 [sub_resource type="GDScript" id="GDScript_qfblm"]
 script/source = "extends Control
 
+@onready var slider = %VolumeSlider
+@onready var main_menu = $VBoxContainer
+@onready var options_panel = $OptionsPanel
+@onready var fullscreen_toggle = %FullscreenToggle
+@onready var click_sound = $ClickSound
+
+var opened_from = \"main\"
+var config = ConfigFile.new()
+var is_loading_settings = false
+
+func _ready():
+	load_settings()
+	options_panel.hide()
+	AudioManager.volume_changed.connect(_on_volume_changed)
+
+# -------------------------
+# NAVIGATION
+# -------------------------
+
+func open_options(from):
+	opened_from = from
+	
+	if main_menu:
+		main_menu.hide()
+	
+	options_panel.show()
+
+func _on_back_button_pressed():
+	options_panel.hide()
+
+	if opened_from == \"main\":
+		main_menu.show()
+
+# -------------------------
+# BUTTONS
+# -------------------------
+
 func _on_start_button_pressed():
+	ScoreManager.reset_score()
 	get_tree().change_scene_to_file(\"res://scenes/rooms/main_scene.tscn\")
 
 func _on_options_button_pressed():
-	print(\"Options pressed\")
+	open_options(\"main\")
 
 func _on_quit_button_pressed():
 	get_tree().quit()
+
+# -------------------------
+# AUDIO
+# -------------------------
+
+func _on_volume_slider_value_changed(value):
+	if value != AudioManager.volume:
+		AudioManager.set_volume(value)
+		save_settings()
+
+func _on_volume_changed(value):
+	if slider.value != value:
+		slider.value = value
+
+func _on_volume_slider_drag_ended(value_changed):
+	if value_changed:
+		click_sound.play()
+
+# -------------------------
+# FULLSCREEN
+# -------------------------
+
+func _on_fullscreen_toggle_toggled(button_pressed):
+	if is_loading_settings:
+		return
+		
+	if button_pressed:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+
+	save_settings()
+
+# -------------------------
+# SAVE / LOAD
+# -------------------------
+
+func save_settings():
+	config.set_value(\"display\", \"fullscreen\", fullscreen_toggle.button_pressed)
+	config.set_value(\"audio\", \"volume\", slider.value)
+	config.save(\"user://settings.cfg\")
+
+func load_settings():
+	is_loading_settings = true
+
+	var err = config.load(\"user://settings.cfg\")
+
+	var fullscreen = false
+	var volume = 1.0
+
+	if err == OK:
+		fullscreen = config.get_value(\"display\", \"fullscreen\", false)
+		volume = config.get_value(\"audio\", \"volume\", 1.0)
+
+	fullscreen_toggle.button_pressed = fullscreen
+	slider.value = volume
+	AudioManager.set_volume(volume)
+
+	if fullscreen:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+	else:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+
+	is_loading_settings = false
 "
+
+[sub_resource type="SystemFont" id="SystemFont_pw24t"]
 
 [node name="MainMenu" type="Control" unique_id=815509216]
 layout_mode = 3
@@ -52,9 +166,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -48.0
+offset_left = -56.5
 offset_top = -98.0
-offset_right = 48.0
+offset_right = 56.5
 offset_bottom = 3.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -72,7 +186,9 @@ texture_hover = ExtResource("3_5hoan")
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-texture_normal = ExtResource("5_de6vd")
+texture_normal = ExtResource("5_7suek")
+texture_pressed = ExtResource("6_otr3d")
+texture_hover = ExtResource("7_8ekit")
 stretch_mode = 1
 
 [node name="QuitButton" type="TextureButton" parent="VBoxContainer" unique_id=37141069]
@@ -88,6 +204,84 @@ stream = ExtResource("9_q85j6")
 autoplay = true
 parameters/looping = true
 
+[node name="OptionsPanel" type="TextureRect" parent="." unique_id=1058659621]
+custom_minimum_size = Vector2(400, 250)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_otr3d")
+expand_mode = 3
+stretch_mode = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="OptionsPanel" unique_id=1688262677]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -122.0
+offset_top = -63.0
+offset_right = 123.0
+offset_bottom = 67.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="OptionsPanel/VBoxContainer" unique_id=1293061448]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Volume" type="Label" parent="OptionsPanel/VBoxContainer/HBoxContainer" unique_id=1913600182]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_pw24t")
+theme_override_font_sizes/font_size = 16
+text = "Overall Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="OptionsPanel/VBoxContainer/HBoxContainer" unique_id=591392044]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = ExtResource("13_n4uci")
+theme_override_icons/grabber_highlight = ExtResource("14_ayp64")
+theme_override_icons/grabber_disabled = ExtResource("15_y2j7i")
+max_value = 1.0
+step = 0.01
+ticks_position = 3
+
+[node name="FullscreenToggle" type="CheckButton" parent="OptionsPanel/VBoxContainer" unique_id=463626433]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Full Screen"
+
+[node name="BackButton" type="TextureButton" parent="OptionsPanel" unique_id=775081333]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 172.0
+offset_top = 223.0
+offset_right = 309.0
+offset_bottom = 244.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture_normal = ExtResource("16_y2j7i")
+texture_pressed = ExtResource("17_pw24t")
+texture_hover = ExtResource("18_5dct7")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=1552756802]
+stream = ExtResource("14_n4uci")
+pitch_scale = 2.45
+
 [connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/OptionsButton" to="." method="_on_options_button_pressed"]
 [connection signal="pressed" from="VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="drag_ended" from="OptionsPanel/VBoxContainer/HBoxContainer/VolumeSlider" to="." method="_on_volume_slider_drag_ended"]
+[connection signal="value_changed" from="OptionsPanel/VBoxContainer/HBoxContainer/VolumeSlider" to="." method="_on_volume_slider_value_changed"]
+[connection signal="pressed" from="OptionsPanel/VBoxContainer/FullscreenToggle" to="." method="_on_full_screen_button_pressed"]
+[connection signal="pressed" from="OptionsPanel/BackButton" to="." method="_on_back_button_pressed"]

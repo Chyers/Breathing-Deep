@@ -73,7 +73,7 @@ var buff_cooldown: float = 15.0
 
 # Node References
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
-@onready var slots = get_tree().get_root().get_node("/root/main_scene/CanvasLayer/Panel/GridContainer").get_children()
+@onready var slots = get_tree().current_scene.get_node("CanvasLayer/Panel/GridContainer").get_children()
 @onready var hitbox_down: CollisionShape2D = $Hitbox/CollisionShape2D_Down
 @onready var hitbox_up: CollisionShape2D = $Hitbox/CollisionShape2D_Up
 @onready var hitbox_side: CollisionShape2D = $Hitbox/CollisionShape2D
@@ -322,7 +322,11 @@ func take_damage(amount: int) -> void:
 		is_dead = true
 		is_hurt = false
 		is_attack = false
-		_play_anim("death", last_dir)
+		_enter_state(State.DEATH)
+		anim_player.play("death")
+		await get_tree().create_timer(0.8).timeout
+		get_tree().get_first_node_in_group("game_over_menu").show_game_over()
+		print("Final score: ", ScoreManager.get_score())
 	else:
 		is_hurt = true
 		_play_anim("hurt", last_dir)
@@ -374,3 +378,4 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 func add_coins(amount: int):
 	# For now just print, add a coin counter var if needed
 	print("Collected ", amount, " coin(s)")
+	

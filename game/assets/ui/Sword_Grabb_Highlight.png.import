@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqm5wh1210fb3"
-path="res://.godot/imported/ChatGPT Image Mar 3, 2026, 04_38_05 PM.png-328c3c1a5670b2998827511621df0253.ctex"
+uid="uid://b407e3d332xk"
+path="res://.godot/imported/Sword_Grabb_Highlight.png-f251f27853901985b9696a86c675958b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/ChatGPT Image Mar 3, 2026, 04_38_05 PM.png"
-dest_files=["res://.godot/imported/ChatGPT Image Mar 3, 2026, 04_38_05 PM.png-328c3c1a5670b2998827511621df0253.ctex"]
+source_file="res://assets/ui/Sword_Grabb_Highlight.png"
+dest_files=["res://.godot/imported/Sword_Grabb_Highlight.png-f251f27853901985b9696a86c675958b.ctex"]
 
 [params]
 
