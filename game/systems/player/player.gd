@@ -23,6 +23,27 @@ enum State{
 	DEATH_RIGHT
 }
 
+const STATE_MAP = {
+	"IDLE": State.IDLE,
+	"IDLE_UP": State.IDLE_UP,
+	"IDLE_RIGHT": State.IDLE_RIGHT,
+	"WALK": State.WALK,
+	"WALK_UP": State.WALK_UP,
+	"WALK_RIGHT": State.WALK_RIGHT,
+	"ATTACK_SW": State.ATTACK_SW,
+	"ATTACK_SW_UP": State.ATTACK_SW_UP,
+	"ATTACK_SW_RIGHT": State.ATTACK_SW_RIGHT,
+	"ATTACK_SP": State.ATTACK_SP,
+	"ATTACK_SP_UP": State.ATTACK_SP_UP,
+	"ATTACK_SP_RIGHT": State.ATTACK_SP_RIGHT,
+	"HURT": State.HURT,
+	"HURT_UP": State.HURT_UP,
+	"HURT_RIGHT": State.HURT_RIGHT,
+	"DEATH": State.DEATH,
+	"DEATH_UP": State.DEATH_UP,
+	"DEATH_RIGHT": State.DEATH_RIGHT
+}
+
 # Stats / State
 var inventory: Array[Item] = []
 var max_slots: int = 5
@@ -57,9 +78,12 @@ var buff_cooldown: float = 15.0
 
 # Ready
 func _ready() -> void:
-	$Hitbox.area_entered.connect(_on_hitbox_area_entered)
+	var dir := get_dir_suffix()
 	add_to_group("player")
-	_enter_state(State.IDLE)
+	_play_anim("IDLE", dir)
+
+	$Hitbox.area_entered.connect(_on_hitbox_area_entered)
+  
 	for i in slots.size():
 		var slot = slots[i]
 		slot.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -195,9 +219,8 @@ func _handle_input() -> void:
 
 func get_dir_suffix() -> String:
 	if velocity.y < 0:
-		$Plain.flip_h = false
-		last_dir = "_UP"
-		return "_UP"
+		last_dir = "UP"
+		return "UP"
 	if velocity.x != 0:
 		$Plain.flip_h = velocity.x < 0   # flip RIGHT anim for left movement
 		last_dir = "_RIGHT"
@@ -218,7 +241,7 @@ func movement_loop() -> void:
 	).normalized()
 	
 	# Avoids zero-vector issues
-	# var input := raw.normalized() if raw.length() > 0 else Vector2.ZERO
+	input = input.normalized() if input.length() > 0 else Vector2.ZERO
 
 	velocity = input * speed
 
@@ -227,13 +250,15 @@ func movement_loop() -> void:
 
 # State Logic
 func set_state() -> void:
+	var dir := get_dir_suffix()
+	
 	if is_hurt:
 		is_attack = false
 
 	if is_dead:
-		_enter_state(State.DEATH)
+		_play_anim("DEATH", dir)
 	elif is_hurt:
-		_enter_state(State.HURT)
+		_play_anim("HURT", dir)
 	elif is_attack:
 		return
 	elif velocity.length() > 0:
@@ -242,83 +267,127 @@ func set_state() -> void:
 		_resolve_idle_state()
 
 func _resolve_move_state() -> void:
+	var dir := get_dir_suffix()
 	var raw := Vector2(
 		Input.get_axis("left", "right"),
 		Input.get_axis("up", "down")
 	)
 
 	if raw == Vector2.ZERO:
-		_enter_state(State.IDLE)
+		_play_anim("IDLE", dir)
 		return
 
 	if abs(raw.y) > abs(raw.x):
-		_enter_state(State.WALK_UP if raw.y < 0 else State.WALK)
+		_play_anim("WALK_UP" if raw.y < 0 else "WALK")
 	else:
-		_enter_state(State.WALK_RIGHT)
+		_play_anim("WALK_RIGHT")
 
 func _resolve_idle_state() -> void:
 	if abs(cardinal_direct.y) > abs(cardinal_direct.x):
-		_enter_state(State.IDLE_UP if cardinal_direct.y < 0 else State.IDLE)
+		_play_anim("IDLE_UP" if cardinal_direct.y < 0 else "IDLE")
 	else:
-		_enter_state(State.IDLE_RIGHT)
+		_play_anim("IDLE_RIGHT")
 
-func _enter_state(new_state: State) -> void:
-	if new_state == curr_state:
-		return
-	prev_state = curr_state
-	curr_state = new_state
+func _string_to_state(s: String) -> State:
+	var dir := get_dir_suffix()
+	var curr_state := s + dir
+	
+	if curr_state == "IDLE_UP":
+		return STATE_MAP.get(curr_state, State.IDLE_UP)
+	if curr_state == "IDLE_RIGHT":
+		return STATE_MAP.get(curr_state, State.IDLE_RIGHT)
+	if curr_state == "WALK":
+		return STATE_MAP.get(curr_state, State.WALK)
+	if curr_state == "WALK_UP":
+		return STATE_MAP.get(curr_state, State.WALK_UP)
+	if curr_state == "WALK_RIGHT":
+		return STATE_MAP.get(curr_state, State.WALK_RIGHT)
+	if curr_state == "ATTACK_SW":
+		return STATE_MAP.get(curr_state, State.ATTACK_SW)
+	if curr_state == "ATTACK_SW_UP":
+		return STATE_MAP.get(curr_state, State.ATTACK_SW_UP)
+	if curr_state == "ATTACK_SW_RIGHT":
+		return STATE_MAP.get(curr_state, State.ATTACK_SW_RIGHT)
+	if curr_state == "ATTACK_SP":
+		return STATE_MAP.get(curr_state, State.ATTACK_SP)
+	if curr_state == "ATTACK_SP_UP":
+		return STATE_MAP.get(curr_state, State.ATTACK_SP_UP)
+	if curr_state == "ATTACK_SP_RIGHT":
+		return STATE_MAP.get(curr_state, State.ATTACK_SP_RIGHT)
+	if curr_state == "HURT":
+		return STATE_MAP.get(curr_state, State.HURT)
+	if curr_state == "HURT_UP":
+		return STATE_MAP.get(curr_state, State.HURT_UP)
+	if curr_state == "HURT_RIGHT":
+		return STATE_MAP.get(curr_state, State.HURT_RIGHT)
+	if curr_state == "DEATH":
+		return STATE_MAP.get(curr_state, State.DEATH)
+	if curr_state == "DEATH_UP":
+		return STATE_MAP.get(curr_state, State.DEATH_UP)
+	if curr_state == "DEATH_RIGHT":
+		return STATE_MAP.get(curr_state, State.DEATH_RIGHT)
+	return STATE_MAP.get(curr_state, State.IDLE)
 
 # Animation Handling
 func _update_anim() -> void:
-	$Plain.flip_h = cardinal_direct.x < 0
+	var dir := get_dir_suffix()
+	
+	if is_dead:
+		_play_anim("DEATH", dir)
+	elif is_hurt:
+		_play_anim("HURT", dir)
+	elif is_attack:
+		return
 
+func _state_to_anim(state: State) -> String:
 	var anim := _state_to_anim(State.keys()[curr_state])
 	if anim_player.current_animation != anim:
 		anim_player.play(anim)
 
-func _state_to_anim(state: String) -> String:
+func _state_to_anim(state: String) -> String: 
 	match state:
-		"IDLE":        return "idle"
-		"IDLE_UP":     return "idle_up"
-		"IDLE_RIGHT":  return "idle_right"
-		"WALK":        return "walk"
-		"WALK_UP":     return "walk_up"
-		"WALK_RIGHT":  return "walk_right"
-		"ATTACK_SW":   return "attack_sw"
-		"ATTACK_SW_RIGHT": return "attack_sw_right"
-		"ATTACK_SW_UP": return "attack_sw_up"
-		"ATTACK_SP":   return "attack_sp"
-		"ATTACK_SP_RIGHT": return "attack_sp_right"
-		"ATTACK_SP_UP": return "attack_sp_up"
-		"HURT":        return "hurt"
-		"HURT_RIGHT":  return "hurt_right"
-		"HURT_UP":     return "hurt_up"
-		"DEATH":       return "death"
-		"DEATH_RIGHT": return "death_right"
-		"DEATH_UP":    return "death_up"
-		_:                 return "idle"
+		State.IDLE:        return "IDLE"
+		State.IDLE_UP:     return "IDLE_UP"
+		State.IDLE_RIGHT:  return "IDLE_RIGHT"
+		State.WALK:        return "WALK"
+		State.WALK_UP:     return "WALK_UP"
+		State.WALK_RIGHT:  return "WALK_RIGHT"
+		State.ATTACK_SW:   return "ATTACK_SW"
+		State.ATTACK_SW_RIGHT: return "ATTACK_SW_RIGHT"
+		State.ATTACK_SW_UP: return "ATTACK_SW_UP"
+		State.ATTACK_SP:   return "ATTACK_SP"
+		State.ATTACK_SP_RIGHT: return "ATTACK_SP_RIGHT"
+		State.ATTACK_SP_UP: return "ATTACK_SP_UP"
+		State.HURT:        return "HURT"
+		State.HURT_RIGHT:  return "HURT_RIGHT"
+		State.HURT_UP:     return "HURT_UP"
+		State.DEATH:       return "DEATH"
+		State.DEATH_RIGHT: return "DEATH_RIGHT"
+		State.DEATH_UP:    return "DEATH_UP"
+		_:                 return "IDLE"
 
-#func _play_anim(base: String, dir: String = ""):
-	#var anim_name := _state_to_anim(base + dir)
-	#if anim_player.animation != anim_name:
-		#anim_player.play(anim_name)
+func _play_anim(base: String, dir: String = ""):
+	var anim_name := _state_to_anim(_string_to_state(base + dir))
+	if anim_player.animation != anim_name:
+		anim_player.play(anim_name)
 
 #API
 func attack_sw() -> void:
+	var dir := get_dir_suffix()
 	if is_dead or is_hurt or is_attack:
 		return
 	is_attack = true
-	_enter_state(State.ATTACK_SW)
-	hit_sw_attack()
+	_play_anim("ATTACK_SW", dir)
 
 func attack_sp() -> void:
+	var dir := get_dir_suffix()
 	if is_dead or is_hurt or is_attack:
 		return
 	is_attack = true
-	_enter_state(State.ATTACK_SP)
-	hit_sw_attack()
+	_play_anim("ATTACK_SP", dir)
 
 func take_damage(amount: int) -> void:
+	var dir := get_dir_suffix()
 	if is_dead:
 		return
 	health -= amount
@@ -327,14 +396,13 @@ func take_damage(amount: int) -> void:
 		is_dead = true
 		is_hurt = false
 		is_attack = false
-		_enter_state(State.DEATH)
-		anim_player.play("death")
-		print("Final score: ", ScoreManager.get_score())
+		_play_anim("DEATH", dir)
 	else:
 		is_hurt = true
 
 # Animation Callbacks
 func _on_animation_finished(anim_name: String) -> void:
+	var dir := get_dir_suffix()
 	if is_dead and anim_name != "death":
 		return
 
@@ -342,12 +410,12 @@ func _on_animation_finished(anim_name: String) -> void:
 		"attack_sw", "attack_sp":
 			is_attack = false
 			is_hurt = false
-			_enter_state(State.IDLE)
+			_play_anim("IDLE", dir)
 
 		"hurt":
 			is_hurt = false
 			is_attack = false
-			_enter_state(State.IDLE)
+			_play_anim("IDLE", dir)
 
 		"death":
 			set_physics_process(false)
