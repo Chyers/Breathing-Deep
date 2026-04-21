@@ -4,10 +4,8 @@
 [ext_resource type="Script" uid="uid://ttmsk81oc8ll" path="res://systems/rooms/main_scene.gd" id="1_es0yc"]
 [ext_resource type="PackedScene" uid="uid://dt67tlg4gd676" path="res://scenes/ui/Minimap.tscn" id="3_nuqkj"]
 [ext_resource type="Script" uid="uid://noa3wjfjbwob" path="res://systems/ui/progress_bar.gd" id="4_x721j"]
-[ext_resource type="Script" uid="uid://bjx3vcrlsey6b" path="res://scenes/rooms/volume_slider.gd" id="5_wxxke"]
-[ext_resource type="Script" uid="uid://dab10beh081sl" path="res://scenes/rooms/pause_menu.gd" id="5_x721j"]
-[ext_resource type="Script" uid="uid://c0y48joam56m4" path="res://systems/ui/resume.gd" id="7_05o64"]
-[ext_resource type="Script" uid="uid://bsqtb162sknoo" path="res://systems/ui/quit.gd" id="8_5rn85"]
+[ext_resource type="PackedScene" uid="uid://byks3rut603tu" path="res://scenes/rooms/pause_menu.tscn" id="5_wxxke"]
+[ext_resource type="PackedScene" uid="uid://c87xvdx0vycb0" path="res://scenes/ui/game_over_menu.tscn" id="6_lxejf"]
 
 [node name="main_scene" type="Node2D" unique_id=1437714124]
 y_sort_enabled = true
@@ -27,9 +25,6 @@ y_sort_enabled = true
 position = Vector2(240, 135)
 collision_layer = 2
 collision_mask = 25
-speed = null
-attack_speed = null
-max_health = null
 
 [node name="Minimap" parent="." unique_id=1017776597 instance=ExtResource("3_nuqkj")]
 
@@ -113,69 +108,6 @@ theme_override_font_sizes/font_size = 10
 horizontal_alignment = 2
 vertical_alignment = 2
 
-[node name="Control" type="Control" parent="CanvasLayer" unique_id=1797919021]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="PauseMenu" parent="CanvasLayer/Panel" unique_id=2005001826 instance=ExtResource("5_wxxke")]
 
-[node name="Panel (Control)" type="Panel" parent="CanvasLayer/Control" unique_id=1008097022]
-visible = false
-custom_minimum_size = Vector2(300, 200)
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 70.0
-offset_top = 15.0
-offset_right = 370.0
-offset_bottom = 215.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="PauseMenu" type="Control" parent="CanvasLayer/Control/Panel (Control)" unique_id=1426362160]
-process_mode = 3
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("5_x721j")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control/Panel (Control)/PauseMenu" unique_id=278380407]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Resume" type="Button" parent="CanvasLayer/Control/Panel (Control)/PauseMenu/VBoxContainer" unique_id=1954090772]
-layout_mode = 2
-action_mode = 0
-script = ExtResource("7_05o64")
-
-[node name="Options" type="Button" parent="CanvasLayer/Control/Panel (Control)/PauseMenu/VBoxContainer" unique_id=573245193]
-layout_mode = 2
-
-[node name="Quit" type="Button" parent="CanvasLayer/Control/Panel (Control)/PauseMenu/VBoxContainer" unique_id=589558648]
-layout_mode = 2
-script = ExtResource("8_5rn85")
-
-[node name="VolumeSlider" type="HSlider" parent="CanvasLayer/Control" unique_id=737261271]
-layout_mode = 0
-offset_right = 99.0
-offset_bottom = 16.0
-max_value = 1.0
-step = 0.01
-value = 0.5
-script = ExtResource("5_wxxke")
-
-[connection signal="pressed" from="CanvasLayer/Control/Panel (Control)/PauseMenu/VBoxContainer/Resume" to="." method="_on_resume_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/Panel (Control)/PauseMenu/VBoxContainer/Resume" to="CanvasLayer/Control/Panel (Control)/PauseMenu" method="_on_resume_pressed"]
+[node name="GameOverMenu" parent="CanvasLayer" unique_id=1578638756 instance=ExtResource("6_lxejf")]

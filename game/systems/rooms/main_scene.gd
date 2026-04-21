@@ -401,3 +401,11 @@ func _print_dungeon() -> void:
 
 func _on_resume_pressed() -> void:
 	pass # Replace with function body.
+
+
+func _on_quit_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_music_slider_value_changed(value: float) -> void:
+	pass # Replace with function body.

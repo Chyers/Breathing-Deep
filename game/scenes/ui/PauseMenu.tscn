@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://csvwq7fpcohp0"]
+
+[ext_resource type="Script" uid="uid://dab10beh081sl" path="res://scenes/rooms/pause_menu.gd" id="1_vb6pq"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=1958510700]
+process_mode = 3
+layer = 10
+visible = false
+script = ExtResource("1_vb6pq")
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=1440281338]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=285268028]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1758579324]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="Panel/VBoxContainer" unique_id=856461713]
+layout_mode = 2
+text = "PAUSED"
+
+[node name="ResumeButton" type="Button" parent="Panel/VBoxContainer" unique_id=1970947746]
+layout_mode = 2
+
+[node name="RestartButton" type="Button" parent="Panel/VBoxContainer" unique_id=600042752]
+layout_mode = 2
+
+[node name="SettingsButton" type="Button" parent="Panel/VBoxContainer" unique_id=1267223823]
+layout_mode = 2
+
+[node name="QuitButton" type="Button" parent="Panel/VBoxContainer" unique_id=1396806763]
+process_mode = 3
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+text = "EXIT"
+
+[node name="SettingsPanel" type="PanelContainer" parent="." unique_id=640493961]
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -37.0
+offset_top = -20.0
+offset_right = 37.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsPanel" unique_id=1714968662]
+layout_mode = 2
+
+[node name="SettingsTitle" type="Label" parent="SettingsPanel/VBoxContainer" unique_id=1521672490]
+layout_mode = 2
+text = "SETTINGS"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsPanel/VBoxContainer/SettingsTitle" unique_id=794763680]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Master Volume" type="Label" parent="SettingsPanel/VBoxContainer/SettingsTitle/HBoxContainer" unique_id=1434367537]
+layout_mode = 2
+
+[node name="MasterSlider" type="HSlider" parent="SettingsPanel/VBoxContainer/SettingsTitle/HBoxContainer" unique_id=1647645322]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="SettingsPanel/VBoxContainer/SettingsTitle" unique_id=1134588975]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Music Volume" type="Label" parent="SettingsPanel/VBoxContainer/SettingsTitle/HBoxContainer2" unique_id=990210715]
+layout_mode = 2
+
+[node name="MusicSlider" type="HSlider" parent="SettingsPanel/VBoxContainer/SettingsTitle/HBoxContainer2" unique_id=883903383]
+layout_mode = 2
+
+[node name="CloseSettingsButton" type="Button" parent="SettingsPanel/VBoxContainer" unique_id=1160681258]
+layout_mode = 2
+text = "Back"
+
+[connection signal="pressed" from="Panel/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="value_changed" from="SettingsPanel/VBoxContainer/SettingsTitle/HBoxContainer/MasterSlider" to="." method="_on_master_slider_value_changed"]
+[connection signal="pressed" from="SettingsPanel/VBoxContainer/CloseSettingsButton" to="." method="_on_close_settings_button_pressed"]

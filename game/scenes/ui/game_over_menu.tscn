@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://c87xvdx0vycb0"]
+
+[ext_resource type="Script" uid="uid://ck80qjgfv8jd8" path="res://systems/ui/game_over_menu.gd" id="1_7nx0y"]
+[ext_resource type="Texture2D" uid="uid://djtcda17wsbmh" path="res://assets/ui/GameOver_window.png" id="2_eqkiq"]
+[ext_resource type="Texture2D" uid="uid://dpxuomu5kkcgv" path="res://assets/ui/Restart_button_Normal.png" id="3_5d0qp"]
+[ext_resource type="Texture2D" uid="uid://b5becwcblevea" path="res://assets/ui/Restart_button_Pressed_2.png" id="4_rvyv1"]
+[ext_resource type="Texture2D" uid="uid://bm0inu5m2pxeh" path="res://assets/ui/Restart_button_Hover_2.png" id="5_bajbn"]
+[ext_resource type="Texture2D" uid="uid://cecj27s7hdyrj" path="res://assets/ui/Main_Menu.png" id="6_pqh8g"]
+[ext_resource type="Texture2D" uid="uid://c4jejn41eggrk" path="res://assets/ui/Main_Menu_Pressed.png" id="7_p2eg5"]
+[ext_resource type="Texture2D" uid="uid://c1bil6btl2gna" path="res://assets/ui/Main_Menu_Hover.png" id="8_mtq2r"]
+[ext_resource type="Texture2D" uid="uid://bx7gdvp556rx2" path="res://assets/ui/Quit_button_normal.png" id="9_pig6i"]
+[ext_resource type="Texture2D" uid="uid://o358xr7j0ih" path="res://assets/ui/Quit_button_Pressed_2.png" id="10_6pcd1"]
+[ext_resource type="Texture2D" uid="uid://dj56i1rd5dhip" path="res://assets/ui/Quit_button_Hover_2.png" id="11_kec37"]
+
+[node name="GameOverMenu" type="CanvasLayer" unique_id=1578638756 groups=["game_over_menu"]]
+process_mode = 3
+layer = 10
+script = ExtResource("1_7nx0y")
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=2075453939]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.003921569)
+
+[node name="CenterContainer" type="TextureRect" parent="Dimmer" unique_id=29823799]
+layout_mode = 0
+offset_right = 480.0
+offset_bottom = 270.0
+texture = ExtResource("2_eqkiq")
+expand_mode = 3
+
+[node name="VBoxContainer" type="Control" parent="Dimmer/CenterContainer" unique_id=1057969538]
+anchors_preset = 0
+offset_right = 480.0
+offset_bottom = 270.0
+
+[node name="RetryButton" type="TextureButton" parent="Dimmer/CenterContainer/VBoxContainer" unique_id=1066973683]
+process_mode = 3
+layout_mode = 0
+offset_left = 44.0
+offset_top = 209.0
+offset_right = 173.0
+offset_bottom = 244.0
+texture_normal = ExtResource("3_5d0qp")
+texture_pressed = ExtResource("4_rvyv1")
+texture_hover = ExtResource("5_bajbn")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="MainMenuButton" type="TextureButton" parent="Dimmer/CenterContainer/VBoxContainer" unique_id=490261444]
+layout_mode = 0
+offset_left = 173.0
+offset_top = 208.0
+offset_right = 305.0
+offset_bottom = 244.0
+texture_normal = ExtResource("6_pqh8g")
+texture_pressed = ExtResource("7_p2eg5")
+texture_hover = ExtResource("8_mtq2r")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="QuitButton" type="TextureButton" parent="Dimmer/CenterContainer/VBoxContainer" unique_id=1509874297]
+process_mode = 3
+layout_mode = 0
+offset_left = 308.0
+offset_top = 207.0
+offset_right = 444.0
+offset_bottom = 244.0
+texture_normal = ExtResource("9_pig6i")
+texture_pressed = ExtResource("10_6pcd1")
+texture_hover = ExtResource("11_kec37")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="FinalScoreLabel" type="Label" parent="Dimmer/CenterContainer/VBoxContainer" unique_id=255750837]
+layout_mode = 0
+offset_left = 182.0
+offset_top = 114.0
+offset_right = 222.0
+offset_bottom = 137.0
+
+[connection signal="pressed" from="Dimmer/CenterContainer/VBoxContainer/RetryButton" to="." method="_on_retry_button_pressed"]
+[connection signal="pressed" from="Dimmer/CenterContainer/VBoxContainer/MainMenuButton" to="." method="_on_main_menu_button_pressed"]
+[connection signal="pressed" from="Dimmer/CenterContainer/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]

@@ -1,0 +1,172 @@
+[gd_scene format=3 uid="uid://byks3rut603tu"]
+
+[ext_resource type="Script" uid="uid://dab10beh081sl" path="res://scenes/rooms/pause_menu.gd" id="1_1kep3"]
+[ext_resource type="Texture2D" uid="uid://buqskx7ur2wdm" path="res://assets/ui/quit_button_128x64.png" id="2_emkjq"]
+[ext_resource type="Texture2D" uid="uid://bycmlxp0dkde7" path="res://assets/ui/resume_button_128x64.png" id="2_fmhug"]
+[ext_resource type="Texture2D" uid="uid://q3o1nvo6m6r" path="res://assets/ui/paused_128x64_final.png" id="2_fyqa3"]
+[ext_resource type="Texture2D" uid="uid://d15f3vge6k4c3" path="res://assets/ui/resume_button_pressed.png" id="3_6ob86"]
+[ext_resource type="Texture2D" uid="uid://bmyov5dgpxeln" path="res://assets/ui/resume_button_hover.png" id="3_dqyr6"]
+[ext_resource type="Texture2D" uid="uid://bavmyw80hxthf" path="res://assets/ui/quit_button_pressed.png" id="3_fmhug"]
+[ext_resource type="Texture2D" uid="uid://b7vecndu4dbol" path="res://assets/ui/quit_button_hover.png" id="4_dqyr6"]
+[ext_resource type="Texture2D" uid="uid://drc18ypacyudf" path="res://assets/ui/options_button_Normal.png" id="5_uks3b"]
+[ext_resource type="Texture2D" uid="uid://dm4lvr2wepvic" path="res://assets/ui/options_button_Pressed.png" id="6_bv386"]
+[ext_resource type="Texture2D" uid="uid://do3s7tbsfohux" path="res://assets/ui/options_button_Hover.png" id="7_fyqa3"]
+[ext_resource type="Texture2D" uid="uid://sobrhoujc3dq" path="res://assets/ui/Restart_button.png" id="9_d5gpx"]
+[ext_resource type="Texture2D" uid="uid://du4pvk6uxlblc" path="res://assets/ui/Restart_button_Pressed.png" id="10_gksir"]
+[ext_resource type="Texture2D" uid="uid://bp338cfx2fyf" path="res://assets/ui/Restart_button_hover.png" id="11_ymetx"]
+[ext_resource type="Texture2D" uid="uid://8xtt777mqyni" path="res://assets/ui/options_bg.png.png" id="12_jvaon"]
+[ext_resource type="Script" uid="uid://jjmdr5v20bph" path="res://scenes/rooms/settings_panel.gd" id="12_u0awo"]
+[ext_resource type="Texture2D" uid="uid://c1fmfare47ool" path="res://assets/ui/Sword_Grabb.png" id="13_0iuun"]
+[ext_resource type="Texture2D" uid="uid://b407e3d332xk" path="res://assets/ui/Sword_Grabb_Highlight.png" id="14_jvaon"]
+[ext_resource type="Texture2D" uid="uid://d0fhl6x3rhvy6" path="res://assets/ui/Sword_Grabb_Disable.png" id="15_7pqut"]
+[ext_resource type="Texture2D" uid="uid://dt1n12uqyjmte" path="res://assets/ui/Options_Back_button.png" id="17_o1e4s"]
+[ext_resource type="Texture2D" uid="uid://dd8b0544j2lfk" path="res://assets/ui/Options_Back_button_Pressed.png" id="18_071bt"]
+[ext_resource type="Texture2D" uid="uid://em6vmu8bpyqd" path="res://assets/ui/Options_Back_button_hover.png" id="19_d5gpx"]
+[ext_resource type="AudioStream" uid="uid://cfrd88kn7wois" path="res://audio/VolumeSlider_Feedback.mp3" id="20_071bt"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=1958510700]
+process_mode = 3
+layer = 10
+script = ExtResource("1_1kep3")
+
+[node name="Dimmer" type="ColorRect" parent="." unique_id=1440281338]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=285268028]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -56.5
+offset_top = -83.5
+offset_right = 56.5
+offset_bottom = 83.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1758579324]
+layout_mode = 2
+alignment = 1
+
+[node name="TextureTitle" type="TextureRect" parent="Panel/VBoxContainer" unique_id=930729623]
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("2_fyqa3")
+expand_mode = 5
+stretch_mode = 6
+
+[node name="ResumeButton" type="TextureButton" parent="Panel/VBoxContainer" unique_id=415775518]
+layout_mode = 2
+size_flags_vertical = 3
+texture_normal = ExtResource("2_fmhug")
+texture_pressed = ExtResource("3_6ob86")
+texture_hover = ExtResource("3_dqyr6")
+
+[node name="OptionsButton" type="TextureButton" parent="Panel/VBoxContainer" unique_id=728645629]
+layout_mode = 2
+size_flags_vertical = 3
+texture_normal = ExtResource("5_uks3b")
+texture_pressed = ExtResource("6_bv386")
+texture_hover = ExtResource("7_fyqa3")
+
+[node name="RestartButton" type="TextureButton" parent="Panel/VBoxContainer" unique_id=749615754]
+layout_mode = 2
+size_flags_vertical = 3
+texture_normal = ExtResource("9_d5gpx")
+texture_pressed = ExtResource("10_gksir")
+texture_hover = ExtResource("11_ymetx")
+
+[node name="QuitButton" type="TextureButton" parent="Panel/VBoxContainer" unique_id=439982491]
+layout_mode = 2
+size_flags_vertical = 3
+texture_normal = ExtResource("2_emkjq")
+texture_pressed = ExtResource("3_fmhug")
+texture_hover = ExtResource("4_dqyr6")
+stretch_mode = 5
+
+[node name="SettingsPanel" type="TextureRect" parent="." unique_id=773501439]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("12_jvaon")
+expand_mode = 1
+script = ExtResource("12_u0awo")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="SettingsPanel" unique_id=1714968662]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -122.0
+offset_top = -63.0
+offset_right = 123.0
+offset_bottom = 67.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="SettingsPanel/VBoxContainer" unique_id=1333841319]
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Overall Volume" type="Label" parent="SettingsPanel/VBoxContainer/HBoxContainer" unique_id=82807040]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "Overall volume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VolumeSlider" type="HSlider" parent="SettingsPanel/VBoxContainer/HBoxContainer" unique_id=1402027182]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_icons/grabber = ExtResource("13_0iuun")
+theme_override_icons/grabber_highlight = ExtResource("14_jvaon")
+theme_override_icons/grabber_disabled = ExtResource("15_7pqut")
+max_value = 1.0
+step = 0.01
+ticks_position = 3
+
+[node name="FullscreenToggle" type="CheckButton" parent="SettingsPanel/VBoxContainer" unique_id=1744128629]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Full Screen"
+
+[node name="BackButton" type="TextureButton" parent="SettingsPanel" unique_id=454222299]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 172.0
+offset_top = 209.0
+offset_right = 309.0
+offset_bottom = 228.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
+texture_normal = ExtResource("17_o1e4s")
+texture_pressed = ExtResource("18_071bt")
+texture_hover = ExtResource("19_d5gpx")
+ignore_texture_size = true
+stretch_mode = 0
+
+[node name="ClickSound" type="AudioStreamPlayer" parent="." unique_id=548242983]
+stream = ExtResource("20_071bt")
+pitch_scale = 2.45
+
+[connection signal="pressed" from="Panel/VBoxContainer/ResumeButton" to="." method="_on_resume_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/OptionsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/QuitButton" to="." method="_on_quit_button_pressed"]
+[connection signal="value_changed" from="SettingsPanel/VBoxContainer/HBoxContainer/VolumeSlider" to="." method="_on_volume_slider_value_changed"]
+[connection signal="pressed" from="SettingsPanel/BackButton" to="SettingsPanel" method="_on_back_button_pressed"]

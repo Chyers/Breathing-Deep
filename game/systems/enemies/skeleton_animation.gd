@@ -25,9 +25,16 @@ const hurt_duration: float = 0.385
 @onready var hitbox_shape: CollisionShape2D = $Hitbox/CollisionShape2D
 @onready var hitbox_shape_up: CollisionShape2D = $Hitbox/CollisionShape2D_Up
 @onready var hitbox_shape_down: CollisionShape2D = $Hitbox/CollisionShape2D_Down
+@onready var health_bar: ProgressBar = $HealthBarPivot/HealthBar
+@onready var damage_sound: AudioStreamPlayer2D = $DamageSound
 
 func _ready() -> void:
-	health = max_health  # fixes the one-hit bug from earlier
+	health = max_health
+	
+	health_bar.max_value = max_health
+	health_bar.value = health
+	health_bar.visible = false
+	
 	hitbox.damage = attack_damage
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
 	sprite.animation_finished.connect(_on_animation_finished)
@@ -103,7 +110,13 @@ func _set_hitboxes(disabled: bool) -> void:
 func take_damage(amount: int) -> void:
 	if is_dead:
 		return
+	
 	health -= amount
+	damage_sound.stop()
+	damage_sound.play()
+	health_bar.value = health
+	health_bar.visible = true
+	
 	if health <= 0:
 		is_dead = true
 		is_attacking = false
