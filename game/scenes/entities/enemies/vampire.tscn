@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c65le7cq00udg"]
 
-[ext_resource type="Script" uid="uid://buloe33aaobb2" path="res://systems/enemies/vampire.gd" id="1_h5es4"]
+[ext_resource type="Script" uid="uid://505d213fl0ib" path="res://systems/enemies/vampire.gd" id="1_h5es4"]
 [ext_resource type="Texture2D" uid="uid://c0awlksjiitj4" path="res://assets/characters/enemies/animations/vampire/Vampire.png" id="2_whbrm"]
 [ext_resource type="AudioStream" uid="uid://ch8ox3ixpai7" path="res://audio/freesound_community-hit-swing-sword-small-2-95566.mp3" id="4_whbrm"]
 [ext_resource type="Script" uid="uid://te60g7u2pikd" path="res://systems/enemies/hitbox.gd" id="6_smptb"]
