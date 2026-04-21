@@ -322,7 +322,6 @@ func take_damage(amount: int) -> void:
 		is_dead = true
 		is_hurt = false
 		is_attack = false
-		_enter_state(State.DEATH)
 		anim_player.play("death")
 		await get_tree().create_timer(0.8).timeout
 		get_tree().get_first_node_in_group("game_over_menu").show_game_over()

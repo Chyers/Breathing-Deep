@@ -1,5 +1,6 @@
 extends Node
 var config = ConfigFile.new()
+var player: AudioStreamPlayer   # ✅ global player
 
 func set_volume(value):
 	volume = value
@@ -24,3 +25,12 @@ func load_settings():
 signal volume_changed(value)
 
 var volume: float = 1.0
+
+func play_sound(sound: AudioStream):
+	var p = AudioStreamPlayer.new()
+	add_child(p)
+	
+	p.stream = sound
+	p.play()
+	
+	p.finished.connect(func(): p.queue_free())
