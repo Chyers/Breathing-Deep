@@ -22,6 +22,9 @@ var possible_rooms = [
 @export var _branches: int = 3
 @export var _branch_length: Vector2i = Vector2i(1, 4)
 
+# EncounterManager
+var encounter_manager: EncounterManager
+
 # Dungeon State
 var grid_map: Dictionary = {} # Vector2i -> { "type": String, "scene": String }
 var dungeon_grid: Array = []
@@ -68,6 +71,8 @@ func play_music(track: AudioStream, fade_out: float = 1.0, fade_in: float = 1.5,
 
 # Lifecycle
 func _ready() -> void:
+	encounter_manager = EncounterManager.new()
+	add_child(encounter_manager)
 	_generate_dungeon()
 	await spawn_room(current_grid_pos)
 	minimap.initialize(grid_map, current_grid_pos)
@@ -307,6 +312,20 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 	await get_tree().process_frame
 
 	var room_type: String = grid_map[grid_pos]["type"]
+
+	# Only spawn enemies in normal combat rooms
+	if room_type == "C" and not cached_room:
+		var floor_scalar := _get_floor_scalar()
+		var hp_ratio := _get_hp_ratio()
+		var enemies := encounter_manager.start_encounter(floor_scalar, hp_ratio)
+		if new_room.has_method("spawn_enemies"):
+			new_room.spawn_enemies(enemies)
+	
+	if room_type == "B" and not cached_room:
+		var boss_enemies := encounter_manager.spawn_boss()
+		if new_room.has_method("spawn_enemies"):
+			new_room.spawn_enemies(boss_enemies)
+	
 	if room_type == "B":
 		play_music(preload("res://audio/Boss Battle.ogg"), 1.0, 1.5, -10.0)
 	else:
@@ -336,6 +355,16 @@ func _get_active_doors(grid_pos: Vector2i) -> Array[String]:
 		if grid_map.has(neighbor):
 			active.append(dir_name + "_boss" if grid_map[neighbor]["type"] == "B" else dir_name)
 	return active
+	
+func _get_floor_scalar() -> float:
+	var total := grid_map.size()
+	var cleared := encounter_manager.telemetry.rooms_cleared
+	return clamp(float(cleared) / float(max(total, 1)), 0.0, 1.0)
+
+func _get_hp_ratio() -> float:
+	if player and "health" in player and "max_health" in player:
+		return clamp(float(player.health) / float(player.max_health), 0.0, 1.0)
+	return 1.0
 
 func _opposite_direction(dir: String) -> String:
 	match dir:

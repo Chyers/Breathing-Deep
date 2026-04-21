@@ -1,4 +1,7 @@
 extends CharacterBody2D
+class_name Boss
+
+signal boss_defeated
 
 @export var speed := 40
 @export var max_health := 30
@@ -6,7 +9,7 @@ extends CharacterBody2D
 @export var attack_damage: int = 10
 @export var attack_cooldown: float = 1.2
 @export var hit_offset: float = 10.0
-@export var points: int = 10
+@export var points: int = 500
 
 var player: Node2D = null
 var player_target: Node2D = null
@@ -17,7 +20,13 @@ var is_hurt: bool = false
 var is_dead: bool = false
 var has_dealt_damage: bool = false
 var hurt_timer: float = 0.0
+var phase2_threshold: float = 0.5
+var in_phase2: bool = false
+
 const hurt_duration: float = 0.385
+const PHASE2_SPEED_BONUS    := 15
+const PHASE2_DAMAGE_BONUS   := 8
+const PHASE2_COOLDOWN_MULT  := 0.75
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
@@ -27,7 +36,7 @@ const hurt_duration: float = 0.385
 @onready var hitbox_shape_down: CollisionShape2D = $Hitbox/CollisionShape2D_Down
 
 func _ready() -> void:
-	health = max_health  # fixes the one-hit bug from earlier
+	health = max_health
 	hitbox.damage = attack_damage
 	hitbox.area_entered.connect(_on_hitbox_area_entered)
 	sprite.animation_finished.connect(_on_animation_finished)
@@ -60,7 +69,6 @@ func _physics_process(delta: float) -> void:
 			is_hurt = false
 			if not is_attacking:
 				sprite.play("idle")
-		# Always returns early while hurt so nothing overrides damage animation
 		return
 
 	if is_attacking:
@@ -104,6 +112,10 @@ func take_damage(amount: int) -> void:
 	if is_dead:
 		return
 	health -= amount
+	
+	if not in_phase2 and float(health) / float(max_health) <= phase2_threshold:
+		_enter_phase2()
+
 	if health <= 0:
 		is_dead = true
 		is_attacking = false
@@ -116,6 +128,7 @@ func take_damage(amount: int) -> void:
 		if hurtbox:
 			hurtbox.set_deferred("monitoring", false)
 			hurtbox.set_deferred("monitorable", false)
+			boss_defeated.emit()
 		sprite.play("death")
 	else:
 		is_attacking = false
@@ -130,6 +143,14 @@ func take_damage(amount: int) -> void:
 func attack() -> void:
 	is_attacking = true
 	sprite.play("attack")
+
+func _enter_phase2() -> void:
+	in_phase2 = true
+	speed += PHASE2_SPEED_BONUS
+	attack_damage += PHASE2_DAMAGE_BONUS
+	attack_cooldown *= PHASE2_COOLDOWN_MULT
+	hitbox.damage = attack_damage
+	print("Boss entered phase 2!")
 
 func _on_frame_changed() -> void:
 	if sprite.animation != "attack":
@@ -162,10 +183,11 @@ func _on_animation_finished() -> void:
 			queue_free()
 
 func setup(config: Dictionary) -> void:
-	if config.has("speed"):speed = config["speed"]
+	if config.has("speed"): speed = config["speed"]
 	if config.has("max_health"): max_health = config["max_health"]
-	if config.has("attack_damage"):attack_damage = config["attack_damage"]
-	if config.has("attack_cooldown"):attack_cooldown = config["attack_cooldown"]
+	if config.has("attack_damage"): attack_damage = config["attack_damage"]
+	if config.has("attack_cooldown"): attack_cooldown = config["attack_cooldown"]
 	if config.has("hit_offset"): hit_offset = config["hit_offset"]
-	if config.has("points"): points = config["points"]
-	health = max_health  # re-syncs health after stat changes
+	if config.has("point_value"): points = config["point_value"]
+	if config.has("phase2_threshold"): phase2_threshold = config["phase2_threshold"]
+	health = max_health

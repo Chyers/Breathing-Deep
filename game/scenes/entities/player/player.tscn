@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://8vhgjodit74q"]
 
 [ext_resource type="Texture2D" uid="uid://d0y6nvl7ipxxd" path="res://assets/characters/main_character/Plain.png" id="1_1hmtu"]
-[ext_resource type="Script" uid="uid://baiylvjfj5c0d" path="res://systems/player/player.gd" id="1_635qg"]
+[ext_resource type="Script" uid="uid://bvpb845h7yy6m" path="res://systems/player/player.gd" id="1_635qg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
 radius = 5.0
@@ -470,13 +470,13 @@ _data = {
 radius = 4.0
 height = 14.0
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_635qg"]
+size = Vector2(18.875, 13.5)
+
 [node name="Player" type="CharacterBody2D" unique_id=969824928 groups=["Player"]]
 collision_layer = 3
 collision_mask = 17
 script = ExtResource("1_635qg")
-speed = null
-attack_speed = null
-max_health = null
 
 [node name="Plain" type="Sprite2D" parent="." unique_id=1436333961]
 position = Vector2(0, -8)
@@ -496,21 +496,37 @@ libraries/ = SubResource("AnimationLibrary_yywfu")
 [node name="EnemyTarget" type="Marker2D" parent="." unique_id=1061896105]
 position = Vector2(0, -11)
 
-[node name="Hurtbox" type="Area2D" parent="." unique_id=1366261430]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1366261430 groups=["hurtbox"]]
+collision_layer = 2
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1171481976]
 position = Vector2(0, -7)
 shape = SubResource("CapsuleShape2D_635qg")
 debug_color = Color(0.9796862, 0.13119817, 0.1444971, 0.41960785)
 
-[node name="AttackHitboxes" type="Node2D" parent="." unique_id=354516248]
+[node name="Hitbox" type="Area2D" parent="." unique_id=952466392]
+collision_layer = 0
+collision_mask = 4
 
-[node name="SwordHitbox" type="Area2D" parent="AttackHitboxes" unique_id=392170488]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1586782518]
+position = Vector2(9, -5)
+shape = SubResource("RectangleShape2D_635qg")
+disabled = true
+debug_color = Color(0, 0.64705884, 0.25882354, 0.41960785)
 
-[node name="SwordRightHitbox" type="Area2D" parent="AttackHitboxes" unique_id=1054362639]
+[node name="CollisionShape2D_Up" type="CollisionShape2D" parent="Hitbox" unique_id=380450231]
+position = Vector2(2.842171e-14, -15)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_635qg")
+disabled = true
+debug_color = Color(0, 0.64705884, 0.25882354, 0.41960785)
 
-[node name="SwordLeftHitbox" type="Area2D" parent="AttackHitboxes" unique_id=2131238322]
-
-[node name="SwordUpHitbox" type="Area2D" parent="AttackHitboxes" unique_id=897742064]
+[node name="CollisionShape2D_Down" type="CollisionShape2D" parent="Hitbox" unique_id=1298330636]
+position = Vector2(0, 4)
+rotation = 1.5707964
+shape = SubResource("RectangleShape2D_635qg")
+disabled = true
+debug_color = Color(0, 0.64705884, 0.25882354, 0.41960785)
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_finished"]

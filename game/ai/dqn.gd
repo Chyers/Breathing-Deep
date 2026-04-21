@@ -5,7 +5,7 @@ class_name DQN
 const INPUT_SIZE: int = 11   # Must match Telemetry.get_state_vector() length
 const HIDDEN1_SIZE: int = 32
 const HIDDEN2_SIZE: int = 16
-const OUTPUT_SIZE: int = 6    # One Q-value per EncounterType
+const OUTPUT_SIZE: int = 5    # One Q-value per EncounterType
 
 # Online network weights
 var weights1: Array = []  # INPUT_SIZE × HIDDEN1_SIZE
@@ -41,7 +41,6 @@ const WEIGHTS_PATH: String = "user://dqn_weights.json"
 var last_action: int = -1
 const EXPECTED_DIFFICULTY: Array[float] = [
 		0.35, # SWARM
-		0.40, # RANGED
 		0.55, # BRUISER
 		0.38, # FLANKER
 		0.65, # ELITE
