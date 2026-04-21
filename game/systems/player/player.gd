@@ -74,7 +74,9 @@ var buff_cooldown: float = 15.0
 # Node References
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var slots = get_tree().get_root().get_node("/root/main_scene/CanvasLayer/Panel/GridContainer").get_children()
-@onready var player_hitbox: CollisionShape2D = $Hitbox/CollisionShape2D
+@onready var hitbox_down: CollisionShape2D = $Hitbox/CollisionShape2D_Down
+@onready var hitbox_up: CollisionShape2D = $Hitbox/CollisionShape2D_Up
+@onready var hitbox_side: CollisionShape2D = $Hitbox/CollisionShape2D
 
 # Ready
 func _ready() -> void:
@@ -88,6 +90,10 @@ func _ready() -> void:
 		var slot = slots[i]
 		slot.mouse_filter = Control.MOUSE_FILTER_STOP
 		slot.gui_input.connect(_on_slot_gui_input.bind(i))
+	
+	anim_player.animation_finished.connect(_on_animation_finished)
+	
+	_disable_all_hitboxes()
 
 # Inventory
 func add_item(item: Item) -> void:
@@ -177,14 +183,11 @@ func use_selected_item() -> void:
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
-
 	_update_buff(delta)
 	movement_loop()
 	move_and_slide()
-
 	_handle_input()
 	set_state()
-	_update_anim()
 
 func _update_buff(delta: float) -> void:
 	if buff_timer > 0.0:
@@ -218,16 +221,7 @@ func _handle_input() -> void:
 #Input & movement
 
 func get_dir_suffix() -> String:
-	if velocity.y < 0:
-		last_dir = "UP"
-		return "UP"
-	if velocity.x != 0:
-		$Plain.flip_h = velocity.x < 0   # flip RIGHT anim for left movement
-		last_dir = "_RIGHT"
-		return "_RIGHT"
-	$Plain.flip_h = false
-	last_dir = ""
-	return ""
+	return last_dir
 
 # Movement
 func movement_loop() -> void:
@@ -238,95 +232,52 @@ func movement_loop() -> void:
 	var input := Vector2(
 		Input.get_axis("left", "right"),
 		Input.get_axis("up", "down")
-	).normalized()
-	
-	# Avoids zero-vector issues
-	input = input.normalized() if input.length() > 0 else Vector2.ZERO
+	)
+
+	if input.length() > 0:
+		input = input.normalized()
+		cardinal_direct = input
+		# Set last_dir here from input, not in get_dir_suffix from velocity
+		if abs(input.y) > abs(input.x):
+			if input.y < 0:
+				last_dir = "up"
+			else:
+				last_dir = ""
+		else:
+			last_dir = "left" if input.x < 0 else "right"
 
 	velocity = input * speed
 
-	if input != Vector2.ZERO:
-		cardinal_direct = input
-
 # State Logic
 func set_state() -> void:
+	if is_attack or is_dead:
+		return  # Don't interfere — let animation_finished handle it
 	var dir := get_dir_suffix()
-	
 	if is_hurt:
-		is_attack = false
-
-	if is_dead:
-		_play_anim("DEATH", dir)
-	elif is_hurt:
-		_play_anim("HURT", dir)
-	elif is_attack:
-		return
+		return  # Same — already triggered in take_damage
 	elif velocity.length() > 0:
 		_resolve_move_state()
 	else:
 		_resolve_idle_state()
 
 func _resolve_move_state() -> void:
-	var dir := get_dir_suffix()
 	var raw := Vector2(
 		Input.get_axis("left", "right"),
 		Input.get_axis("up", "down")
 	)
-
 	if raw == Vector2.ZERO:
-		_play_anim("IDLE", dir)
+		_resolve_idle_state()
 		return
-
 	if abs(raw.y) > abs(raw.x):
-		_play_anim("WALK_UP" if raw.y < 0 else "WALK")
+		_play_anim("walk", "up" if raw.y < 0 else "")
 	else:
-		_play_anim("WALK_RIGHT")
+		_play_anim("walk", last_dir)  # was hardcoded "right"
 
 func _resolve_idle_state() -> void:
 	if abs(cardinal_direct.y) > abs(cardinal_direct.x):
-		_play_anim("IDLE_UP" if cardinal_direct.y < 0 else "IDLE")
+		_play_anim("idle", "up" if cardinal_direct.y < 0 else "")
 	else:
-		_play_anim("IDLE_RIGHT")
-
-func _string_to_state(s: String) -> State:
-	var dir := get_dir_suffix()
-	var curr_state := s + dir
-	
-	if curr_state == "IDLE_UP":
-		return STATE_MAP.get(curr_state, State.IDLE_UP)
-	if curr_state == "IDLE_RIGHT":
-		return STATE_MAP.get(curr_state, State.IDLE_RIGHT)
-	if curr_state == "WALK":
-		return STATE_MAP.get(curr_state, State.WALK)
-	if curr_state == "WALK_UP":
-		return STATE_MAP.get(curr_state, State.WALK_UP)
-	if curr_state == "WALK_RIGHT":
-		return STATE_MAP.get(curr_state, State.WALK_RIGHT)
-	if curr_state == "ATTACK_SW":
-		return STATE_MAP.get(curr_state, State.ATTACK_SW)
-	if curr_state == "ATTACK_SW_UP":
-		return STATE_MAP.get(curr_state, State.ATTACK_SW_UP)
-	if curr_state == "ATTACK_SW_RIGHT":
-		return STATE_MAP.get(curr_state, State.ATTACK_SW_RIGHT)
-	if curr_state == "ATTACK_SP":
-		return STATE_MAP.get(curr_state, State.ATTACK_SP)
-	if curr_state == "ATTACK_SP_UP":
-		return STATE_MAP.get(curr_state, State.ATTACK_SP_UP)
-	if curr_state == "ATTACK_SP_RIGHT":
-		return STATE_MAP.get(curr_state, State.ATTACK_SP_RIGHT)
-	if curr_state == "HURT":
-		return STATE_MAP.get(curr_state, State.HURT)
-	if curr_state == "HURT_UP":
-		return STATE_MAP.get(curr_state, State.HURT_UP)
-	if curr_state == "HURT_RIGHT":
-		return STATE_MAP.get(curr_state, State.HURT_RIGHT)
-	if curr_state == "DEATH":
-		return STATE_MAP.get(curr_state, State.DEATH)
-	if curr_state == "DEATH_UP":
-		return STATE_MAP.get(curr_state, State.DEATH_UP)
-	if curr_state == "DEATH_RIGHT":
-		return STATE_MAP.get(curr_state, State.DEATH_RIGHT)
-	return STATE_MAP.get(curr_state, State.IDLE)
+		_play_anim("idle", last_dir)
 
 # Animation Handling
 func _update_anim() -> void:
@@ -339,98 +290,86 @@ func _update_anim() -> void:
 	elif is_attack:
 		return
 
-func _state_to_anim(state: State) -> String:
-	var anim := _state_to_anim(State.keys()[curr_state])
-	if anim_player.current_animation != anim:
-		anim_player.play(anim)
-
-func _state_to_anim(state: String) -> String: 
-	match state:
-		State.IDLE:        return "IDLE"
-		State.IDLE_UP:     return "IDLE_UP"
-		State.IDLE_RIGHT:  return "IDLE_RIGHT"
-		State.WALK:        return "WALK"
-		State.WALK_UP:     return "WALK_UP"
-		State.WALK_RIGHT:  return "WALK_RIGHT"
-		State.ATTACK_SW:   return "ATTACK_SW"
-		State.ATTACK_SW_RIGHT: return "ATTACK_SW_RIGHT"
-		State.ATTACK_SW_UP: return "ATTACK_SW_UP"
-		State.ATTACK_SP:   return "ATTACK_SP"
-		State.ATTACK_SP_RIGHT: return "ATTACK_SP_RIGHT"
-		State.ATTACK_SP_UP: return "ATTACK_SP_UP"
-		State.HURT:        return "HURT"
-		State.HURT_RIGHT:  return "HURT_RIGHT"
-		State.HURT_UP:     return "HURT_UP"
-		State.DEATH:       return "DEATH"
-		State.DEATH_RIGHT: return "DEATH_RIGHT"
-		State.DEATH_UP:    return "DEATH_UP"
-		_:                 return "IDLE"
-
-func _play_anim(base: String, dir: String = ""):
-	var anim_name := _state_to_anim(_string_to_state(base + dir))
-	if anim_player.animation != anim_name:
+func _play_anim(base: String, dir: String = "") -> void:
+	var anim_name := base.to_lower()
+	if dir != "":
+		anim_name = anim_name + "_" + dir.to_lower()
+	$Plain.flip_h = false
+	if anim_player.current_animation != anim_name:
 		anim_player.play(anim_name)
 
 #API
 func attack_sw() -> void:
-	var dir := get_dir_suffix()
 	if is_dead or is_hurt or is_attack:
 		return
 	is_attack = true
-	_play_anim("ATTACK_SW", dir)
+	_play_anim("attack_sw", last_dir)
 
 func attack_sp() -> void:
-	var dir := get_dir_suffix()
 	if is_dead or is_hurt or is_attack:
 		return
 	is_attack = true
-	_play_anim("ATTACK_SP", dir)
+	_play_anim("attack_sp", last_dir)
 
 func take_damage(amount: int) -> void:
-	var dir := get_dir_suffix()
 	if is_dead:
 		return
+		
 	health -= amount
+	
+	is_attack = false
+	
 	if health <= 0:
 		health = 0
 		is_dead = true
 		is_hurt = false
 		is_attack = false
-		_play_anim("DEATH", dir)
+		_play_anim("death", last_dir)
 	else:
 		is_hurt = true
+		_play_anim("hurt", last_dir)
 
 # Animation Callbacks
 func _on_animation_finished(anim_name: String) -> void:
-	var dir := get_dir_suffix()
-	if is_dead and anim_name != "death":
+	if is_dead and not anim_name.begins_with("death"):
 		return
+	if anim_name.begins_with("attack"):
+		is_attack = false
+		_play_anim("idle", last_dir)
+	elif anim_name.begins_with("hurt"):
+		is_hurt = false
+		_play_anim("idle", last_dir)
+	elif anim_name.begins_with("death"):
+		set_physics_process(false)
 
-	match anim_name:
-		"attack_sw", "attack_sp":
-			is_attack = false
-			is_hurt = false
-			_play_anim("IDLE", dir)
+func hit_attack(duration: float = 0.15) -> void:
+	_disable_all_hitboxes()
+	var hitbox := _get_active_hitbox()
 
-		"hurt":
-			is_hurt = false
-			is_attack = false
-			_play_anim("IDLE", dir)
+	if last_dir == "left":
+		hitbox_side.position.x = -abs(hitbox_side.position.x)
+	elif last_dir == "right":
+		hitbox_side.position.x = abs(hitbox_side.position.x)
 
-		"death":
-			set_physics_process(false)
-
-func hit_sw_attack() -> void:
-	if not is_instance_valid(player_hitbox):
-		return
-	player_hitbox.disabled = false
-	await get_tree().create_timer(0.2).timeout
-	if is_instance_valid(player_hitbox):
-		player_hitbox.disabled = true
+	hitbox.disabled = false
+	await get_tree().create_timer(duration).timeout
+	_disable_all_hitboxes()
 
 #func on_hit(area: Area2D):
 	#if area.is_in_group("hitbox"):
 		#take_damage(area.damage)
+
+func _disable_all_hitboxes() -> void:
+	hitbox_down.disabled = true
+	hitbox_up.disabled = true
+	hitbox_side.disabled = true
+
+func _get_active_hitbox() -> CollisionShape2D:
+	match last_dir:
+		"up":    return hitbox_up
+		"left":  return hitbox_side
+		"right": return hitbox_side
+		_:       return hitbox_down
 
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("hurtbox"):
