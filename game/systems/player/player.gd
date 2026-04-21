@@ -219,7 +219,6 @@ func _handle_input() -> void:
 		_refresh_slot_highlight()
 
 #Input & movement
-
 func get_dir_suffix() -> String:
 	return last_dir
 
@@ -237,7 +236,6 @@ func movement_loop() -> void:
 	if input.length() > 0:
 		input = input.normalized()
 		cardinal_direct = input
-		# Set last_dir here from input, not in get_dir_suffix from velocity
 		if abs(input.y) > abs(input.x):
 			if input.y < 0:
 				last_dir = "up"
@@ -251,10 +249,10 @@ func movement_loop() -> void:
 # State Logic
 func set_state() -> void:
 	if is_attack or is_dead:
-		return  # Don't interfere — let animation_finished handle it
+		return
 	var dir := get_dir_suffix()
 	if is_hurt:
-		return  # Same — already triggered in take_damage
+		return 
 	elif velocity.length() > 0:
 		_resolve_move_state()
 	else:
@@ -271,7 +269,7 @@ func _resolve_move_state() -> void:
 	if abs(raw.y) > abs(raw.x):
 		_play_anim("walk", "up" if raw.y < 0 else "")
 	else:
-		_play_anim("walk", last_dir)  # was hardcoded "right"
+		_play_anim("walk", last_dir)
 
 func _resolve_idle_state() -> void:
 	if abs(cardinal_direct.y) > abs(cardinal_direct.x):
@@ -354,10 +352,6 @@ func hit_attack(duration: float = 0.15) -> void:
 	hitbox.disabled = false
 	await get_tree().create_timer(duration).timeout
 	_disable_all_hitboxes()
-
-#func on_hit(area: Area2D):
-	#if area.is_in_group("hitbox"):
-		#take_damage(area.damage)
 
 func _disable_all_hitboxes() -> void:
 	hitbox_down.disabled = true
