@@ -1,9 +1,12 @@
 [gd_scene format=3 uid="uid://c65le7cq00udg"]
 
 [ext_resource type="Script" uid="uid://505d213fl0ib" path="res://systems/enemies/vampire.gd" id="1_h5es4"]
+[ext_resource type="PackedScene" uid="uid://64uu0oy0ptx1" path="res://scenes/environment/coin.tscn" id="2_ieonr"]
 [ext_resource type="Texture2D" uid="uid://c0awlksjiitj4" path="res://assets/characters/enemies/animations/vampire/Vampire.png" id="2_whbrm"]
+[ext_resource type="PackedScene" uid="uid://dr43y0k1fpybp" path="res://scenes/environment/buff.tscn" id="3_21u6w"]
+[ext_resource type="PackedScene" uid="uid://bscoprqh5ulfp" path="res://scenes/environment/health.tscn" id="4_mt17v"]
 [ext_resource type="AudioStream" uid="uid://ch8ox3ixpai7" path="res://audio/freesound_community-hit-swing-sword-small-2-95566.mp3" id="4_whbrm"]
-[ext_resource type="Script" uid="uid://te60g7u2pikd" path="res://systems/enemies/hitbox.gd" id="6_smptb"]
+[ext_resource type="Script" uid="uid://lsqv7gejs0sp" path="res://systems/enemies/hitbox.gd" id="6_smptb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ybvg"]
 atlas = ExtResource("2_whbrm")
@@ -395,6 +398,7 @@ bg_color = Color(0.7607843, 0, 0, 1)
 
 [node name="Vampire" type="CharacterBody2D" unique_id=1008056816]
 script = ExtResource("1_h5es4")
+drop_table = Array[PackedScene]([ExtResource("2_ieonr"), ExtResource("3_21u6w"), ExtResource("4_mt17v")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1955147580]
 sprite_frames = SubResource("SpriteFrames_wq36j")

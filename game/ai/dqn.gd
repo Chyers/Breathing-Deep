@@ -183,35 +183,50 @@ func get_reward(
 		return -1.0
 
 	# damage_score: 0 damage → +1.0, full damage → -0.5
-	var damage_score : float = lerp(1.0, -0.5, clamp(damage_taken, 0.0, 1.0))
+	var damage_score: float = lerp(1.0, -0.5, clamp(damage_taken, 0.0, 1.0))
 	# time_score: on-target → +1.0, maximally off-target → 0.0
-	var time_score : float = 1.0 - clamp(abs(clear_time_delta), 0.0, 1.0)
+	var time_score: float = 1.0 - clamp(abs(clear_time_delta), 0.0, 1.0)
 	# survival_score: full HP → 1.0, empty → 0.0
-	var survival_score : float = clamp(hp_ratio, 0.0, 1.0)
-	
-	# Low HP Scaling
+	var survival_score: float = clamp(hp_ratio, 0.0, 1.0)
+
+	# Low HP scaling — amplifies damage penalty when player is already hurt
 	var low_hp_penalty := 1.0 - hp_ratio
 	damage_score *= (1.0 + low_hp_penalty * 0.5)
-	
-	# Floor Difficulty Bonus
+
+	# Floor difficulty bonus
 	var difficulty_bonus := floor_scalar * 0.2
-	
-	# Action-aware Difficulty Alignment
-	var expected_difficulty: float = EXPECTED_DIFFICULTY[action]
-	
-	var target_difficulty: float = lerp(0.3, 0.7, floor_scalar)
-	var difficulty_alignment: float = clamp(
-		1.0 - abs(expected_difficulty - target_difficulty),
-		0.0,
-		1.0
+
+	# Player performance score — how well are they actually doing?
+	# Low damage + fast clears + high HP = performing well = needs harder content
+	# High damage + slow clears + low HP = struggling = needs easier content
+	var performance: float = clamp(
+		(1.0 - damage_taken) * 0.5 +        # clean clear contributes 50%
+		(1.0 - clamp(abs(clear_time_delta), 0.0, 1.0)) * 0.3 +  # pace contributes 30%
+		hp_ratio * 0.2,                      # health remaining contributes 20%
+		0.0, 1.0
 	)
-	
-	# Final Reward
-	var reward : float = (
-		damage_score * 0.40 +
+
+	# Target difficulty scales with both floor depth AND player performance.
+	# A strong player deep in the dungeon should face the hardest encounters.
+	# A struggling player early on should face easier ones.
+	var target_difficulty: float = clamp(
+		floor_scalar * 0.5 + performance * 0.5,
+		0.0, 1.0
+	)
+
+	# Reward the DQN for picking an encounter whose difficulty matched what
+	# the player needed — close match → +1.0, far off → 0.0
+	var expected_difficulty: float = EXPECTED_DIFFICULTY[action]
+	var difficulty_alignment: float = clamp(
+		1.0 - abs(expected_difficulty - target_difficulty) * 2.0,
+		0.0, 1.0
+	)
+
+	var reward: float = (
+		damage_score * 0.35 +
 		time_score * 0.20 +
 		survival_score * 0.15 +
-		difficulty_alignment * 0.15 +
+		difficulty_alignment * 0.20 +   # bumped from 0.15 — alignment matters more now
 		difficulty_bonus * 0.10
 	)
 

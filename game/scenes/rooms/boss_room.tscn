@@ -346,6 +346,18 @@ y_sort_enabled = true
 [node name="Marker2D" type="Marker2D" parent="EnemySpawn" unique_id=226201152]
 position = Vector2(530, 216)
 
+[node name="Marker2D2" type="Marker2D" parent="EnemySpawn" unique_id=602525716]
+position = Vector2(563, 175)
+
+[node name="Marker2D3" type="Marker2D" parent="EnemySpawn" unique_id=987734577]
+position = Vector2(443, 155)
+
+[node name="Marker2D4" type="Marker2D" parent="EnemySpawn" unique_id=1140767856]
+position = Vector2(603, 273)
+
+[node name="Marker2D5" type="Marker2D" parent="EnemySpawn" unique_id=1994838811]
+position = Vector2(551, 240)
+
 [node name="ItemSpawn" type="Node2D" parent="." unique_id=1069459506]
 position = Vector2(15, 14)
 
