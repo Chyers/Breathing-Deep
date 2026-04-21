@@ -78,16 +78,12 @@ var buff_cooldown: float = 15.0
 
 # Ready
 func _ready() -> void:
-<<<<<<< HEAD
 	var dir := get_dir_suffix()
 	add_to_group("player")
 	_play_anim("IDLE", dir)
 
-=======
 	$Hitbox.area_entered.connect(_on_hitbox_area_entered)
-	add_to_group("player")
-	_enter_state(State.IDLE)
->>>>>>> main
+  
 	for i in slots.size():
 		var slot = slots[i]
 		slot.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -208,11 +204,7 @@ func _handle_input() -> void:
 		attack_sw()
 	elif Input.is_action_just_pressed("attack_sp"):
 		attack_sp()
-<<<<<<< HEAD
-	
-=======
 		
->>>>>>> main
 	if Input.is_action_just_pressed("use_item"):
 		use_selected_item()
 
@@ -249,11 +241,7 @@ func movement_loop() -> void:
 	).normalized()
 	
 	# Avoids zero-vector issues
-<<<<<<< HEAD
 	input = input.normalized() if input.length() > 0 else Vector2.ZERO
-=======
-	# var input := raw.normalized() if raw.length() > 0 else Vector2.ZERO
->>>>>>> main
 
 	velocity = input * speed
 
@@ -351,15 +339,12 @@ func _update_anim() -> void:
 	elif is_attack:
 		return
 
-<<<<<<< HEAD
 func _state_to_anim(state: State) -> String:
-=======
 	var anim := _state_to_anim(State.keys()[curr_state])
 	if anim_player.current_animation != anim:
 		anim_player.play(anim)
 
-func _state_to_anim(state: String) -> String:
->>>>>>> main
+func _state_to_anim(state: String) -> String: 
 	match state:
 		State.IDLE:        return "IDLE"
 		State.IDLE_UP:     return "IDLE_UP"
@@ -381,17 +366,10 @@ func _state_to_anim(state: String) -> String:
 		State.DEATH_UP:    return "DEATH_UP"
 		_:                 return "IDLE"
 
-<<<<<<< HEAD
 func _play_anim(base: String, dir: String = ""):
 	var anim_name := _state_to_anim(_string_to_state(base + dir))
 	if anim_player.animation != anim_name:
 		anim_player.play(anim_name)
-=======
-#func _play_anim(base: String, dir: String = ""):
-	#var anim_name := _state_to_anim(base + dir)
-	#if anim_player.animation != anim_name:
-		#anim_player.play(anim_name)
->>>>>>> main
 
 #API
 func attack_sw() -> void:
@@ -399,24 +377,14 @@ func attack_sw() -> void:
 	if is_dead or is_hurt or is_attack:
 		return
 	is_attack = true
-<<<<<<< HEAD
 	_play_anim("ATTACK_SW", dir)
-=======
-	_enter_state(State.ATTACK_SW)
-	hit_sw_attack()
->>>>>>> main
 
 func attack_sp() -> void:
 	var dir := get_dir_suffix()
 	if is_dead or is_hurt or is_attack:
 		return
 	is_attack = true
-<<<<<<< HEAD
 	_play_anim("ATTACK_SP", dir)
-=======
-	_enter_state(State.ATTACK_SP)
-	hit_sw_attack()
->>>>>>> main
 
 func take_damage(amount: int) -> void:
 	var dir := get_dir_suffix()
@@ -428,13 +396,7 @@ func take_damage(amount: int) -> void:
 		is_dead = true
 		is_hurt = false
 		is_attack = false
-<<<<<<< HEAD
 		_play_anim("DEATH", dir)
-=======
-		_enter_state(State.DEATH)
-		anim_player.play("death")
-		print("Final score: ", ScoreManager.get_score())
->>>>>>> main
 	else:
 		is_hurt = true
 
