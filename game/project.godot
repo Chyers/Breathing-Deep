@@ -32,6 +32,11 @@ window/size/viewport_width=480
 window/size/viewport_height=270
 window/stretch/mode="viewport"
 
+[gui]
+
+theme/custom_font="uid://bpyaj0wtrb64l"
+theme/updates_per_second=10
+
 [input]
 
 left={
@@ -81,3 +86,8 @@ use_item={
 2d_physics/layer_5="DOOR/STAIRS"
 2d_physics/layer_6="HITBOX"
 2d_physics/layer_7="HURTBOX"
+
+[rendering]
+
+2d/snap/snap_2d_transforms_to_pixel=true
+2d/snap/snap_2d_vertices_to_pixel=true

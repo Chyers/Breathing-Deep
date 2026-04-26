@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bavmyw80hxthf" path="res://assets/ui/quit_button_pressed.png" id="7_t5d2d"]
 [ext_resource type="AudioStream" uid="uid://c56fvp40cywm1" path="res://audio/Hero Immortal.mp3" id="9_q85j6"]
 [ext_resource type="Texture2D" uid="uid://8xtt777mqyni" path="res://assets/ui/options_bg.png.png" id="12_otr3d"]
+[ext_resource type="FontFile" uid="uid://bpyaj0wtrb64l" path="res://Deutsch.ttf" id="13_5dct7"]
 [ext_resource type="Texture2D" uid="uid://c1fmfare47ool" path="res://assets/ui/Sword_Grabb.png" id="13_n4uci"]
 [ext_resource type="Texture2D" uid="uid://b407e3d332xk" path="res://assets/ui/Sword_Grabb_Highlight.png" id="14_ayp64"]
 [ext_resource type="AudioStream" uid="uid://cfrd88kn7wois" path="res://audio/VolumeSlider_Feedback.mp3" id="14_n4uci"]
@@ -135,8 +136,6 @@ func load_settings():
 	is_loading_settings = false
 "
 
-[sub_resource type="SystemFont" id="SystemFont_pw24t"]
-
 [node name="MainMenu" type="Control" unique_id=815509216]
 layout_mode = 3
 anchors_preset = 15
@@ -238,7 +237,7 @@ alignment = 1
 
 [node name="Volume" type="Label" parent="OptionsPanel/VBoxContainer/HBoxContainer" unique_id=1913600182]
 layout_mode = 2
-theme_override_fonts/font = SubResource("SystemFont_pw24t")
+theme_override_fonts/font = ExtResource("13_5dct7")
 theme_override_font_sizes/font_size = 16
 text = "Overall Volume"
 
@@ -257,6 +256,7 @@ ticks_position = 3
 [node name="FullscreenToggle" type="CheckButton" parent="OptionsPanel/VBoxContainer" unique_id=463626433]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_fonts/font = ExtResource("13_5dct7")
 text = "Full Screen"
 
 [node name="BackButton" type="TextureButton" parent="OptionsPanel" unique_id=775081333]

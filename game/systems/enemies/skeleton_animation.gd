@@ -118,6 +118,9 @@ func take_damage(amount: int) -> void:
 	health_bar.visible = true
 	
 	if health <= 0:
+		await get_tree().create_timer(0.3).timeout
+		_disable_collisions()
+		health_bar.visible = false
 		is_dead = true
 		is_attacking = false
 		is_hurt = false
@@ -173,6 +176,15 @@ func _on_animation_finished() -> void:
 			pass
 		"death":
 			queue_free()
+
+func _disable_collisions():
+	$CollisionShape2D.set_deferred("disabled", true)
+	
+	$Hitbox.set_deferred("monitoring", false)
+	$Hitbox.set_deferred("monitorable", false)
+	
+	$Hurtbox.set_deferred("monitoring", false)
+	$Hurtbox.set_deferred("monitorable", false)
 
 func setup(config: Dictionary) -> void:
 	if config.has("speed"):speed = config["speed"]

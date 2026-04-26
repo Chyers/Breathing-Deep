@@ -15,11 +15,12 @@
 [ext_resource type="Texture2D" uid="uid://du4pvk6uxlblc" path="res://assets/ui/Restart_button_Pressed.png" id="10_gksir"]
 [ext_resource type="Texture2D" uid="uid://bp338cfx2fyf" path="res://assets/ui/Restart_button_hover.png" id="11_ymetx"]
 [ext_resource type="Texture2D" uid="uid://8xtt777mqyni" path="res://assets/ui/options_bg.png.png" id="12_jvaon"]
-[ext_resource type="Script" uid="uid://jjmdr5v20bph" path="res://scenes/rooms/settings_panel.gd" id="12_u0awo"]
+[ext_resource type="Script" uid="uid://jjmdr5v20bph" path="res://systems/ui/settings_panel.gd" id="12_u0awo"]
 [ext_resource type="Texture2D" uid="uid://c1fmfare47ool" path="res://assets/ui/Sword_Grabb.png" id="13_0iuun"]
 [ext_resource type="Texture2D" uid="uid://b407e3d332xk" path="res://assets/ui/Sword_Grabb_Highlight.png" id="14_jvaon"]
 [ext_resource type="Texture2D" uid="uid://d0fhl6x3rhvy6" path="res://assets/ui/Sword_Grabb_Disable.png" id="15_7pqut"]
 [ext_resource type="Texture2D" uid="uid://dt1n12uqyjmte" path="res://assets/ui/Options_Back_button.png" id="17_o1e4s"]
+[ext_resource type="FontFile" uid="uid://bpyaj0wtrb64l" path="res://Deutsch.ttf" id="17_ymetx"]
 [ext_resource type="Texture2D" uid="uid://dd8b0544j2lfk" path="res://assets/ui/Options_Back_button_Pressed.png" id="18_071bt"]
 [ext_resource type="Texture2D" uid="uid://em6vmu8bpyqd" path="res://assets/ui/Options_Back_button_hover.png" id="19_d5gpx"]
 [ext_resource type="AudioStream" uid="uid://cfrd88kn7wois" path="res://audio/VolumeSlider_Feedback.mp3" id="20_071bt"]
@@ -90,14 +91,14 @@ texture_hover = ExtResource("4_dqyr6")
 stretch_mode = 5
 
 [node name="SettingsPanel" type="TextureRect" parent="." unique_id=773501439]
-visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("12_jvaon")
-expand_mode = 1
+expand_mode = 3
+stretch_mode = 6
 script = ExtResource("12_u0awo")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="SettingsPanel" unique_id=1714968662]
@@ -124,9 +125,8 @@ alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
+theme_override_fonts/font = ExtResource("17_ymetx")
 text = "Overall volume"
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="VolumeSlider" type="HSlider" parent="SettingsPanel/VBoxContainer/HBoxContainer" unique_id=1402027182]
 unique_name_in_owner = true
@@ -143,15 +143,16 @@ ticks_position = 3
 [node name="FullscreenToggle" type="CheckButton" parent="SettingsPanel/VBoxContainer" unique_id=1744128629]
 unique_name_in_owner = true
 layout_mode = 2
+theme_override_fonts/font = ExtResource("17_ymetx")
 text = "Full Screen"
 
 [node name="BackButton" type="TextureButton" parent="SettingsPanel" unique_id=454222299]
 layout_mode = 1
 anchors_preset = -1
 offset_left = 172.0
-offset_top = 209.0
+offset_top = 224.0
 offset_right = 309.0
-offset_bottom = 228.0
+offset_bottom = 246.0
 size_flags_horizontal = 4
 size_flags_vertical = 0
 texture_normal = ExtResource("17_o1e4s")
