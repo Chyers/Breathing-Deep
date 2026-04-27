@@ -23,10 +23,9 @@ func _on_exit_area_2d_body_entered(body: Node) -> void:
 		return
 		
 	if body.is_in_group("player"):
+		AudioManager.play_sound(stair_sound.stream)
 		_used = true
 		print("Player used stairs!")
-		
-		AudioManager.play_sound(stair_sound.stream)
 
 		var main_scene = get_tree().get_current_scene()
 		main_scene.restart_dungeon()

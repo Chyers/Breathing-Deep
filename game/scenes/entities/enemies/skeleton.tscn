@@ -420,12 +420,13 @@ bg_color = Color(0, 0, 0, 1)
 bg_color = Color(0.7607843, 0, 0, 1)
 
 [node name="Skeleton" type="CharacterBody2D" unique_id=1147805820]
+texture_repeat = 1
 script = ExtResource("1_3w83s")
 drop_table = Array[PackedScene]([ExtResource("2_mfyrh"), ExtResource("3_rwbew"), ExtResource("4_ywdfk")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=867065892]
 sprite_frames = SubResource("SpriteFrames_dx3v6")
-animation = &"attack"
+animation = &"death"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=311520641]
 position = Vector2(-3, 9)
@@ -469,10 +470,10 @@ debug_color = Color(0.9626878, 0.06452384, 0.4646926, 0.41960785)
 [node name="HealthBarPivot" type="Node2D" parent="." unique_id=1848342122]
 
 [node name="HealthBar" type="ProgressBar" parent="HealthBarPivot" unique_id=602717156]
-offset_left = -9.0
-offset_top = -7.0
-offset_right = 7.0
-offset_bottom = -4.0
+offset_left = -8.0
+offset_top = -8.0
+offset_right = 8.0
+offset_bottom = -5.0
 theme_override_styles/background = SubResource("StyleBoxFlat_ey25l")
 theme_override_styles/fill = SubResource("StyleBoxFlat_iet1o")
 value = 100.0

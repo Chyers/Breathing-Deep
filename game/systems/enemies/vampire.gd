@@ -133,6 +133,8 @@ func take_damage(amount: int) -> void:
 		_enter_phase2()
 
 	if health <= 0:
+		await get_tree().create_timer(0.3).timeout
+		health_bar.visible = false
 		is_dead = true
 		is_attacking = false
 		is_hurt = false

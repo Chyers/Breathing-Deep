@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://c51ujwext7mpy"]
 
-[ext_resource type="Script" uid="uid://cmpsrh50vqtuc" path="res://systems/rooms/room_gen.gd" id="1_v2v41"]
+[ext_resource type="Script" uid="uid://riqdv7uho668" path="res://systems/rooms/room_gen.gd" id="1_v2v41"]
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="2_b5oy7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ekhbd"]
