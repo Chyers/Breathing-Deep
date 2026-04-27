@@ -10,7 +10,7 @@ func set_volume(value):
 
 	emit_signal("volume_changed", value)
 
-	save_settings()   # ✅ ALWAYS save here
+	save_settings()   # ALWAYS save here
 
 
 func save_settings():

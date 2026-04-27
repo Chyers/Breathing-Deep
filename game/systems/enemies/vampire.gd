@@ -11,6 +11,8 @@ signal boss_defeated
 @export var hit_offset: float = 10.0
 @export var points: int = 500
 @onready var health_bar: ProgressBar = $HealthBarPivot/HealthBar
+@export var drop_table: Array[PackedScene] = []
+@export var drop_chance: float = 0.5  # 0.5 = 50%
 
 var player: Node2D = null
 var player_target: Node2D = null
@@ -194,7 +196,20 @@ func _on_animation_finished() -> void:
 		"damage":
 			pass
 		"death":
+			_drop_item()
 			queue_free()
+
+func _drop_item() -> void:
+	if drop_table.is_empty():
+		return
+	
+	if randf() > drop_chance:
+		return
+
+	var scene: PackedScene = drop_table.pick_random()
+	var item_instance = scene.instantiate()
+	get_parent().add_child(item_instance)
+	item_instance.global_position = global_position
 
 func setup(config: Dictionary) -> void:
 	if config.has("speed"): speed = config["speed"]
