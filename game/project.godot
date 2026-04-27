@@ -21,10 +21,10 @@ config/icon="uid://caf7mhmbvsqh5"
 
 [autoload]
 
-AudioManager="*uid://b2sv5es1cm8g"
-DoorAudio="*uid://bacaw020ikaer"
-ScoreManager="*uid://dhikifymjsj2i"
-SettingsManager="*uid://44sbrq3eler2"
+AudioManager="*uid://0odbt3u5c3vh"
+DoorAudio="*uid://bijoxl6xmj251"
+ScoreManager="*uid://bvji6gwixdcfq"
+SettingsManager="*uid://blspwcn4moqfv"
 
 [display]
 

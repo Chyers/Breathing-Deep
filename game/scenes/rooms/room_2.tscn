@@ -311,18 +311,3 @@ position = Vector2(284, 73)
 
 [node name="Marker2D4" type="Marker2D" parent="EnemySpawn" unique_id=1276896926]
 position = Vector2(257, 128)
-
-[node name="ItemSpawn" type="Node2D" parent="." unique_id=2118128408]
-position = Vector2(15, 14)
-
-[node name="Marker2D" type="Marker2D" parent="ItemSpawn" unique_id=1361209240]
-position = Vector2(441, 163)
-
-[node name="Marker2D2" type="Marker2D" parent="ItemSpawn" unique_id=611776048]
-position = Vector2(444, 245)
-
-[node name="Marker2D3" type="Marker2D" parent="ItemSpawn" unique_id=1247570050]
-position = Vector2(476, 244)
-
-[node name="Marker2D4" type="Marker2D" parent="ItemSpawn" unique_id=812407121]
-position = Vector2(475, 163)
