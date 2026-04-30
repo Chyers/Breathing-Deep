@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ck3e1bipj6cng" path="res://systems/environment/door_north.gd" id="1_s6om1"]
 [ext_resource type="Texture2D" uid="uid://dfxo5wjg8m6vp" path="res://assets/environment/door_01.jpg" id="2_v45ce"]
-[ext_resource type="AudioStream" uid="uid://dr8p1ydtww5n8" path="res://audio/dragon-studio-heavy-door-unlocking-515258.mp3" id="3_jjdmp"]
+[ext_resource type="AudioStream" uid="uid://emrbttibosj8" path="res://scenes/environment/door/new door audio.wav" id="3_jjdmp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2jnv8"]
 size = Vector2(44, 36)
