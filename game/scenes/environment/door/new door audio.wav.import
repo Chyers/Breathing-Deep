@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://emrbttibosj8"
+path="res://.godot/imported/new door audio.wav-4ac1611a442cc4efa88343dbdfbd2294.sample"
+
+[deps]
+
+source_file="res://scenes/environment/door/new door audio.wav"
+dest_files=["res://.godot/imported/new door audio.wav-4ac1611a442cc4efa88343dbdfbd2294.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=2
