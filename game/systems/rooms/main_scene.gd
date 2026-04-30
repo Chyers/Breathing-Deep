@@ -72,6 +72,7 @@ func play_music(track: AudioStream, fade_out: float = 1.0, fade_in: float = 1.5,
 
 # Lifecycle
 func _ready() -> void:
+	add_to_group("main_scene")
 	encounter_manager = EncounterManager.new()
 	add_child(encounter_manager)
 	_generate_dungeon()
@@ -318,23 +319,39 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 
 	var room_type: String = grid_map[grid_pos]["type"]
 
-	# Only spawn enemies in normal combat rooms
 	if room_type == "C" and not cached_room:
 		var floor_scalar := _get_floor_scalar()
 		var hp_ratio := _get_hp_ratio()
 		var enemies := encounter_manager.start_encounter(floor_scalar, hp_ratio)
 		if new_room.has_method("spawn_enemies"):
 			new_room.spawn_enemies(enemies)
-	
+		if new_room.has_signal("room_cleared") and \
+				not new_room.is_connected("room_cleared", _on_room_cleared):
+			new_room.room_cleared.connect(_on_room_cleared)
+
 	if room_type == "B" and not cached_room:
+		var floor_scalar := _get_floor_scalar()
+		var hp_ratio := _get_hp_ratio()
 		var boss_enemies := encounter_manager.spawn_boss()
+		var minions := encounter_manager.start_encounter(floor_scalar, hp_ratio)
+		var all_enemies := boss_enemies + minions
 		if new_room.has_method("spawn_enemies"):
-			new_room.spawn_enemies(boss_enemies)
-	
+			new_room.spawn_enemies(all_enemies)
+		if new_room.has_signal("room_cleared") and \
+				not new_room.is_connected("room_cleared", _on_room_cleared):
+			new_room.room_cleared.connect(_on_room_cleared)
+
 	if room_type == "B":
 		play_music(preload("res://audio/Boss Battle.ogg"), 1.0, 1.5, -10.0)
 	else:
 		play_music(preload("res://audio/Memoraphile - Spooky Dungeon.mp3"), 0.3, 0.8)
+
+func _on_room_cleared(damage_taken: float, player_died: bool) -> void:
+	var floor_scalar := _get_floor_scalar()
+	var hp_ratio := _get_hp_ratio()
+		
+	encounter_manager.end_encounter(damage_taken, player_died, floor_scalar, hp_ratio)
+	encounter_manager.save_session()
 
 func enter_door(direction: String) -> void:
 	if is_transitioning:
@@ -403,7 +420,6 @@ func _print_dungeon() -> void:
 			output += "[" + str(dungeon_grid[x][y]) + "]" if dungeon_grid[x][y] else "   "
 		output += "\n"
 	print(output)
-
 
 func _on_resume_pressed() -> void:
 	pass # Replace with function body.

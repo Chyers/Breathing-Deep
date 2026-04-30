@@ -25,8 +25,11 @@ func start_encounter(floor_scalar: float, hp_ratio: float) -> Array:
 	_current_state = telemetry.get_state_vector(floor_scalar, hp_ratio)
 	_last_action = dqn.choose_action(_current_state)
 	last_action = _last_action
+	
+	var variant := _pick_variant(floor_scalar, hp_ratio)
+	
 	print("Encounter type chosen: %d" % _last_action)
-	return _get_enemy_scenes(_last_action)
+	return _build_encounter(_last_action, variant, floor_scalar)
 
 # Called when the room ends.
 # damage_taken: raw damage dealt this room / player max HP → normalized [0, 1]
@@ -102,29 +105,26 @@ const BOSS_PROFILES = {
 	},
 }
 
-func _get_enemy_scenes(encounter_type: int) -> Array:
-	var type_name: String = EncounterTypes.EncounterType.keys()[encounter_type]
-	print("Encounter selected: %s" % type_name)
-	
-	match encounter_type:
-		EncounterTypes.EncounterType.SWARM:
-			print("Spawning: 4x SWARM skeletons (fast, low HP, low damage)")
-			return _make_enemies("SWARM", 4)
-		EncounterTypes.EncounterType.BRUISER:
-			print("Spawning: 1x BRUISER skeleton (slow, high HP, high damage)")
-			return _make_enemies("BRUISER", 1)
-		EncounterTypes.EncounterType.FLANKER:
-			print("Spawning: 2x FLANKER skeletons (quick, low damage)")
-			return _make_enemies("FLANKER", 2)
-		EncounterTypes.EncounterType.ELITE:
-			print("Spawning: 1x ELITE skeleton (balanced, very high HP and damage)")
-			return _make_enemies("ELITE", 1)
-		EncounterTypes.EncounterType.MIXED:
-			print("Spawning: 1x BRUISER + 2x SWARM skeletons")
-			return _make_enemies("BRUISER", 1) + _make_enemies("SWARM", 2)
-		_:
-			print("Spawning: fallback 2x MIXED skeletons")
-			return _make_enemies("MIXED", 2)
+func _build_encounter(encounter_type: int, variant: int, floor_scalar: float) -> Array:
+	var type_name : String = EncounterTypes.EncounterType.keys()[encounter_type]
+
+	match variant:
+		EncounterTypes.Variant.SINGLE:
+			return _make_enemies(type_name, 2)
+
+		EncounterTypes.Variant.WAVE:
+			return _make_wave(type_name, floor_scalar)
+
+		EncounterTypes.Variant.AMBUSH:
+			return _make_ambush(type_name, floor_scalar)
+
+		EncounterTypes.Variant.SPLIT:
+			return _make_split(type_name)
+
+		EncounterTypes.Variant.ELITE_PLUS_MINIONS:
+			return _make_elite_pack(type_name)
+
+	return _make_enemies(type_name, 2)
 
 func _make_enemies(profile_key: String, count: int) -> Array:
 	var enemies := []
@@ -142,6 +142,55 @@ func _make_enemies(profile_key: String, count: int) -> Array:
 			enemy.setup(profile)
 		enemies.append(enemy)
 	return enemies
+
+func _pick_variant(floor_scalar: float, hp_ratio: float) -> int:
+	var roll := randf()
+
+	if floor_scalar > 0.7:
+		# harder floors = more chaos
+		if roll < 0.25:
+			return EncounterTypes.Variant.WAVE
+		elif roll < 0.5:
+			return EncounterTypes.Variant.SPLIT
+		elif roll < 0.75:
+			return EncounterTypes.Variant.AMBUSH
+		else:
+			return EncounterTypes.Variant.ELITE_PLUS_MINIONS
+
+	# early floors = simpler
+	if roll < 0.4:
+		return EncounterTypes.Variant.SINGLE
+	elif roll < 0.7:
+		return EncounterTypes.Variant.WAVE
+	else:
+		return EncounterTypes.Variant.AMBUSH
+
+func _make_wave(profile_key: String, floor_scalar: float) -> Array:
+	var count := int(3 + floor_scalar * 3)
+	var enemies := []
+	for i in range(count):
+		var enemy = _create_enemy(profile_key)
+		enemy.set_meta("wave_delay", i * 0.5)
+		enemies.append(enemy)
+	return enemies
+
+func _make_ambush(profile_key: String, floor_scalar: float) -> Array:
+	var enemies := _make_enemies(profile_key, 3)
+	for e in enemies:
+		e.set_meta("ambush", true)
+	return enemies
+
+func _make_elite_pack(profile_key: String) -> Array:
+	return _make_enemies("ELITE", 1) + _make_enemies("SWARM", 3)
+
+func _make_split(profile_key: String) -> Array:
+	return _make_enemies("BRUISER", 1) + _make_enemies("FLANKER", 2)
+
+func _create_enemy(profile_key: String) -> Node:
+	var enemy = skeleton_scene.instantiate()
+	if enemy.has_method("setup"):
+		enemy.setup(PROFILES[profile_key])
+	return enemy
 
 func get_boss_profile() -> Dictionary:
 	# Pulls the metrics the DQN already tracks

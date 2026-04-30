@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://baa3afpncco58"]
 
 [ext_resource type="PackedScene" uid="uid://8vhgjodit74q" path="res://scenes/entities/player/player.tscn" id="1_6jndt"]
-[ext_resource type="Script" uid="uid://ttmsk81oc8ll" path="res://systems/rooms/main_scene.gd" id="1_es0yc"]
+[ext_resource type="Script" uid="uid://bnanarhldcsg5" path="res://systems/rooms/main_scene.gd" id="1_es0yc"]
 [ext_resource type="PackedScene" uid="uid://dt67tlg4gd676" path="res://scenes/ui/Minimap.tscn" id="3_nuqkj"]
-[ext_resource type="Script" uid="uid://noa3wjfjbwob" path="res://systems/ui/progress_bar.gd" id="4_x721j"]
+[ext_resource type="Script" uid="uid://dhwgy8b83ou3m" path="res://systems/ui/progress_bar.gd" id="4_x721j"]
 [ext_resource type="PackedScene" uid="uid://byks3rut603tu" path="res://scenes/rooms/pause_menu.tscn" id="5_wxxke"]
 [ext_resource type="PackedScene" uid="uid://c87xvdx0vycb0" path="res://scenes/ui/game_over_menu.tscn" id="6_lxejf"]
 

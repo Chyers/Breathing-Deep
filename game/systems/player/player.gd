@@ -49,7 +49,7 @@ var inventory: Array[Item] = []
 var max_slots: int = 5
 
 @export var speed: float = 150.0
-@export var attack_speed: float = 0.8
+@export var attack_speed: float = 1.0
 @export var max_health: int = 100
 
 var health: int = max_health
@@ -163,6 +163,8 @@ func use_selected_item() -> void:
 
 		Item.Type.BUFF:
 			damage_multiplier = 1.20
+			attack_speed = 1.10
+			anim_player.speed_scale = attack_speed
 			buff_timer = 10.0
 			print("Buff active (+20% damage)")
 			item_cooldowns[Item.Type.BUFF] = buff_cooldown
@@ -195,6 +197,8 @@ func _update_buff(delta: float) -> void:
 		buff_timer -= delta
 		if buff_timer <= 0.0:
 			damage_multiplier = 1.0
+			attack_speed = 0.8
+			anim_player.speed_scale = 1.0
 			buff_timer = 0.0
 	
 	for type in item_cooldowns.keys():
@@ -313,9 +317,13 @@ func attack_sp() -> void:
 func take_damage(amount: int) -> void:
 	if is_dead:
 		return
+	
+	var main_scene = get_tree().get_first_node_in_group("main_scene")
+	if main_scene and main_scene.current_room and \
+			main_scene.current_room.has_method("record_damage"):
+		main_scene.current_room.record_damage(float(amount), float(max_health))
 		
 	health -= amount
-	
 	is_attack = false
 	
 	if health <= 0:
@@ -324,6 +332,9 @@ func take_damage(amount: int) -> void:
 		is_hurt = false
 		is_attack = false
 		anim_player.play("death")
+		if main_scene and main_scene.current_room and \
+				main_scene.current_room.has_method("notify_player_died"):
+			main_scene.current_room.notify_player_died()
 		await get_tree().create_timer(0.8).timeout
 		get_tree().get_first_node_in_group("game_over_menu").show_game_over()
 		print("Final score: ", ScoreManager.get_score())
@@ -354,7 +365,10 @@ func hit_attack(duration: float = 0.15) -> void:
 		hitbox_side.position.x = abs(hitbox_side.position.x)
 
 	hitbox.disabled = false
-	await get_tree().create_timer(duration).timeout
+	
+	var adjusted_duration = duration / attack_speed
+	
+	await get_tree().create_timer(adjusted_duration).timeout
 	_disable_all_hitboxes()
 
 func _disable_all_hitboxes() -> void:
@@ -373,7 +387,8 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("hurtbox"):
 		var parent = area.get_parent()
 		if parent.has_method("take_damage"):
-			parent.take_damage(10)
+			var damage := int(10 * damage_multiplier)
+			parent.take_damage(damage)
 
 func add_coins(amount: int):
 	# For now just print, add a coin counter var if needed

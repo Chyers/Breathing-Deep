@@ -19,21 +19,16 @@ var item_scenes = [
 const DOOR_SCENES = {
 	"north": preload("res://scenes/environment/door/door_north.tscn"),
 	"south": preload("res://scenes/environment/door/door_south.tscn"),
-	"east":  preload("res://scenes/environment/door/door_east.tscn"),
-	"west":  preload("res://scenes/environment/door/door_west.tscn"),
+	"east": preload("res://scenes/environment/door/door_east.tscn"),
+	"west": preload("res://scenes/environment/door/door_west.tscn"),
 	"north_boss": preload("res://scenes/environment/door/north_boss.tscn"),
 	"south_boss": preload("res://scenes/environment/door/south_boss.tscn"),
-	"east_boss":  preload("res://scenes/environment/door/east_boss.tscn"),
-	"west_boss":  preload("res://scenes/environment/door/west_boss.tscn"),
+	"east_boss": preload("res://scenes/environment/door/east_boss.tscn"),
+	"west_boss": preload("res://scenes/environment/door/west_boss.tscn"),
 }
 
 func _ready() -> void:
 	randomize()
-	if not is_boss_room:
-		spawn_items()
-		# spawn_enemies() is now called by main_scene.gd 
-		# after EncounterManager decides
-		# setup_doors() is called externally by main_scene.gd
 
 # Called by main_scene.gd after instantiation
 func setup_doors(active_directions: Array[String]) -> void:
@@ -62,15 +57,6 @@ func setup_doors(active_directions: Array[String]) -> void:
 		door.name = base_dir.capitalize()
 		door.position = marker.position
 		doors_node.add_child(door)
-
-func spawn_items() -> void:
-	var spawn_points = $ItemSpawn.get_children()
-	var item_count = randi_range(min_items, max_items)
-	spawn_points.shuffle()
-	for i in range(min(item_count, spawn_points.size())):
-		var item = item_scenes.pick_random().instantiate()
-		item.position = spawn_points[i].position
-		add_child(item)
 
 func spawn_enemies(injected_enemies: Array = []) -> void:
 	var spawn_points = get_node_or_null("EnemySpawn")

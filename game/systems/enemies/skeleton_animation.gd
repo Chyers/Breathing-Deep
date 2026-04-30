@@ -7,6 +7,8 @@ extends CharacterBody2D
 @export var attack_cooldown: float = 1.2
 @export var hit_offset: float = 10.0
 @export var points: int = 10
+@export var drop_table: Array[PackedScene] = []
+@export var drop_chance: float = 0.5  # 0.5 = 50%
 
 var player: Node2D = null
 var player_target: Node2D = null
@@ -194,7 +196,23 @@ func _on_animation_finished() -> void:
 		"damage":
 			pass
 		"death":
+			_drop_item()
 			queue_free()
+			
+func _drop_item() -> void:
+	if drop_table.is_empty():
+		return
+	
+	if randf() > drop_chance:
+		return
+
+	var scene: PackedScene = drop_table.pick_random()
+	var item_instance = scene.instantiate()
+	get_parent().add_child(item_instance)
+	item_instance.global_position = global_position + Vector2(
+	randf_range(-6, 6),
+	randf_range(-6, 6)
+)
 
 func _disable_collisions():
 	$CollisionShape2D.set_deferred("disabled", true)
