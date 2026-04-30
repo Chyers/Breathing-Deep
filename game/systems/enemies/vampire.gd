@@ -23,6 +23,7 @@ var has_dealt_damage: bool = false
 var hurt_timer: float = 0.0
 var phase2_threshold: float = 0.5
 var in_phase2: bool = false
+var can_fear_talk := true
 
 const hurt_duration: float = 0.385
 const PHASE2_SPEED_BONUS    := 15
@@ -122,11 +123,23 @@ func take_damage(amount: int) -> void:
 		return
 		
 	health -= amount
+
 	damage_sound.stop()
 	damage_sound.play()
 	health_bar.value = health
 	health_bar.visible = true
 	
+	if health < max_health * 0.25 and can_fear_talk:
+		can_fear_talk = false
+
+		AIManager.request_dialogue({
+			"enemy_type": "vampire",
+			"enemy_state": "fear"
+		}, self)
+
+		await get_tree().create_timer(4.0).timeout
+		can_fear_talk = true
+		
 	if not in_phase2 and float(health) / float(max_health) <= phase2_threshold:
 		_enter_phase2()
 
@@ -160,6 +173,12 @@ func attack() -> void:
 	is_attacking = true
 	sprite.play("attack")
 
+	if randf() < 0.5:  # 50% chance (important to avoid spam)
+		AIManager.request_dialogue({
+			"enemy_type": "vampire",
+			"enemy_state": "taunt"
+		}, self)
+
 func _enter_phase2() -> void:
 	in_phase2 = true
 	speed += PHASE2_SPEED_BONUS
@@ -167,6 +186,10 @@ func _enter_phase2() -> void:
 	attack_cooldown *= PHASE2_COOLDOWN_MULT
 	hitbox.damage = attack_damage
 	print("Boss entered phase 2!")
+	AIManager.request_dialogue({
+	"enemy_type": "vampire",
+	"enemy_state": "taunt"
+}, self)
 
 func _on_frame_changed() -> void:
 	if sprite.animation != "attack":

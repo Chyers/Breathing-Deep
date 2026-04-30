@@ -1,12 +1,8 @@
 [gd_scene format=3 uid="uid://csvwq7fpcohp0"]
 
-[ext_resource type="Script" uid="uid://dab10beh081sl" path="res://scenes/rooms/pause_menu.gd" id="1_vb6pq"]
-
 [node name="PauseMenu" type="CanvasLayer" unique_id=1958510700]
 process_mode = 3
 layer = 10
-visible = false
-script = ExtResource("1_vb6pq")
 
 [node name="Dimmer" type="ColorRect" parent="." unique_id=1440281338]
 anchors_preset = 15
@@ -14,6 +10,13 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="DialogueLabel" type="Label" parent="Dimmer" unique_id=542173831]
+layout_mode = 0
+offset_left = 164.0
+offset_top = 250.0
+offset_right = 309.0
+offset_bottom = 268.0
 
 [node name="Panel" type="PanelContainer" parent="." unique_id=285268028]
 anchors_preset = 8

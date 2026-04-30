@@ -5,6 +5,7 @@ extends CanvasLayer
 @onready var pause_panel = $Panel
 @onready var slider = $SettingsPanel.get_node("VBoxContainer/HBoxContainer/VolumeSlider")
 @onready var click_sound = $ClickSound
+@onready var dialogue_label = get_tree().get_root().get_node("main_scene/DialogueLabel")
 
 var is_paused: bool = false
 
@@ -18,6 +19,7 @@ func _ready() -> void:
 
 	slider.value = AudioManager.volume
 	AudioManager.volume_changed.connect(_on_volume_changed)
+	AIManager.dialogue_received.connect(_on_dialogue)
 
 # -------------------------
 # INPUT
@@ -77,3 +79,28 @@ func _on_volume_slider_value_changed(value):
 func _on_volume_changed(value):
 	if slider.value != value:
 		slider.value = value
+
+
+# -------------------------
+# AI
+# -------------------------
+
+func test_ai():
+	AIManager.request_dialogue({
+	"health": 20,
+	"enemy_count": 3,
+	"room": "test_room",
+	"is_low_health": true
+}, self)
+	
+
+func _on_dialogue(text, sender):
+	dialogue_label.text = text
+	dialogue_label.visible = true
+	
+	await get_tree().create_timer(2.5).timeout
+	dialogue_label.visible = false
+	
+func _input(event):
+	if event.is_action_pressed("ui_accept"):  # Enter key
+		test_ai()

@@ -6,6 +6,7 @@ extends Node2D
 @onready var camera = $Camera2D
 @onready var minimap = $Minimap
 @onready var music_player = $MusicPlayer
+@onready var dialogue_label = $DialogueLabel
 
 # Room Assets
 var start_room_scene: String = "res://scenes/rooms/starter_room.tscn"
@@ -76,6 +77,7 @@ func _ready() -> void:
 	_generate_dungeon()
 	await spawn_room(current_grid_pos)
 	minimap.initialize(grid_map, current_grid_pos)
+	AIManager.dialogue_received.connect(_on_dialogue)
 
 func restart_dungeon() -> void:
 	_generate_dungeon()
@@ -117,6 +119,9 @@ func _place_entrance() -> void:
 	if _start.y < 0 or _start.y >= _dimensions.y:
 		_start.y = randi_range(1, _dimensions.y - 2)
 	dungeon_grid[_start.x][_start.y] = "S"
+
+var server_started := false
+
 
 func _generate_path(from: Vector2i, length: int, marker: String) -> bool:
 	if length == 0:
@@ -380,6 +385,7 @@ func _reset_room_doors(room: Node) -> void:
 		return
 	_reset_doors_recursive(doors_node)
 
+
 func _reset_doors_recursive(node: Node) -> void:
 	for child in node.get_children():
 		if child is Area2D:
@@ -409,3 +415,19 @@ func _on_quit_pressed() -> void:
 
 func _on_music_slider_value_changed(value: float) -> void:
 	pass # Replace with function body.
+	
+func _on_dialogue(text, sender):
+	dialogue_label.text = text
+	dialogue_label.modulate.a = 0
+	dialogue_label.visible = true
+
+	var tween = create_tween()
+	tween.tween_property(dialogue_label, "modulate:a", 1, 0.3)
+
+	await get_tree().create_timer(3.0).timeout
+
+	tween = create_tween()
+	tween.tween_property(dialogue_label, "modulate:a", 0, 0.3)
+	await tween.finished
+
+	dialogue_label.visible = false

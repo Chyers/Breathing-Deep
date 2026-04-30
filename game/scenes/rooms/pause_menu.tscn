@@ -91,6 +91,7 @@ texture_hover = ExtResource("4_dqyr6")
 stretch_mode = 5
 
 [node name="SettingsPanel" type="TextureRect" parent="." unique_id=773501439]
+visible = false
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
