@@ -1,8 +1,10 @@
 extends CharacterBody2D
 
-@export var speed := 40
-@export var max_health := 30
-@export var stop_distance := 15.0
+# Exports
+
+@export var speed: int = 40
+@export var max_health: int = 30
+@export var stop_distance: float = 15.0
 @export var attack_damage: int = 10
 @export var attack_cooldown: float = 1.2
 @export var hit_offset: float = 10.0
