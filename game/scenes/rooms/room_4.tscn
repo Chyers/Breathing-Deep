@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://deakca8t65l"]
 
-[ext_resource type="Script" uid="uid://cmpsrh50vqtuc" path="res://systems/rooms/room_gen.gd" id="1_nvm38"]
+[ext_resource type="Script" uid="uid://riqdv7uho668" path="res://systems/rooms/room_gen.gd" id="1_nvm38"]
 [ext_resource type="PackedScene" uid="uid://csbk48acax1k4" path="res://scenes/entities/enemies/skeleton.tscn" id="2_8h73v"]
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="2_nt2nv"]
 

@@ -93,6 +93,18 @@ func _physics_process(delta: float) -> void:
 	_update_facing()
 	sprite.play("movement" if velocity != Vector2.ZERO else "idle")
 
+func _on_player_detected():
+	taunt_player()
+
+	
+func taunt_player():
+	AIManager.request_dialogue({
+		"type": "enemy",
+		"enemy_type": "skeleton",
+		"enemy_state": "taunt",
+		"player_health": player.health
+	}, self)
+
 func _update_facing() -> void:
 	var dir_to_player := player_target.global_position - global_position
 	if abs(dir_to_player.y) > abs(dir_to_player.x):
@@ -118,6 +130,12 @@ func take_damage(amount: int) -> void:
 	damage_sound.play()
 	health_bar.value = health
 	health_bar.visible = true
+	
+	if health < 20:
+		AIManager.request_dialogue({
+			"enemy_type": "skeleton",
+			"enemy_state": "fear"
+		}, self)
 	
 	if health <= 0:
 		await get_tree().create_timer(0.3).timeout
@@ -148,6 +166,7 @@ func take_damage(amount: int) -> void:
 func attack() -> void:
 	is_attacking = true
 	sprite.play("attack")
+	taunt_player()
 
 func _on_frame_changed() -> void:
 	if sprite.animation != "attack":
@@ -212,3 +231,4 @@ func setup(config: Dictionary) -> void:
 	if config.has("hit_offset"): hit_offset = config["hit_offset"]
 	if config.has("points"): points = config["points"]
 	health = max_health  # re-syncs health after stat changes
+	

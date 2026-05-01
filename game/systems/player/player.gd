@@ -71,6 +71,7 @@ var item_cooldowns: Dictionary = {}
 var health_cooldown: float = 5.0
 var buff_cooldown: float = 15.0
 
+
 # Node References
 @onready var anim_player: AnimationPlayer = $AnimationPlayer
 @onready var slots = get_tree().current_scene.get_node("CanvasLayer/Panel/GridContainer").get_children()

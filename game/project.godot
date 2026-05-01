@@ -21,10 +21,18 @@ config/icon="uid://caf7mhmbvsqh5"
 
 [autoload]
 
+<<<<<<< HEAD
+AudioManager="*uid://b2sv5es1cm8g"
+DoorAudio="*uid://bacaw020ikaer"
+ScoreManager="*uid://dhikifymjsj2i"
+SettingsManager="*uid://44sbrq3eler2"
+AIManager="*uid://c5i2dhxgsmmin"
+=======
 AudioManager="*uid://0odbt3u5c3vh"
 DoorAudio="*uid://bijoxl6xmj251"
 ScoreManager="*uid://bvji6gwixdcfq"
 SettingsManager="*uid://blspwcn4moqfv"
+>>>>>>> 99658de9c14f1ba471e21d3fa5bd3570e2540405
 
 [display]
 

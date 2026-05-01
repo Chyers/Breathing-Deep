@@ -34,3 +34,5 @@ func play_sound(sound: AudioStream):
 	p.play()
 	
 	p.finished.connect(func(): p.queue_free())
+	
+	
