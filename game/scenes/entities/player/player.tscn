@@ -586,7 +586,8 @@ height = 14.0
 size = Vector2(14.578125, 6.1875)
 
 [node name="Player" type="CharacterBody2D" unique_id=969824928 groups=["Player"]]
-collision_layer = 3
+y_sort_enabled = true
+collision_layer = 2
 collision_mask = 17
 script = ExtResource("1_635qg")
 
@@ -618,8 +619,8 @@ shape = SubResource("CapsuleShape2D_635qg")
 debug_color = Color(0.9796862, 0.13119817, 0.1444971, 0.41960785)
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=952466392]
-collision_layer = 0
-collision_mask = 4
+collision_layer = 32
+collision_mask = 132
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1586782518]
 position = Vector2(12, -7)

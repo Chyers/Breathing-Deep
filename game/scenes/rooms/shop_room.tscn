@@ -1,7 +1,11 @@
 [gd_scene format=4 uid="uid://c51ujwext7mpy"]
 
-[ext_resource type="Script" uid="uid://riqdv7uho668" path="res://systems/rooms/room_gen.gd" id="1_v2v41"]
+[ext_resource type="Script" uid="uid://cmpsrh50vqtuc" path="res://systems/rooms/room_gen.gd" id="1_v2v41"]
 [ext_resource type="Texture2D" uid="uid://dfxmbor5lyo8l" path="res://assets/environment/Dungeon tileset.png" id="2_b5oy7"]
+[ext_resource type="PackedScene" uid="uid://bhi104bcsprcd" path="res://scenes/environment/chest.tscn" id="3_44mus"]
+[ext_resource type="PackedScene" uid="uid://64uu0oy0ptx1" path="res://scenes/environment/coin.tscn" id="4_01urt"]
+[ext_resource type="PackedScene" uid="uid://bscoprqh5ulfp" path="res://scenes/environment/health.tscn" id="5_dhrod"]
+[ext_resource type="PackedScene" uid="uid://dr43y0k1fpybp" path="res://scenes/environment/buff.tscn" id="6_7jh8p"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ekhbd"]
 texture = ExtResource("2_b5oy7")
@@ -80,42 +84,6 @@ terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Floor"
 terrain_set_0/terrain_0/color = Color(0.5, 0.34375, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_ekhbd")
-
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_g7de3"]
-texture = ExtResource("2_b5oy7")
-7:5/size_in_atlas = Vector2i(1, 2)
-7:5/0 = 0
-7:5/0/texture_origin = Vector2i(0, 6)
-7:5/0/z_index = -1
-7:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-5.333333, 0, 5.333334, 0, 8, 2.666667, 2.666667, 2.666667, -2.6666665, 2.666667, -8, 2.666667)
-8:5/size_in_atlas = Vector2i(1, 2)
-8:5/0 = 0
-8:5/0/z_index = -1
-8:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, 2.666667, 8, 2.666667, 5.333334, 8, 2.666667, 10.666668, -2.6666665, 10.666668, -5.333333, 8)
-9:5/size_in_atlas = Vector2i(1, 2)
-9:5/0 = 0
-9:5/0/z_index = -1
-9:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-5.333333, 8, 5.333334, 8, 0, 10.666668)
-10:5/size_in_atlas = Vector2i(1, 2)
-10:5/0 = 0
-10:5/0/z_index = -1
-10:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-5.333333, 8, 2.666667, 8, 0, 10.666668)
-11:5/size_in_atlas = Vector2i(1, 2)
-11:5/0 = 0
-11:5/0/z_index = -1
-11:5/0/y_sort_origin = 4
-11:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-2.6666665, 5.333334, 2.666667, 5.333334, 2.666667, 8, -2.6666665, 8)
-12:5/size_in_atlas = Vector2i(2, 2)
-12:5/0 = 0
-12:5/0/texture_origin = Vector2i(0, 6)
-12:5/0/z_index = -1
-12:5/0/physics_layer_0/polygon_0/points = PackedVector2Array(-16, 0, 16, 0, 10.666668, 5.333334, 5.333334, 10.666668, -5.333333, 10.666668, -10.666667, 5.333334)
-15:4/0 = 0
-15:4/0/z_index = -2
-
-[sub_resource type="TileSet" id="TileSet_pli5l"]
-physics_layer_0/collision_layer = 1
-sources/0 = SubResource("TileSetAtlasSource_g7de3")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2pcud"]
 texture = ExtResource("2_b5oy7")
@@ -231,8 +199,7 @@ texture = ExtResource("2_b5oy7")
 [sub_resource type="TileSet" id="TileSet_acbhu"]
 sources/0 = SubResource("TileSetAtlasSource_3b773")
 
-[node name="shop_room" type="Node2D" unique_id=48695799]
-y_sort_enabled = true
+[node name="shop_room" type="Node2D" unique_id=48695799 groups=["shop_room"]]
 position = Vector2(-290, -78)
 script = ExtResource("1_v2v41")
 
@@ -241,16 +208,37 @@ z_index = -2
 tile_map_data = PackedByteArray("AAAbABIAAAAEAAsAAAAcABIAAAAFAAsAAAAdABIAAAAFAAsAAAAeABIAAAAFAAsAAAAfABIAAAAFAAsAAAAgABIAAAAFAAsAAAAiABIAAAAFAAsAAAAjABIAAAAFAAsAAAAkABIAAAAFAAsAAAAkABEAAAAFAAoAAAAkABAAAAAFAAoAAAAjABAAAAAFAAoAAAAgABAAAAAFAAoAAAAfABAAAAAFAAoAAAAeABAAAAAFAAoAAAAdABAAAAAFAAoAAAAcABAAAAAFAAoAAAAbABAAAAAEAAoAAAAbABEAAAAEAAoAAAAcABEAAAAFAAoAAAAdABEAAAAFAAoAAAAeABEAAAAFAAoAAAAfABEAAAAFAAoAAAAgABEAAAAFAAoAAAAjABEAAAAFAAoAAAAkAA8AAAAFAAoAAAAjAA8AAAAFAAoAAAAiAA8AAAAFAAoAAAAhAA8AAAAFAAoAAAAgAA8AAAAFAAoAAAAfAA8AAAAFAAoAAAAeAA8AAAAFAAoAAAAdAA8AAAAFAAoAAAAcAA8AAAAFAAoAAAAbAA8AAAAEAAoAAAAlABIAAAAFAAsAAAAmABIAAAAGAAsAAAAmABEAAAAGAAoAAAAmABAAAAAGAAoAAAAlABAAAAAFAAoAAAAlABEAAAAFAAoAAAAmAA8AAAAGAAoAAAAlAA8AAAAFAAoAAAAhABIAAAAFAAsAAAAhABEAAAAFAAoAAAAiABEAAAAFAAoAAAAiABAAAAAFAAoAAAAhABAAAAAFAAoAAAAmAA4AAAAGAAoAAAAmAA0AAAAGAAoAAAAlAA0AAAAFAAoAAAAkAA0AAAAFAAoAAAAjAA0AAAAFAAoAAAAiAA0AAAAFAAoAAAAhAA0AAAAFAAoAAAAgAA0AAAAFAAoAAAAfAA0AAAAFAAoAAAAeAA0AAAAFAAoAAAAdAA0AAAAFAAoAAAAcAA0AAAAFAAoAAAAbAA0AAAAEAAoAAAAbAA4AAAAEAAoAAAAcAA4AAAAFAAoAAAAdAA4AAAAFAAoAAAAeAA4AAAAFAAoAAAAfAA4AAAAFAAoAAAAgAA4AAAAFAAoAAAAhAA4AAAAFAAoAAAAiAA4AAAAFAAoAAAAjAA4AAAAFAAoAAAAkAA4AAAAFAAoAAAAlAA4AAAAFAAoAAAAmAAwAAAAGAAoAAAAlAAwAAAAFAAoAAAAkAAwAAAAFAAoAAAAjAAwAAAAFAAoAAAAiAAwAAAAFAAoAAAAhAAwAAAAFAAoAAAAgAAwAAAAFAAoAAAAfAAwAAAAFAAoAAAAbAAwAAAAEAAoAAAAcAAwAAAAFAAoAAAAdAAwAAAAFAAoAAAAeAAwAAAAFAAoAAAAbAAsAAAAEAAoAAAAbAAoAAAAEAAoAAAAbAAkAAAAEAAkAAAAcAAkAAAAFAAkAAAAdAAkAAAAFAAkAAAAeAAkAAAAFAAkAAAAeAAoAAAAFAAoAAAAfAAoAAAAFAAoAAAAgAAoAAAAFAAoAAAAhAAoAAAAFAAoAAAAiAAoAAAAFAAoAAAAjAAkAAAAFAAkAAAAkAAkAAAAFAAkAAAAlAAkAAAAFAAkAAAAmAAkAAAAGAAkAAAAiAAkAAAAFAAkAAAAhAAkAAAAFAAkAAAAgAAkAAAAFAAkAAAAfAAkAAAAFAAkAAAAlAAoAAAAFAAoAAAAmAAoAAAAGAAoAAAAmAAsAAAAGAAoAAAAlAAsAAAAFAAoAAAAkAAsAAAAFAAoAAAAjAAsAAAAFAAoAAAAiAAsAAAAFAAoAAAAhAAsAAAAFAAoAAAAgAAsAAAAFAAoAAAAfAAsAAAAFAAoAAAAeAAsAAAAFAAoAAAAdAAsAAAAFAAoAAAAcAAsAAAAFAAoAAAAcAAoAAAAFAAoAAAAdAAoAAAAFAAoAAAAjAAoAAAAFAAoAAAAkAAoAAAAFAAoAAAA=")
 tile_set = SubResource("TileSet_e2lbl")
 
-[node name="FloorDecor" type="TileMapLayer" parent="." unique_id=1367152092]
-z_index = 1
-y_sort_enabled = true
-position = Vector2(-3, 0)
-tile_map_data = PackedByteArray("AAAdAA0AAAAJAAUAAAAfAA0AAAAKAAUAAAAkAA0AAAAKAAUAAAAiAA0AAAAJAAUAAAA=")
-tile_set = SubResource("TileSet_pli5l")
-
 [node name="SideWall" type="TileMapLayer" parent="." unique_id=931651141]
 tile_map_data = PackedByteArray("AAAaAAcAAAACAAAAAAAnAAcAAAAEAAAAAAAaAAgAAAACAAEAAAAaAAkAAAACAAEAAAAaAAoAAAACAAEAAAAaAAsAAAACAAEAAAAaAAwAAAACAAEAAAAaAA0AAAACAAEAAAAaAA4AAAACAAEAAAAaAA8AAAACAAEAAAAaABAAAAACAAEAAAAaABEAAAACAAEAAAAnAAgAAAACAAEAAAAnAAkAAAACAAEAAAAnAAoAAAACAAEAAAAnAAsAAAACAAEAAAAnAAwAAAACAAEAAAAnAA0AAAACAAEAAAAnAA4AAAACAAEAAAAnAA8AAAACAAEAAAAnABAAAAACAAEAAAAnABEAAAACAAEAAAAaABIAAAACAAIAAAAnABIAAAACAAIAABA=")
 tile_set = SubResource("TileSet_irgj1")
+
+[node name="Node2D" type="Node2D" parent="." unique_id=1020413091]
+z_index = 1
+y_sort_enabled = true
+
+[node name="Chest" parent="Node2D" unique_id=391324757 instance=ExtResource("3_44mus")]
+position = Vector2(500, 210)
+coin_scene = ExtResource("4_01urt")
+health_potion_scene = ExtResource("5_dhrod")
+buff_potion_scene = ExtResource("6_7jh8p")
+
+[node name="Chest2" parent="Node2D" unique_id=716862299 instance=ExtResource("3_44mus")]
+position = Vector2(470, 210)
+coin_scene = ExtResource("4_01urt")
+health_potion_scene = ExtResource("5_dhrod")
+buff_potion_scene = ExtResource("6_7jh8p")
+
+[node name="Chest3" parent="Node2D" unique_id=1802530885 instance=ExtResource("3_44mus")]
+position = Vector2(550, 210)
+coin_scene = ExtResource("4_01urt")
+health_potion_scene = ExtResource("5_dhrod")
+buff_potion_scene = ExtResource("6_7jh8p")
+
+[node name="Chest4" parent="Node2D" unique_id=1364143864 groups=["shop_room"] instance=ExtResource("3_44mus")]
+position = Vector2(580, 210)
+coin_scene = ExtResource("4_01urt")
+health_potion_scene = ExtResource("5_dhrod")
+buff_potion_scene = ExtResource("6_7jh8p")
 
 [node name="TopWall" type="TileMapLayer" parent="." unique_id=2077733507]
 z_index = -1

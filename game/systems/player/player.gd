@@ -81,6 +81,10 @@ var buff_cooldown: float = 15.0
 
 # Ready
 func _ready() -> void:
+	set_collision_mask_value(3, true)
+	print("Player mask after fix: ", collision_mask)
+	print("Player layer: ", collision_layer)
+	print("Player mask: ", collision_mask)
 	var dir := get_dir_suffix()
 	add_to_group("player")
 	_play_anim("IDLE", dir)
@@ -196,8 +200,8 @@ func _update_buff(delta: float) -> void:
 	if buff_timer > 0.0:
 		buff_timer -= delta
 		if buff_timer <= 0.0:
-			damage_multiplier = 1.0
-			attack_speed = 0.8
+			damage_multiplier = 2.0
+			attack_speed = 1.0
 			anim_player.speed_scale = 1.0
 			buff_timer = 0.0
 	
@@ -389,8 +393,50 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 		if parent.has_method("take_damage"):
 			var damage := int(10 * damage_multiplier)
 			parent.take_damage(damage)
-
-func add_coins(amount: int):
-	# For now just print, add a coin counter var if needed
-	print("Collected ", amount, " coin(s)")
 	
+	if area.is_in_group("chest"):
+		var parent = area.get_parent()
+		if parent is Chest:
+			parent.take_hit(self)
+
+func add_coins(amount: int, icon: Texture2D = null) -> void:
+	# Stacks onto existing coin item if one exists
+	for item in inventory:
+		if item.item_type == Item.Type.COIN:
+			item.quantity += amount
+			update_inventory_ui()
+			return
+
+	# Otherwise creates a new coin stack
+	var coin_item := Item.new()
+	coin_item.item_name = "Coin"
+	coin_item.item_type = Item.Type.COIN
+	coin_item.quantity = amount
+	coin_item.icon = icon
+	coin_item.max_stack = 9999
+
+	add_item(coin_item)
+
+func spend_coins(amount: int) -> bool:
+	# Counts total coins across all stacks
+	var total_coins: int = 0
+	for item in inventory:
+		if item.item_type == Item.Type.COIN:
+			total_coins += item.quantity
+
+	if total_coins < amount:
+		print("Not enough coins! Have: ", total_coins, " Need: ", amount)
+		return false
+
+	# Deducts from coin stacks
+	var remaining: int = amount
+	for item in inventory:
+		if item.item_type == Item.Type.COIN and remaining > 0:
+			var taken: int = min(item.quantity, remaining)
+			item.quantity -= taken
+			remaining -= taken
+
+	# Cleans up any empty stacks
+	inventory = inventory.filter(func(item): return item.quantity > 0)
+	update_inventory_ui()
+	return true

@@ -419,8 +419,9 @@ bg_color = Color(0, 0, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iet1o"]
 bg_color = Color(0.7607843, 0, 0, 1)
 
-[node name="Skeleton" type="CharacterBody2D" unique_id=1147805820]
+[node name="Skeleton" type="CharacterBody2D" unique_id=1147805820 groups=["enemy"]]
 texture_repeat = 1
+collision_layer = 4
 script = ExtResource("1_3w83s")
 drop_table = Array[PackedScene]([ExtResource("2_mfyrh"), ExtResource("3_rwbew"), ExtResource("4_ywdfk")])
 
