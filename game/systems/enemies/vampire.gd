@@ -26,6 +26,13 @@ var hurt_timer: float = 0.0
 var phase2_threshold: float = 0.5
 var in_phase2: bool = false
 var can_fear_talk := true
+var fade_timer := 0.0
+var is_fading := false
+var is_invisible := false
+var fade_delay := 1.5
+
+const FADE_DELAY := 1.5
+const FADE_SPEED := 2.0   # higher = faster fade
 
 const hurt_duration: float = 0.385
 const PHASE2_SPEED_BONUS    := 15
@@ -85,6 +92,7 @@ func _physics_process(delta: float) -> void:
 
 	if is_attacking:
 		velocity = Vector2.ZERO
+		_update_facing()
 		return
 
 	nav_agent.target_position = player_target.global_position
@@ -102,7 +110,44 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 
 	_update_facing()
-	sprite.play("movement" if velocity != Vector2.ZERO else "idle")
+	if not is_attacking and not is_hurt and not is_dead:
+		sprite.play("movement" if velocity != Vector2.ZERO else "idle")
+		
+	# -------------------------
+	# 👻 FADE LOGIC (FIXED)
+	# -------------------------
+
+	# Track movement time
+	if velocity != Vector2.ZERO and not is_attacking and not is_hurt:
+		# If just started moving → pick new random delay
+		if fade_timer == 0.0:
+			fade_delay = randf_range(1.0, 5.0)  # 🔥 RANDOM RANGE
+	
+		fade_timer += delta
+	else:
+		fade_timer = 0.0
+		is_fading = false
+	
+	# Start fading after delay
+	if fade_timer >= fade_delay:
+		is_fading = true
+	
+	# Decide target alpha
+	var target_alpha := 1.0
+	
+	if is_fading and not is_attacking and not is_hurt:
+		target_alpha = 0.01   # invisible
+		health_bar.visible = sprite.modulate.a > 0.1
+
+	# Smooth transition
+	sprite.modulate.a = move_toward(
+		sprite.modulate.a,
+		target_alpha,
+		delta * FADE_SPEED
+	)
+	
+	# Hide health bar when invisible
+
 
 func _update_facing() -> void:
 	var dir_to_player := player_target.global_position - global_position
@@ -123,7 +168,12 @@ func _set_hitboxes(disabled: bool) -> void:
 func take_damage(amount: int) -> void:
 	if is_dead:
 		return
-		
+	# 👇 force visible when hit
+	is_fading = false
+	is_invisible = false
+	sprite.modulate.a = 1.0
+	fade_timer = 0.0
+	fade_delay = randf_range(1.0, 5.0)
 	health -= amount
 
 	damage_sound.stop()
@@ -139,8 +189,9 @@ func take_damage(amount: int) -> void:
 			"enemy_state": "fear"
 		}, self)
 
-		await get_tree().create_timer(4.0).timeout
-		can_fear_talk = true
+		get_tree().create_timer(4.0).timeout.connect(func():
+			can_fear_talk = true
+		)
 		
 	if not in_phase2 and float(health) / float(max_health) <= phase2_threshold:
 		_enter_phase2()
@@ -174,12 +225,11 @@ func take_damage(amount: int) -> void:
 func attack() -> void:
 	is_attacking = true
 	sprite.play("attack")
+	# 👇 force visible before attack
+	is_fading = false
+	is_invisible = false
+	sprite.modulate.a = 1.0
 
-	if randf() < 0.5:  # 50% chance (important to avoid spam)
-		AIManager.request_dialogue({
-			"enemy_type": "vampire",
-			"enemy_state": "taunt"
-		}, self)
 
 func _enter_phase2() -> void:
 	in_phase2 = true
@@ -189,9 +239,9 @@ func _enter_phase2() -> void:
 	hitbox.damage = attack_damage
 	print("Boss entered phase 2!")
 	AIManager.request_dialogue({
-	"enemy_type": "vampire",
-	"enemy_state": "taunt"
-}, self)
+		"enemy_type": "vampire",
+		"enemy_state": "taunt"
+	}, self)
 
 func _on_frame_changed() -> void:
 	if sprite.animation != "attack":
@@ -200,6 +250,12 @@ func _on_frame_changed() -> void:
 	if sprite.frame == halfway_frame and not has_dealt_damage:
 		has_dealt_damage = true
 		_set_hitboxes(false)
+		
+		if randf() < 0.3:
+			AIManager.request_dialogue({
+				"enemy_type": "vampire",
+				"enemy_state": "taunt"
+			}, self)
 	elif sprite.frame == halfway_frame + 1:
 		_set_hitboxes(true)
 
