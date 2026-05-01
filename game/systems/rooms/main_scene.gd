@@ -48,6 +48,18 @@ const DIRECTIONS = {
 
 # Music
 var current_tween: Tween = null
+var hide_timer: Timer
+
+
+func show_dialogue(text):
+	dialogue_label.text = text
+	dialogue_label.visible = true
+
+	hide_timer.stop() # 🚨 cancel previous hide
+	hide_timer.start(2.5)
+
+func _hide_text():
+	dialogue_label.visible = false
 
 func play_music(track: AudioStream, fade_out: float = 1.0, fade_in: float = 1.5, volume_db: float = 0.0) -> void:
 	if music_player.stream == track and music_player.playing:
@@ -79,6 +91,10 @@ func _ready() -> void:
 	await spawn_room(current_grid_pos)
 	minimap.initialize(grid_map, current_grid_pos)
 	AIManager.dialogue_received.connect(_on_dialogue)
+	hide_timer = Timer.new()
+	hide_timer.one_shot = true
+	add_child(hide_timer)
+	hide_timer.timeout.connect(_hide_text)
 
 func restart_dungeon() -> void:
 	_generate_dungeon()

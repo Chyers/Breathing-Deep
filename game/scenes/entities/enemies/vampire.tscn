@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dr43y0k1fpybp" path="res://scenes/environment/buff.tscn" id="3_21u6w"]
 [ext_resource type="PackedScene" uid="uid://bscoprqh5ulfp" path="res://scenes/environment/health.tscn" id="4_mt17v"]
 [ext_resource type="AudioStream" uid="uid://ch8ox3ixpai7" path="res://audio/freesound_community-hit-swing-sword-small-2-95566.mp3" id="4_whbrm"]
-[ext_resource type="Script" uid="uid://lsqv7gejs0sp" path="res://systems/enemies/hitbox.gd" id="6_smptb"]
+[ext_resource type="Script" uid="uid://te60g7u2pikd" path="res://systems/enemies/hitbox.gd" id="6_smptb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4ybvg"]
 atlas = ExtResource("2_whbrm")
