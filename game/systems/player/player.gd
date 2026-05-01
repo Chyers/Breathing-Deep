@@ -49,8 +49,11 @@ var inventory: Array[Item] = []
 var max_slots: int = 5
 
 @export var speed: float = 150.0
+@export var dash_speed: float = 200.0
+@export var dash_dur: float = 0.15
 @export var attack_speed: float = 1.0
 @export var max_health: int = 100
+@export var stun_dur: float = 0.5
 
 var health: int = max_health
 var curr_state: State = State.IDLE
@@ -60,6 +63,9 @@ var is_attack: bool = false
 var is_hurt: bool = false
 var last_dir:= ""
 var attack_type = "" #sw or sp
+var dash: bool = false
+var is_dash_attack: bool = false
+var is_stun: bool = false
 
 var cardinal_direct: Vector2 = Vector2.DOWN
 
@@ -229,7 +235,7 @@ func get_dir_suffix() -> String:
 
 # Movement
 func movement_loop() -> void:
-	if is_attack or is_hurt:
+	if is_attack or is_hurt or is_stun:
 		velocity = Vector2.ZERO
 		return
 
@@ -306,12 +312,14 @@ func attack_sw() -> void:
 	if is_dead or is_hurt or is_attack:
 		return
 	is_attack = true
+	attack_type = "sw"
 	_play_anim("attack_sw", last_dir)
 
 func attack_sp() -> void:
 	if is_dead or is_hurt or is_attack:
 		return
 	is_attack = true
+	attack_type = "sp"
 	_play_anim("attack_sp", last_dir)
 
 func take_damage(amount: int) -> void:
@@ -358,18 +366,51 @@ func _on_animation_finished(anim_name: String) -> void:
 func hit_attack(duration: float = 0.15) -> void:
 	_disable_all_hitboxes()
 	var hitbox := _get_active_hitbox()
-
+	
 	if last_dir == "left":
 		hitbox_side.position.x = -abs(hitbox_side.position.x)
 	elif last_dir == "right":
 		hitbox_side.position.x = abs(hitbox_side.position.x)
 
 	hitbox.disabled = false
-	
+
 	var adjusted_duration = duration / attack_speed
 	
 	await get_tree().create_timer(adjusted_duration).timeout
+	
 	_disable_all_hitboxes()
+
+func dash_attack() -> void:
+	if is_dash_attack:
+		return #Prevents spamming
+
+	is_dash_attack = true
+	var dash_vector = Vector2.ZERO
+	match last_dir:
+		"left": dash_vector = Vector2.LEFT
+		"right": dash_vector = Vector2.RIGHT
+		"up": dash_vector = Vector2.UP
+		_: dash_vector = Vector2.DOWN
+
+	hit_attack()
+
+	var elapsed := 0.0
+	while elapsed < dash_dur:
+		velocity = dash_vector * dash_speed
+		move_and_slide()
+		elapsed += get_physics_process_delta_time()
+		await get_tree().process_frame
+	
+	velocity = Vector2.ZERO
+	is_dash_attack = false
+
+func recovery_stun(duration: float) -> void:
+	is_stun  = true
+	velocity.x = 0
+	
+	await get_tree().create_timer(duration).timeout
+	
+	is_stun = false
 
 func _disable_all_hitboxes() -> void:
 	hitbox_down.disabled = true
@@ -387,8 +428,12 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("hurtbox"):
 		var parent = area.get_parent()
 		if parent.has_method("take_damage"):
-			var damage := int(10 * damage_multiplier)
-			parent.take_damage(damage)
+			if attack_type == "sw":
+				var damage := int(10 * damage_multiplier)
+				parent.take_damage(damage)
+			else:
+				var damage := int(30 * damage_multiplier)
+				parent.take_damage(damage)
 
 func add_coins(amount: int):
 	# For now just print, add a coin counter var if needed
