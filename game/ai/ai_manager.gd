@@ -16,7 +16,6 @@ func request_dialogue(data: Dictionary, sender: Node):
 	var text := _generate_dialogue(data)
 
 	# simulate small delay (feels more real)
-	await get_tree().create_timer(0.1).timeout
 
 	emit_signal("dialogue_received", text, sender)
 
