@@ -49,6 +49,7 @@ var inventory: Array[Item] = []
 var max_slots: int = 5
 
 @export var speed: float = 150.0
+@export var dash_speed: float = 200.0
 @export var attack_speed: float = 1.0
 @export var max_health: int = 100
 
@@ -60,6 +61,7 @@ var is_attack: bool = false
 var is_hurt: bool = false
 var last_dir:= ""
 var attack_type = "" #sw or sp
+var dash: bool = false
 
 var cardinal_direct: Vector2 = Vector2.DOWN
 
@@ -357,17 +359,38 @@ func _on_animation_finished(anim_name: String) -> void:
 func hit_attack(duration: float = 0.15) -> void:
 	_disable_all_hitboxes()
 	var hitbox := _get_active_hitbox()
-
-	if last_dir == "left":
-		hitbox_side.position.x = -abs(hitbox_side.position.x)
-	elif last_dir == "right":
-		hitbox_side.position.x = abs(hitbox_side.position.x)
-
-	hitbox.disabled = false
 	
-	var adjusted_duration = duration / attack_speed
+	if attack_type == "sp":
+		dash = true
+		if last_dir == "left":
+			hitbox_side.position.x = -abs(hitbox_side.position.x)
+		elif last_dir == "right":
+			hitbox_side.position.x = abs(hitbox_side.position.x)
 	
-	await get_tree().create_timer(adjusted_duration).timeout
+		hitbox.disabled = false
+
+		var dash_direction = -1.0 if last_dir == "left" else 1.0
+		velocity.x = dash_direction * dash_speed
+
+		var adjusted_duration = (duration + 0.15) / attack_speed
+		await get_tree().create_timer(adjusted_duration).timeout
+
+		_disable_all_hitboxes()
+		dash = false
+		velocity.x = 0  # Stop dash momentum
+
+	else:
+		if last_dir == "left":
+			hitbox_side.position.x = -abs(hitbox_side.position.x)
+		elif last_dir == "right":
+			hitbox_side.position.x = abs(hitbox_side.position.x)
+
+		hitbox.disabled = false
+	
+		var adjusted_duration = duration / attack_speed
+	
+		await get_tree().create_timer(adjusted_duration).timeout
+	
 	_disable_all_hitboxes()
 
 func _disable_all_hitboxes() -> void:
@@ -386,8 +409,12 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("hurtbox"):
 		var parent = area.get_parent()
 		if parent.has_method("take_damage"):
-			var damage := int(10 * damage_multiplier)
-			parent.take_damage(damage)
+			if attack_type == "sw":
+				var damage := int(10 * damage_multiplier)
+				parent.take_damage(damage)
+			else:
+				var damage := int(30 * damage_multiplier)
+				parent.take_damage(damage)
 
 func add_coins(amount: int):
 	# For now just print, add a coin counter var if needed
