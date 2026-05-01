@@ -62,6 +62,8 @@ var is_hurt: bool = false
 var last_dir:= ""
 var attack_type = "" #sw or sp
 var dash: bool = false
+var is_stun: bool = false
+var stun_dur: float = 0.5
 
 var cardinal_direct: Vector2 = Vector2.DOWN
 
@@ -372,12 +374,13 @@ func hit_attack(duration: float = 0.15) -> void:
 		var dash_direction = -1.0 if last_dir == "left" else 1.0
 		velocity.x = dash_direction * dash_speed
 
-		var adjusted_duration = (duration + 0.15) / attack_speed
+		var adjusted_duration = duration / attack_speed
 		await get_tree().create_timer(adjusted_duration).timeout
 
 		_disable_all_hitboxes()
 		dash = false
 		velocity.x = 0  # Stop dash momentum
+		await recovery_stun(stun_dur)
 
 	else:
 		if last_dir == "left":
@@ -391,7 +394,15 @@ func hit_attack(duration: float = 0.15) -> void:
 	
 		await get_tree().create_timer(adjusted_duration).timeout
 	
-	_disable_all_hitboxes()
+		_disable_all_hitboxes()
+
+func recovery_stun(duration: float) -> void:
+	is_stun  = true
+	velocity.x = 0
+	
+	await get_tree().create_timer(duration).timeout
+	
+	is_stun = false
 
 func _disable_all_hitboxes() -> void:
 	hitbox_down.disabled = true
