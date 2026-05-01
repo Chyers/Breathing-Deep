@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bdua0sdr2v615"]
+
+[ext_resource type="Script" uid="uid://bmd6x3two24lr" path="res://spear.gd" id="1_k0rgn"]
+[ext_resource type="Texture2D" uid="uid://xyyxicwbioaw" path="res://assets/items_&_traps/spear.png" id="2_02fib"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dl81s"]
+size = Vector2(41, 9)
+
+[node name="Spear" type="Area2D" unique_id=526413933]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_k0rgn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1610309896]
+shape = SubResource("RectangleShape2D_dl81s")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=923893711]
+position = Vector2(-1.9073486e-06, -4.7683716e-07)
+scale = Vector2(0.54687494, 0.515625)
+texture = ExtResource("2_02fib")

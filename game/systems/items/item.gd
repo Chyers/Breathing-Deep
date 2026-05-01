@@ -1,7 +1,7 @@
 class_name Item
 extends Resource
 
-enum Type {NONE, COIN, HEALTH, BUFF}
+enum Type {NONE, COIN, HEALTH, BUFF, REVIVE}
 
 var item_name: String = ""
 var item_type: Type = Type.NONE

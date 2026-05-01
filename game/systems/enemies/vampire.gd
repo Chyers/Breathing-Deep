@@ -12,7 +12,8 @@ signal boss_defeated
 @export var points: int = 500
 @onready var health_bar: ProgressBar = $HealthBarPivot/HealthBar
 @export var drop_table: Array[PackedScene] = []
-@export var drop_chance: float = 0.5  # 0.5 = 50%
+@export var drop_chance: float = 0.5
+@export var spear_scene: PackedScene
 
 var player: Node2D = null
 var player_target: Node2D = null
@@ -30,6 +31,9 @@ var fade_timer := 0.0
 var is_fading := false
 var is_invisible := false
 var fade_delay := 1.5
+var is_dodging: bool = false
+var dodge_timer: float = 0.0
+var dodge_velocity: Vector2 = Vector2.ZERO
 
 const FADE_DELAY := 1.5
 const FADE_SPEED := 2.0   # higher = faster fade
@@ -38,6 +42,9 @@ const hurt_duration: float = 0.385
 const PHASE2_SPEED_BONUS    := 15
 const PHASE2_DAMAGE_BONUS   := 8
 const PHASE2_COOLDOWN_MULT  := 0.75
+const DODGE_SPEED: float = 120.0
+const DODGE_DURATION: float = 0.35
+const DODGE_CHANCE: float = 0.6
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var nav_agent: NavigationAgent2D = $NavigationAgent2D
@@ -84,6 +91,14 @@ func _physics_process(delta: float) -> void:
 
 	if hurt_timer > 0.0:
 		hurt_timer -= delta
+		if is_dodging:
+			dodge_timer -= delta
+			velocity = dodge_velocity
+			move_and_slide()
+			if dodge_timer <= 0.0:
+				is_dodging = false
+				velocity = Vector2.ZERO
+				_set_player_collision(true)
 		if hurt_timer <= 0.0:
 			is_hurt = false
 			if not is_attacking:
@@ -112,10 +127,6 @@ func _physics_process(delta: float) -> void:
 	_update_facing()
 	if not is_attacking and not is_hurt and not is_dead:
 		sprite.play("movement" if velocity != Vector2.ZERO else "idle")
-		
-	# -------------------------
-	# 👻 FADE LOGIC (FIXED)
-	# -------------------------
 
 	# Track movement time
 	if velocity != Vector2.ZERO and not is_attacking and not is_hurt:
@@ -145,9 +156,6 @@ func _physics_process(delta: float) -> void:
 		target_alpha,
 		delta * FADE_SPEED
 	)
-	
-	# Hide health bar when invisible
-
 
 func _update_facing() -> void:
 	var dir_to_player := player_target.global_position - global_position
@@ -168,12 +176,6 @@ func _set_hitboxes(disabled: bool) -> void:
 func take_damage(amount: int) -> void:
 	if is_dead:
 		return
-	# 👇 force visible when hit
-	is_fading = false
-	is_invisible = false
-	sprite.modulate.a = 1.0
-	fade_timer = 0.0
-	fade_delay = randf_range(1.0, 5.0)
 	health -= amount
 
 	damage_sound.stop()
@@ -222,10 +224,17 @@ func take_damage(amount: int) -> void:
 		sprite.frame = 0
 		sprite.play("damage")
 
+		if player and randf() < DODGE_CHANCE and not is_dodging:
+			var away := (global_position - player.global_position).normalized()
+			var perp := Vector2(-away.y, away.x) * (1.0 if randf() > 0.5 else -1.0)
+			dodge_velocity = (away + perp * 0.5).normalized() * DODGE_SPEED
+			is_dodging = true
+			dodge_timer = DODGE_DURATION
+			_set_player_collision(false)
+
 func attack() -> void:
 	is_attacking = true
 	sprite.play("attack")
-	# 👇 force visible before attack
 	is_fading = false
 	is_invisible = false
 	sprite.modulate.a = 1.0
@@ -259,6 +268,10 @@ func _on_frame_changed() -> void:
 	elif sprite.frame == halfway_frame + 1:
 		_set_hitboxes(true)
 
+func _set_player_collision(enabled: bool) -> void:
+	if player:
+		player.set_collision_mask_value(3, enabled)
+
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("hurtbox"):
 		var parent = area.get_parent()
@@ -281,10 +294,12 @@ func _on_animation_finished() -> void:
 			queue_free()
 
 func _drop_item() -> void:
-	if drop_table.is_empty():
-		return
+	if spear_scene:
+		var spear = spear_scene.instantiate()
+		get_parent().add_child(spear)
+		spear.global_position = global_position
 	
-	if randf() > drop_chance:
+	if drop_table.is_empty() or randf() > drop_chance:
 		return
 
 	var scene: PackedScene = drop_table.pick_random()

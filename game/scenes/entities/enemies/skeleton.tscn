@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://wl0t5kxbhmg5" path="res://assets/characters/enemies/animations/skeleton_2/idle.png" id="4_iet1o"]
 [ext_resource type="PackedScene" uid="uid://64uu0oy0ptx1" path="res://scenes/environment/coin.tscn" id="4_ywdfk"]
 [ext_resource type="Texture2D" uid="uid://q2u1diu7ry60" path="res://assets/characters/enemies/animations/skeleton_2/movement.png" id="5_aub10"]
+[ext_resource type="PackedScene" uid="uid://cu02rxcgasdn3" path="res://scenes/environment/revive.tscn" id="5_rwbew"]
 [ext_resource type="Script" uid="uid://lsqv7gejs0sp" path="res://systems/enemies/hitbox.gd" id="7_ey25l"]
 [ext_resource type="AudioStream" uid="uid://8hj501fd16m" path="res://audio/dragon-studio-bone-breaking-effect-393836.mp3" id="8_iet1o"]
 
@@ -423,7 +424,7 @@ bg_color = Color(0.7607843, 0, 0, 1)
 texture_repeat = 1
 collision_layer = 4
 script = ExtResource("1_3w83s")
-drop_table = Array[PackedScene]([ExtResource("2_mfyrh"), ExtResource("3_rwbew"), ExtResource("4_ywdfk")])
+drop_table = Array[PackedScene]([ExtResource("2_mfyrh"), ExtResource("3_rwbew"), ExtResource("4_ywdfk"), ExtResource("5_rwbew")])
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=867065892]
 sprite_frames = SubResource("SpriteFrames_dx3v6")

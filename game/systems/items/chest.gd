@@ -5,6 +5,7 @@ extends StaticBody2D
 @export var coin_scene: PackedScene
 @export var health_potion_scene: PackedScene
 @export var buff_potion_scene: PackedScene
+@export var revival_orb_scene:  PackedScene
 
 const ITEM_POOL = [
 	Item.Type.COIN,
@@ -12,6 +13,7 @@ const ITEM_POOL = [
 	Item.Type.COIN,
 	Item.Type.HEALTH,
 	Item.Type.BUFF,
+	Item.Type.REVIVE
 ]
 
 const COIN_PROFIT_MULT: float = 1.5
@@ -49,7 +51,9 @@ func _calculate_price() -> void:
 			price = held_quantity * 3
 		Item.Type.BUFF:
 			price = held_quantity * 4
-	price = clamp(price, 1, 15)
+		Item.Type.REVIVE:
+			price = 20
+	price = clamp(price, 1, 20)
 
 func _update_price_label() -> void:
 	$Label.text = "%d G" % price
@@ -88,6 +92,8 @@ func _drop_items() -> void:
 			scene_to_spawn = health_potion_scene
 		Item.Type.BUFF:
 			scene_to_spawn = buff_potion_scene
+		Item.Type.REVIVE:
+			scene_to_spawn = revival_orb_scene
 
 	for i in held_quantity:
 		var drop = scene_to_spawn.instantiate()

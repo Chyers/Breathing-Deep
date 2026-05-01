@@ -11,6 +11,8 @@ extends CharacterBody2D
 @export var points: int = 10
 @export var drop_table: Array[PackedScene] = []
 @export var drop_chance: float = 0.5
+@export var revival_orb_scene: PackedScene = null
+@export var revival_drop_chance: float = 1.0
 
 # Constants
 
@@ -23,6 +25,7 @@ const POST_HURT_SPEED_MULT: float = 1.5
 const SEPARATION_RADIUS: float = 40.0
 const SEPARATION_WEIGHT: float = 0.8
 const DROP_JITTER: float = 6.0
+const REVIVAL_DROP_CHANCE: float = 0.1
 
 # State
 
@@ -342,6 +345,17 @@ func _drop_item() -> void:
 	var item : Node = drop_table.pick_random().instantiate()
 	get_parent().add_child(item)
 	item.global_position = global_position + Vector2(
+		randf_range(-DROP_JITTER, DROP_JITTER),
+		randf_range(-DROP_JITTER, DROP_JITTER)
+	)
+	_try_drop_revival_orb()
+
+func _try_drop_revival_orb() -> void:
+	if revival_orb_scene == null or randf() > revival_drop_chance:
+		return
+	var orb = revival_orb_scene.instantiate()
+	get_parent().add_child(orb)
+	orb.global_position = global_position + Vector2(
 		randf_range(-DROP_JITTER, DROP_JITTER),
 		randf_range(-DROP_JITTER, DROP_JITTER)
 	)
