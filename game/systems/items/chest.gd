@@ -22,14 +22,27 @@ var held_type: Item.Type
 var held_quantity: int
 var price: int = 0
 var is_opening: bool = false
+static var active_20g_chest: Chest = null
 
 func _ready() -> void:
 	_generate_contents()
 	_calculate_price()
+	
+	if price == 20:
+		if active_20g_chest != null and is_instance_valid(active_20g_chest):
+			queue_free()
+			return
+		active_20g_chest = self
+		tree_exited.connect(_on_chest_removed)
+		
 	$AnimatedSprite2D.play("idle")
 	$AnimatedSprite2D.animation_finished.connect(_on_animation_finished)
 	$Label.text = "%dG" % price
 	call_deferred("_setup_label")
+
+func _on_chest_removed() -> void:
+	if active_20g_chest == self:
+		active_20g_chest = null
 
 func _setup_label() -> void:
 	var node = get_parent()

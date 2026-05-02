@@ -9,6 +9,7 @@ extends Node2D
 @export var enemy_scenes: Array[PackedScene] = []
 
 var _boss_ref: Node = null
+var _enemy_refs: Array[Node] = []
 
 var item_scenes = [
 	preload("res://scenes/environment/coin.tscn"),
@@ -65,30 +66,40 @@ func spawn_enemies(injected_enemies: Array = []) -> void:
 	var points = spawn_points.get_children()
 	if points.is_empty() or injected_enemies.is_empty():
 		return
-
 	points.shuffle()
 	for i in range(min(injected_enemies.size(), points.size())):
 		var enemy = injected_enemies[i]
 		add_child(enemy)
 		enemy.global_position = points[i].global_position
 		print("Spawned %s (%s) at %s" % [enemy.name, enemy.get("max_health"), enemy.global_position])
-		
-		if is_boss_room and enemy.has_signal("boss_defeated"):
-			_boss_ref = enemy
-			enemy.boss_defeated.connect(_on_boss_defeated)
-	
+
+		if is_boss_room:
+			_enemy_refs.append(enemy)            # ← register every enemy
+			enemy.tree_exited.connect(_on_enemy_removed.bind(enemy))
+
+			if enemy.has_signal("boss_defeated"):
+				_boss_ref = enemy
+
 	if is_boss_room:
 		await get_tree().process_frame
 		_lock_doors(true)
 
-func _on_boss_defeated() -> void:
+func _on_enemy_removed(enemy: Node) -> void:
+	_enemy_refs.erase(enemy)
+	print("Enemy removed, %d remaining" % _enemy_refs.size())
+
+	if _enemy_refs.is_empty():
+		_on_room_cleared()
+
+func _on_room_cleared() -> void:
 	var stairs = get_node_or_null("Stairs")
 	if stairs and stairs.has_method("unlock"):
 		stairs.unlock()
 	_lock_doors(false)
-	print("Boss defeated — stairs unlocked!")
+	print("Boss room cleared — stairs unlocked!")
 
-	print("Boss defeated — stairs unlocked!")
+func _on_boss_defeated() -> void:
+	print("Boss defeated — waiting for room clear…")
 
 func _lock_doors(locked: bool) -> void:
 	var doors_node = get_node_or_null("Doors")
