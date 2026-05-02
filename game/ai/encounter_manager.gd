@@ -181,10 +181,10 @@ func _make_ambush(profile_key: String, floor_scalar: float) -> Array:
 	return enemies
 
 func _make_elite_pack(profile_key: String) -> Array:
-	return _make_enemies("ELITE", 1) + _make_enemies("SWARM", 3)
+	return _make_enemies("ELITE", 1) + _make_enemies(profile_key, 3)
 
 func _make_split(profile_key: String) -> Array:
-	return _make_enemies("BRUISER", 1) + _make_enemies("FLANKER", 2)
+	return _make_enemies(profile_key, 1) + _make_enemies("FLANKER", 2)
 
 func _create_enemy(profile_key: String) -> Node:
 	var enemy = skeleton_scene.instantiate()

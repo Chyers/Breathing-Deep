@@ -49,11 +49,8 @@ var inventory: Array[Item] = []
 var max_slots: int = 5
 
 @export var speed: float = 150.0
-@export var dash_speed: float = 200.0
-@export var dash_dur: float = 0.15
 @export var attack_speed: float = 1.0
 @export var max_health: int = 100
-@export var stun_dur: float = 0.5
 
 var health: int = max_health
 var curr_state: State = State.IDLE
@@ -63,9 +60,9 @@ var is_attack: bool = false
 var is_hurt: bool = false
 var last_dir:= ""
 var attack_type = "" #sw or sp
-var dash: bool = false
-var is_dash_attack: bool = false
-var is_stun: bool = false
+var is_dashing: bool = false
+var dash_speed: float = 75.0
+var sp_cooldown_timer: float = 0.0
 
 var cardinal_direct: Vector2 = Vector2.DOWN
 
@@ -76,6 +73,14 @@ var buff_timer: float = 0.0
 var item_cooldowns: Dictionary = {}
 var health_cooldown: float = 5.0
 var buff_cooldown: float = 15.0
+var iframe_timer: float = 0.0
+var _flash_acc: float = 0.0
+var has_spear: bool = false
+
+const REVIVAL_IFRAME_DURATION: float = 2.5
+const REVIVAL_FLASH_RATE: float = 12.0
+const SP_COOLDOWN: float = 2.0
+const DASH_IFRAME_DURATION: float = 0.5
 
 
 # Node References
@@ -87,6 +92,10 @@ var buff_cooldown: float = 15.0
 
 # Ready
 func _ready() -> void:
+	set_collision_mask_value(3, true)
+	print("Player mask after fix: ", collision_mask)
+	print("Player layer: ", collision_layer)
+	print("Player mask: ", collision_mask)
 	var dir := get_dir_suffix()
 	add_to_group("player")
 	_play_anim("IDLE", dir)
@@ -168,7 +177,7 @@ func use_selected_item() -> void:
 			item_cooldowns[Item.Type.HEALTH] = health_cooldown
 
 		Item.Type.BUFF:
-			damage_multiplier = 1.20
+			damage_multiplier = 3.20
 			attack_speed = 1.10
 			anim_player.speed_scale = attack_speed
 			buff_timer = 10.0
@@ -188,11 +197,37 @@ func use_selected_item() -> void:
 	update_inventory_ui()
 	_refresh_slot_highlight()
 
+func _consume_revival_item(index: int) -> void:
+	print("Revival Orb activated!")
+	var orb: Item = inventory[index]
+	orb.quantity -= 1
+	if orb.quantity <= 0:
+		inventory.remove_at(index)
+		selected_slot = -1
+	update_inventory_ui()
+	_refresh_slot_highlight()
+
+	is_dead = true
+	anim_player.play("death")
+	await get_tree().create_timer(0.8).timeout
+
+	is_dead = false
+	is_hurt = false
+	is_attack = false
+	health = int(max_health * 0.5)
+	iframe_timer = REVIVAL_IFRAME_DURATION
+	_flash_acc = 0.0
+	set_physics_process(true)
+	_play_anim("idle", last_dir)
+
 # Physics Loop
 func _physics_process(delta: float) -> void:
 	if is_dead:
 		return
+	if sp_cooldown_timer > 0.0:
+		sp_cooldown_timer -= delta
 	_update_buff(delta)
+	_update_iframes(delta)
 	movement_loop()
 	move_and_slide()
 	_handle_input()
@@ -203,7 +238,7 @@ func _update_buff(delta: float) -> void:
 		buff_timer -= delta
 		if buff_timer <= 0.0:
 			damage_multiplier = 1.0
-			attack_speed = 0.8
+			attack_speed = 1.0
 			anim_player.speed_scale = 1.0
 			buff_timer = 0.0
 	
@@ -235,7 +270,13 @@ func get_dir_suffix() -> String:
 
 # Movement
 func movement_loop() -> void:
-	if is_attack or is_hurt or is_stun:
+	if is_dashing:
+		return
+	if is_attack or is_hurt:
+		velocity = Vector2.ZERO
+		return
+
+	if is_attack or is_hurt:
 		velocity = Vector2.ZERO
 		return
 
@@ -308,41 +349,84 @@ func _play_anim(base: String, dir: String = "") -> void:
 		anim_player.play(anim_name)
 
 #API
+func _dash_attack() -> void:
+	var dash_dir := cardinal_direct.normalized()
+	var elapsed := 0.0
+
+	# Enable the correct hitbox for the whole dash
+	_disable_all_hitboxes()
+	var hitbox := _get_active_hitbox()
+	if last_dir == "left":
+		hitbox_side.position.x = -abs(hitbox_side.position.x)
+	elif last_dir == "right":
+		hitbox_side.position.x = abs(hitbox_side.position.x)
+	hitbox.disabled = false
+
+	while elapsed < DASH_IFRAME_DURATION and is_attack:
+		var delta := get_process_delta_time()
+		velocity = dash_dir * dash_speed
+		move_and_slide()
+		elapsed += delta
+		await get_tree().process_frame
+
+	_disable_all_hitboxes()
+	is_dashing = false
+
 func attack_sw() -> void:
 	if is_dead or is_hurt or is_attack:
 		return
 	is_attack = true
-	attack_type = "sw"
 	_play_anim("attack_sw", last_dir)
 
 func attack_sp() -> void:
 	if is_dead or is_hurt or is_attack:
 		return
+	if not has_spear:
+		print("No spear yet!")
+		return
+	if sp_cooldown_timer > 0.0:
+		return
 	is_attack = true
-	attack_type = "sp"
+	is_dashing = true
+	iframe_timer = DASH_IFRAME_DURATION
+	sp_cooldown_timer = SP_COOLDOWN
 	_play_anim("attack_sp", last_dir)
+	_dash_attack()
 
 func take_damage(amount: int) -> void:
 	if is_dead:
 		return
-	
+		
+	if iframe_timer > 0.0:
+		return
+
 	var main_scene = get_tree().get_first_node_in_group("main_scene")
 	if main_scene and main_scene.current_room and \
 			main_scene.current_room.has_method("record_damage"):
 		main_scene.current_room.record_damage(float(amount), float(max_health))
-		
+
 	health -= amount
 	is_attack = false
-	
+
 	if health <= 0:
 		health = 0
+
+		# Always notify the DQN, even if the player is about to be revived
+		if main_scene and main_scene.current_room and \
+				main_scene.current_room.has_method("notify_player_died"):
+			main_scene.current_room.notify_player_died()
+
+		# Check for revival orb before committing to death
+		var revival_index := _find_revival_item()
+		if revival_index != -1:
+			_consume_revival_item(revival_index)
+			return
+
+		# No orb — normal death
 		is_dead = true
 		is_hurt = false
 		is_attack = false
 		anim_player.play("death")
-		if main_scene and main_scene.current_room and \
-				main_scene.current_room.has_method("notify_player_died"):
-			main_scene.current_room.notify_player_died()
 		await get_tree().create_timer(0.8).timeout
 		get_tree().get_first_node_in_group("game_over_menu").show_game_over()
 		print("Final score: ", ScoreManager.get_score())
@@ -354,63 +438,33 @@ func take_damage(amount: int) -> void:
 func _on_animation_finished(anim_name: String) -> void:
 	if is_dead and not anim_name.begins_with("death"):
 		return
+	if anim_name.begins_with("death"):
+		if is_dead:
+			set_physics_process(false)
+		return
 	if anim_name.begins_with("attack"):
 		is_attack = false
+		is_dashing = false
 		_play_anim("idle", last_dir)
 	elif anim_name.begins_with("hurt"):
 		is_hurt = false
 		_play_anim("idle", last_dir)
-	elif anim_name.begins_with("death"):
-		set_physics_process(false)
 
 func hit_attack(duration: float = 0.15) -> void:
 	_disable_all_hitboxes()
 	var hitbox := _get_active_hitbox()
-	
+
 	if last_dir == "left":
 		hitbox_side.position.x = -abs(hitbox_side.position.x)
 	elif last_dir == "right":
 		hitbox_side.position.x = abs(hitbox_side.position.x)
 
 	hitbox.disabled = false
-
+	
 	var adjusted_duration = duration / attack_speed
 	
 	await get_tree().create_timer(adjusted_duration).timeout
-	
 	_disable_all_hitboxes()
-
-func dash_attack() -> void:
-	if is_dash_attack:
-		return #Prevents spamming
-
-	is_dash_attack = true
-	var dash_vector = Vector2.ZERO
-	match last_dir:
-		"left": dash_vector = Vector2.LEFT
-		"right": dash_vector = Vector2.RIGHT
-		"up": dash_vector = Vector2.UP
-		_: dash_vector = Vector2.DOWN
-
-	hit_attack()
-
-	var elapsed := 0.0
-	while elapsed < dash_dur:
-		velocity = dash_vector * dash_speed
-		move_and_slide()
-		elapsed += get_physics_process_delta_time()
-		await get_tree().process_frame
-	
-	velocity = Vector2.ZERO
-	is_dash_attack = false
-
-func recovery_stun(duration: float) -> void:
-	is_stun  = true
-	velocity.x = 0
-	
-	await get_tree().create_timer(duration).timeout
-	
-	is_stun = false
 
 func _disable_all_hitboxes() -> void:
 	hitbox_down.disabled = true
@@ -428,14 +482,72 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("hurtbox"):
 		var parent = area.get_parent()
 		if parent.has_method("take_damage"):
-			if attack_type == "sw":
-				var damage := int(10 * damage_multiplier)
-				parent.take_damage(damage)
-			else:
-				var damage := int(30 * damage_multiplier)
-				parent.take_damage(damage)
-
-func add_coins(amount: int):
-	# For now just print, add a coin counter var if needed
-	print("Collected ", amount, " coin(s)")
+			var damage := int(10 * damage_multiplier)
+			parent.take_damage(damage)
 	
+	if area.is_in_group("chest"):
+		var parent = area.get_parent()
+		if parent is Chest:
+			parent.take_hit(self)
+
+func add_coins(amount: int, icon: Texture2D = null) -> void:
+	# Stacks onto existing coin item if one exists
+	for item in inventory:
+		if item.item_type == Item.Type.COIN:
+			item.quantity += amount
+			update_inventory_ui()
+			return
+
+	# Otherwise creates a new coin stack
+	var coin_item := Item.new()
+	coin_item.item_name = "Coin"
+	coin_item.item_type = Item.Type.COIN
+	coin_item.quantity = amount
+	coin_item.icon = icon
+	coin_item.max_stack = 9999
+
+	add_item(coin_item)
+
+func spend_coins(amount: int) -> bool:
+	# Counts total coins across all stacks
+	var total_coins: int = 0
+	for item in inventory:
+		if item.item_type == Item.Type.COIN:
+			total_coins += item.quantity
+
+	if total_coins < amount:
+		print("Not enough coins! Have: ", total_coins, " Need: ", amount)
+		return false
+
+	# Deducts from coin stacks
+	var remaining: int = amount
+	for item in inventory:
+		if item.item_type == Item.Type.COIN and remaining > 0:
+			var taken: int = min(item.quantity, remaining)
+			item.quantity -= taken
+			remaining -= taken
+
+	# Cleans up any empty stacks
+	inventory = inventory.filter(func(item): return item.quantity > 0)
+	update_inventory_ui()
+	return true
+
+func _find_revival_item() -> int:
+	for i in inventory.size():
+		if inventory[i].item_type == Item.Type.REVIVE:
+			return i
+	return -1
+
+func _update_iframes(delta: float) -> void:
+	if iframe_timer <= 0.0:
+		return
+	iframe_timer -= delta
+	if not is_dashing:
+		_flash_acc += delta
+		var flash_period := 1.0 / REVIVAL_FLASH_RATE
+		if _flash_acc >= flash_period:
+			_flash_acc = fmod(_flash_acc, flash_period)
+			$Plain.visible = not $Plain.visible
+	if iframe_timer <= 0.0:
+		$Plain.visible = true
+		_flash_acc = 0.0

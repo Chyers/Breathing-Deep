@@ -26,7 +26,7 @@ const MIN_BUFFER_SIZE: int = 64   # Training won't begin until buffer has this m
 # Hyperparameters
 var epsilon: float = 1.0
 const EPSILON_MIN: float = 0.05
-const EPSILON_DECAY: float = 0.9999
+const EPSILON_DECAY: float = 0.995
 const ALPHA: float = 0.003  # Learning rate — lowered for stability
 const GAMMA: float = 0.95   # Discount factor
 

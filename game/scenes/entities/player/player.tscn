@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://8vhgjodit74q"]
 
 [ext_resource type="Texture2D" uid="uid://d0y6nvl7ipxxd" path="res://assets/characters/main_character/Plain.png" id="1_1hmtu"]
-[ext_resource type="Script" uid="uid://5s02uif8cvan" path="res://systems/player/player.gd" id="1_635qg"]
+[ext_resource type="Script" uid="uid://bvpb845h7yy6m" path="res://systems/player/player.gd" id="1_635qg"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_onrkg"]
 radius = 5.0
@@ -586,7 +586,8 @@ height = 14.0
 size = Vector2(14.578125, 6.1875)
 
 [node name="Player" type="CharacterBody2D" unique_id=969824928 groups=["Player"]]
-collision_layer = 3
+y_sort_enabled = true
+collision_layer = 2
 collision_mask = 17
 script = ExtResource("1_635qg")
 
@@ -618,8 +619,8 @@ shape = SubResource("CapsuleShape2D_635qg")
 debug_color = Color(0.9796862, 0.13119817, 0.1444971, 0.41960785)
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=952466392]
-collision_layer = 0
-collision_mask = 4
+collision_layer = 32
+collision_mask = 132
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1586782518]
 position = Vector2(12, -7)
