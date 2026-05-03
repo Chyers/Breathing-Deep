@@ -113,6 +113,7 @@ func _ready() -> void:
 
 # Inventory
 func add_item(item: Item) -> void:
+	print("add_item called: ", item.item_name, " inventory size: ", inventory.size())
 	for existing in inventory:
 		if existing.item_name == item.item_name and existing.quantity < existing.max_stack:
 			existing.quantity += 1
@@ -488,6 +489,8 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 	if area.is_in_group("chest"):
 		var parent = area.get_parent()
 		if parent is Chest:
+			parent.take_hit(self)
+		elif parent is KeyedChest:
 			parent.take_hit(self)
 
 func add_coins(amount: int, icon: Texture2D = null) -> void:

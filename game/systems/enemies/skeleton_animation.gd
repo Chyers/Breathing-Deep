@@ -13,6 +13,7 @@ extends CharacterBody2D
 @export var drop_chance: float = 0.5
 @export var revival_orb_scene: PackedScene = null
 @export var revival_drop_chance: float = 0.5
+@export var key_scene: PackedScene = null
 
 # Constants
 
@@ -309,7 +310,7 @@ func _play_damage_sound() -> void:
 	damage_sound.stop()
 	damage_sound.play()
 
-# ─── Signal handlers ────────────────────────────────────────────────────────
+# Signal handlers
 
 func _on_frame_changed() -> void:
 	if sprite.animation != "attack":
@@ -341,9 +342,17 @@ func _on_animation_finished() -> void:
 			_drop_item()
 			queue_free()
 
-# ─── Drops ──────────────────────────────────────────────────────────────────
+# Drops
 
 func _drop_item() -> void:
+	print("_drop_item called on: ", name)
+	print("drops_key meta: ", get_meta("drops_key", false))
+	print("KeyManager.can_drop: ", KeyManager.can_drop())
+	
+	if get_meta("drops_key", false) and KeyManager.can_drop():
+		KeyManager.register_drop()
+		_spawn_drop(get_meta("key_scene", null))
+
 	if drop_table.is_empty() or randf() > drop_chance:
 		return
 	var item : Node = drop_table.pick_random().instantiate()
@@ -364,7 +373,18 @@ func _try_drop_revival_orb() -> void:
 		randf_range(-DROP_JITTER, DROP_JITTER)
 	)
 
-# ─── Setup (external config) ─────────────────────────────────────────────────
+func _spawn_drop(scene: PackedScene) -> void:
+	print("_spawn_pickup called, scene is: ", scene)
+	if scene == null:
+		return
+	var drop := scene.instantiate()
+	get_parent().add_child(drop)
+	drop.global_position = global_position + Vector2(
+		randf_range(-DROP_JITTER, DROP_JITTER),
+		randf_range(-DROP_JITTER, DROP_JITTER)
+	)
+
+# Setup (external config)
 
 func setup(config: Dictionary) -> void:
 	if config.has("speed"):speed = config["speed"]

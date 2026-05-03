@@ -23,6 +23,9 @@ var possible_rooms = [
 @export var _branches: int = 3
 @export var _branch_length: Vector2i = Vector2i(1, 4)
 
+# Key
+@export var key_scene: PackedScene = null
+
 # EncounterManager
 var encounter_manager: EncounterManager
 
@@ -121,6 +124,10 @@ func _generate_dungeon() -> void:
 	_generate_branches()
 	_build_grid_map()
 	_place_boss_room()
+	KeyManager.reset()
+	for pos in grid_map.keys():
+		if grid_map[pos]["type"] == "C":
+			KeyManager.c_rooms_total += 1
 	_print_dungeon()
 	current_grid_pos = _start
 
@@ -181,9 +188,12 @@ func _build_grid_map() -> void:
 			var cell = dungeon_grid[x][y]
 			if typeof(cell) != TYPE_INT:
 				var pos = Vector2i(x, y)
+				var is_branch: bool = (cell == "1" or cell == "2" or cell == "3")
 				grid_map[pos] = {
 					"type": str(cell),
-					"scene": start_room_scene if cell == "S" else possible_rooms.pick_random()
+					"scene": start_room_scene if cell == "S" \
+						else "res://scenes/rooms/Special.tscn" if is_branch \
+						else possible_rooms.pick_random()
 				}
 
 func _place_boss_room() -> void:
@@ -295,6 +305,7 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 			nav_region.enabled = true
 	else:
 		var room_scene: PackedScene = load(grid_map[grid_pos]["scene"])
+		print("Loading room scene: ", grid_map[grid_pos]["scene"], " result: ", room_scene)
 		new_room = room_scene.instantiate()
 		if grid_map[grid_pos]["type"] == "B":
 			new_room.is_boss_room = true
@@ -341,6 +352,11 @@ func spawn_room(grid_pos: Vector2i, entry_direction: String = "") -> void:
 		var enemies := encounter_manager.start_encounter(floor_scalar, hp_ratio)
 		if new_room.has_method("spawn_enemies"):
 			new_room.spawn_enemies(enemies)
+		if not enemies.is_empty() and KeyManager.should_assign_key():
+			var carrier: Node = enemies[randi() % enemies.size()]
+			carrier.set_meta("drops_key", true)
+			carrier.set_meta("key_scene", key_scene)
+		KeyManager.c_rooms_visited += 1
 		if new_room.has_signal("room_cleared") and \
 				not new_room.is_connected("room_cleared", _on_room_cleared):
 			new_room.room_cleared.connect(_on_room_cleared)

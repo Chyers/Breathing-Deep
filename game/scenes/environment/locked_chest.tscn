@@ -1,0 +1,113 @@
+[gd_scene format=3 uid="uid://crbswo7er5vxh"]
+
+[ext_resource type="Script" uid="uid://dw05pswl0p7p3" path="res://systems/items/locked_chest.gd" id="1_schih"]
+[ext_resource type="PackedScene" uid="uid://64uu0oy0ptx1" path="res://scenes/environment/coin.tscn" id="2_ac6l4"]
+[ext_resource type="Texture2D" uid="uid://bfvgqns43x08i" path="res://assets/items_&_traps/mini_chest/mini_idle.png" id="2_ai3xx"]
+[ext_resource type="PackedScene" uid="uid://bscoprqh5ulfp" path="res://scenes/environment/health.tscn" id="3_c7m82"]
+[ext_resource type="Texture2D" uid="uid://cacbgo1fb6egh" path="res://assets/items_&_traps/mini_chest/mini_open.png" id="3_nji5f"]
+[ext_resource type="PackedScene" uid="uid://dr43y0k1fpybp" path="res://scenes/environment/buff.tscn" id="4_xaag5"]
+[ext_resource type="PackedScene" uid="uid://cu02rxcgasdn3" path="res://scenes/environment/revive.tscn" id="5_bo4ig"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_syw36"]
+atlas = ExtResource("2_ai3xx")
+region = Rect2(0, 0, 17, 27)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ac6l4"]
+atlas = ExtResource("2_ai3xx")
+region = Rect2(17, 0, 17, 27)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c7m82"]
+atlas = ExtResource("2_ai3xx")
+region = Rect2(34, 0, 17, 27)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xaag5"]
+atlas = ExtResource("2_ai3xx")
+region = Rect2(51, 0, 17, 27)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bo4ig"]
+atlas = ExtResource("3_nji5f")
+region = Rect2(0, 0, 17, 27)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hbigt"]
+atlas = ExtResource("3_nji5f")
+region = Rect2(17, 0, 17, 27)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kgll6"]
+atlas = ExtResource("3_nji5f")
+region = Rect2(34, 0, 17, 27)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5doje"]
+atlas = ExtResource("3_nji5f")
+region = Rect2(51, 0, 17, 27)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mkpo0"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_syw36")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ac6l4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c7m82")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xaag5")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bo4ig")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hbigt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kgll6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5doje")
+}],
+"loop": false,
+"name": &"open",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lsrry"]
+size = Vector2(10.5, 7.75)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uhfcs"]
+size = Vector2(10, 9)
+
+[node name="LockedChest" type="StaticBody2D" unique_id=831449375]
+y_sort_enabled = true
+script = ExtResource("1_schih")
+coin_scene = ExtResource("2_ac6l4")
+health_potion_scene = ExtResource("3_c7m82")
+buff_potion_scene = ExtResource("4_xaag5")
+revival_orb_scene = ExtResource("5_bo4ig")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1041791906]
+y_sort_enabled = true
+sprite_frames = SubResource("SpriteFrames_mkpo0")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=294359122]
+y_sort_enabled = true
+position = Vector2(1, 4)
+shape = SubResource("RectangleShape2D_lsrry")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=556906242 groups=["chest"]]
+y_sort_enabled = true
+collision_layer = 128
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=163067876]
+y_sort_enabled = true
+position = Vector2(1, 2.5)
+shape = SubResource("RectangleShape2D_uhfcs")
+debug_color = Color(0.43068376, 0.5858536, 0.39459386, 0.41960785)
