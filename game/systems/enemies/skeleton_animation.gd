@@ -12,7 +12,7 @@ extends CharacterBody2D
 @export var drop_table: Array[PackedScene] = []
 @export var drop_chance: float = 0.5
 @export var revival_orb_scene: PackedScene = null
-@export var revival_drop_chance: float = 0.4
+@export var revival_drop_chance: float = 0.5
 
 # Constants
 
@@ -81,6 +81,9 @@ func _ready() -> void:
 	_randomise_jitter()
 
 func _physics_process(delta: float) -> void:
+	if not is_visible_in_tree():
+		return
+
 	_tick_iframes(delta)
 
 	if player == null:

@@ -74,7 +74,7 @@ func spawn_enemies(injected_enemies: Array = []) -> void:
 		print("Spawned %s (%s) at %s" % [enemy.name, enemy.get("max_health"), enemy.global_position])
 
 		if is_boss_room:
-			_enemy_refs.append(enemy)            # ← register every enemy
+			_enemy_refs.append(enemy)
 			enemy.tree_exited.connect(_on_enemy_removed.bind(enemy))
 
 			if enemy.has_signal("boss_defeated"):
