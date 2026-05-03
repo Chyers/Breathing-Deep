@@ -295,10 +295,19 @@ func _on_animation_finished() -> void:
 
 func _drop_item() -> void:
 	if spear_scene:
-		var spear = spear_scene.instantiate()
-		get_parent().add_child(spear)
-		spear.global_position = global_position
-	
+		var players := get_tree().get_nodes_in_group("player")
+		var already_has_spear := false
+
+		if players.size() > 0:
+			var p = players[0]
+			if p.get("has_spear") == true:
+				already_has_spear = true
+
+		if not already_has_spear:
+			var spear = spear_scene.instantiate()
+			get_parent().add_child(spear)
+			spear.global_position = global_position
+
 	if drop_table.is_empty() or randf() > drop_chance:
 		return
 

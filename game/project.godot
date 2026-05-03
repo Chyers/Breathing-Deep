@@ -26,6 +26,7 @@ DoorAudio="*uid://bijoxl6xmj251"
 ScoreManager="*uid://bvji6gwixdcfq"
 SettingsManager="*uid://blspwcn4moqfv"
 AIManager="*uid://hc8k1jnhivkc"
+KeyManager="*uid://nlin8jma7jik"
 
 [display]
 

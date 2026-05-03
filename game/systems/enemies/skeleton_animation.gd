@@ -12,7 +12,8 @@ extends CharacterBody2D
 @export var drop_table: Array[PackedScene] = []
 @export var drop_chance: float = 0.5
 @export var revival_orb_scene: PackedScene = null
-@export var revival_drop_chance: float = 1.0
+@export var revival_drop_chance: float = 0.5
+@export var key_scene: PackedScene = null
 
 # Constants
 
@@ -81,6 +82,9 @@ func _ready() -> void:
 	_randomise_jitter()
 
 func _physics_process(delta: float) -> void:
+	if not is_visible_in_tree():
+		return
+
 	_tick_iframes(delta)
 
 	if player == null:
@@ -125,7 +129,8 @@ func _tick_hurt(delta: float) -> bool:
 
 	hurt_timer -= delta
 	knockback_velocity = knockback_velocity.move_toward(Vector2.ZERO, KNOCKBACK_DECEL * delta)
-	global_position += knockback_velocity * delta
+	velocity = knockback_velocity
+	move_and_slide()
 
 	if hurt_timer <= 0.0:
 		is_hurt = false
@@ -133,7 +138,6 @@ func _tick_hurt(delta: float) -> bool:
 		knockback_velocity = Vector2.ZERO
 		if not is_attacking:
 			sprite.play("idle")
-
 	return true
 
 func _tick_post_hurt(delta: float) -> bool:
@@ -142,7 +146,8 @@ func _tick_post_hurt(delta: float) -> bool:
 
 	post_hurt_timer -= delta
 	var away := (global_position - player_target.global_position).normalized()
-	global_position += away * speed * POST_HURT_SPEED_MULT * delta
+	velocity = away * speed * POST_HURT_SPEED_MULT
+	move_and_slide()
 
 	if post_hurt_timer <= 0.0:
 		set_collision_layer_value(3, true)
@@ -155,7 +160,7 @@ func _chase_and_attack() -> void:
 	var jittered_target := player_target.global_position + _target_jitter
 	nav_agent.target_position = jittered_target
 
-	if global_position.distance_to(jittered_target) <= stop_distance:
+	if global_position.distance_to(player_target.global_position) <= stop_distance:
 		velocity = Vector2.ZERO
 		if attack_timer <= 0.0:
 			attack()
@@ -305,7 +310,7 @@ func _play_damage_sound() -> void:
 	damage_sound.stop()
 	damage_sound.play()
 
-# ─── Signal handlers ────────────────────────────────────────────────────────
+# Signal handlers
 
 func _on_frame_changed() -> void:
 	if sprite.animation != "attack":
@@ -337,9 +342,17 @@ func _on_animation_finished() -> void:
 			_drop_item()
 			queue_free()
 
-# ─── Drops ──────────────────────────────────────────────────────────────────
+# Drops
 
 func _drop_item() -> void:
+	print("_drop_item called on: ", name)
+	print("drops_key meta: ", get_meta("drops_key", false))
+	print("KeyManager.can_drop: ", KeyManager.can_drop())
+	
+	if get_meta("drops_key", false) and KeyManager.can_drop():
+		KeyManager.register_drop()
+		_spawn_drop(get_meta("key_scene", null))
+
 	if drop_table.is_empty() or randf() > drop_chance:
 		return
 	var item : Node = drop_table.pick_random().instantiate()
@@ -360,7 +373,18 @@ func _try_drop_revival_orb() -> void:
 		randf_range(-DROP_JITTER, DROP_JITTER)
 	)
 
-# ─── Setup (external config) ─────────────────────────────────────────────────
+func _spawn_drop(scene: PackedScene) -> void:
+	print("_spawn_pickup called, scene is: ", scene)
+	if scene == null:
+		return
+	var drop := scene.instantiate()
+	get_parent().add_child(drop)
+	drop.global_position = global_position + Vector2(
+		randf_range(-DROP_JITTER, DROP_JITTER),
+		randf_range(-DROP_JITTER, DROP_JITTER)
+	)
+
+# Setup (external config)
 
 func setup(config: Dictionary) -> void:
 	if config.has("speed"):speed = config["speed"]

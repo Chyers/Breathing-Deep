@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://2wvkuu2iqms7"
-path="res://.godot/imported/VSU_GRAD.jpg-e45aa64a267daf5e88ce0a5a6090fe3f.ctex"
+uid="uid://m4la2hkvq335"
+path="res://.godot/imported/key.png-45ef709f170f8be9a705e8bbae0067d3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/ui/VSU_GRAD.jpg"
-dest_files=["res://.godot/imported/VSU_GRAD.jpg-e45aa64a267daf5e88ce0a5a6090fe3f.ctex"]
+source_file="res://assets/items_&_traps/keys/key.png"
+dest_files=["res://.godot/imported/key.png-45ef709f170f8be9a705e8bbae0067d3.ctex"]
 
 [params]
 
